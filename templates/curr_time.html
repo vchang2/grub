@@ -8,4 +8,27 @@
   <img src = 'https://s.graphiq.com/sites/default/files/530/media/images/t2/Panda_Express_Chicken_Potsticker_821093.jpg' alt = 'Potstickers' style="width:304px;height:228px;">
   <img src = 'http://cookdiary.net/wp-content/uploads/images/Lo-Mein_18970.jpg' alt = 'LoMein' style="width:304px;height:228px;">
 {# also make sure to include this very last line as well #}
+
+<h3>User Results</h3>
+<ul>
+{% if users %}
+{% for result in users %}
+	{% for key in result %}
+		{% if key == 'UserID' %}
+			<div>
+				<p>Username: {{result['UserID']|e}}</p>
+				<p>Password: {{result['Password']|e}}</p>
+			</div>
+		{% else %}
+
+		{% endif %}
+		
+  	{% endfor %}
+  	<div>--------</div>
+{% endfor %}
+{% else %}
+<div>No results</div>
+{% endif %}
+</ul>
+
 {% endblock %}

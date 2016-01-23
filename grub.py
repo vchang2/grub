@@ -4,15 +4,18 @@ import os                             # of the imports to work!
 import web
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
+import sqlitedb
         
 urls = (
-    '/(.*)', 'hello'
+    '/(.*)', 'hello', 'addValerie'
 )
 app = web.application(urls, globals())
 
 class hello:        
     def GET(self, name):
-    	return render_template('curr_time.html')
+        #sqlitedb.addUser('adam', 111)
+        users_search_results = sqlitedb.getUsers()
+    	return render_template('curr_time.html', users = users_search_results)
         return 'Grub! Personalized cooking suggestions'
 
 # helper method to render a template in the templates/ directory

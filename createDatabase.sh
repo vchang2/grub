@@ -1,1 +1,1 @@
-sqlite3 data.db < tables.sql
+cat tables.sql | sqlite3 database.db
