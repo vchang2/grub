@@ -75,6 +75,11 @@ def getIngredients(recipeID):
     results = query(query_string, {'recipeID':recipeID})
     return results
 
+def getInstructions(recipeID):
+    query_string = 'select * from Instructions where RecipeID = $recipeID ORDER BY Instruction_number'
+    results = query(query_string, {'recipeID':recipeID})
+    return results
+
 def getTags(recipeID):
     query_string = 'select * from Tags where RecipeID = $recipeID'
     results = query(query_string, {'recipeID': recipeID})
