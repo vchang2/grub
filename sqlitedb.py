@@ -54,3 +54,63 @@ def getItemById(item_id):
 def addUser(username, password):
     query_string = 'insert into Users values ($username, $password)'
     db.query(query_string, {'username': username, 'password': password})
+
+def getCookbooks(username):
+    query_string = 'select * from Cookbooks where UserID = $userID'
+    results = query(query_string, {'userID' : username})
+    return results
+
+def getCookbooks_recipes(cookbookID):
+    query_string = 'select * from Cookbooks_recipes where CookbookID = cookbookID'
+    results = query(query_string, {'cookbookID': cookbookID})
+    return results
+
+def getRecipe(recipeID):
+    query_string = 'select * from Recipes where RecipeID = $recipeID'
+    result = query(query_string, {'recipeID':recipeID})
+    return result
+
+def getIngredients(recipeID):
+    query_string = 'select * from Ingredients where RecipeID = $recipeID'
+    results = query(query_string, {'recipeID':recipeID})
+    return results
+
+def getTags(recipeID):
+    query_string = 'select * from Tags where RecipeID = $recipeID'
+    results = query(query_string, {'recipeID': recipeID})
+    return results
+
+def getPhotos(recipeID):
+    query_string = 'select * from Photos where RecipeID = $recipeID'
+    results = query(query_string, {'recipeID': recipeID})
+    return results
+
+def getCategories(recipeID):
+    query_string = 'select * from Categories where RecipeID = $recipeID'
+    results = query(query_string, {'recipeID': recipeID})
+    return results
+
+def getReviews(recipeID):
+    query_string = 'select * from Reviews where RecipeID = $recipeID'
+    results = query(query_string, {'recipeID': recipeID})
+    return results
+
+def getFollowers(username):
+    query_string = 'select * from Followers where UserID = $userID'
+    results = query(query_string, {'userID': username})
+    return results
+
+def getFollowing(username):
+    query_string = 'select * from Followers where FollowerID = $userID'
+    results = query(query_string, {'userID': username})
+    return results
+
+def assignRecipeID():
+    query_string = 'select * from LastRecipeID'
+    result = query(query_string)
+    recipeID = result + 1
+    query_string = 'insert into LastRecipeID values ($recipeID)'
+    db.query(query_string, {'recipeID':recipeID})
+    return recipeID
+
+
