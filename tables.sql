@@ -31,11 +31,15 @@ UserID text REFERENCES Users(UserID),
 Overall_rating int,
 Recipe_name text,
 Description text,
-Instructions text,
 Time_completion int,
 Num_servings int,
 Spicy text,
 Difficulty int);
+
+create table Instructions(
+RecipeID int REFERENCES Recipes(RecipeID),
+Instruction_number int,
+Instruction text);
 
 create table Ingredients(
 RecipeID int REFERENCES Recipes(RecipeID),
@@ -66,14 +70,19 @@ create table Followers(
 FollowerID text REFERENCES Users(UserID),
 UserID text REFERENCES Users(UserID));
 
+create table LastRecipeID(
+RecipeID int REFERENCES Recipes(RecipeID));
+
 Insert into Users values("skaterAdam189", "apple"), ("blubbo", "apple"), ("billy", "apple");
 
 Insert into Cookbooks values(1, "blubbo", "Blubbo's cookbook");
 Insert into Cookbooks_recipes values(1, 1);
-Insert into Recipes values(1, "billy", 4, "Broccoli Beef", "The Best Broccoli Beef in town.", "1. Get some broccoli. 2. Get some beef. 3. Get some yummy sauce. 4. 8 dollar donation.", 55, 4, "no", 2);
+Insert into Recipes values(1, "billy", 4, "Broccoli Beef", "The Best Broccoli Beef in town.", 55, 4, "no", 2);
+Insert into Instructions values(1, 1, "Get some broccoli."), (1, 2, "Get some beef."), (1,3, "Get some yummy sauce."), (1, 4, "8 dollar donation.");
 Insert into Ingredients values(1, "broccoli", 10, "blank"), (1, "beef", 4, "pounds"), (1, "yummy sauce", 2, "oz");
 Insert into Tags values(1, "broccoli"), (1, "beef"), (2, "best food ever");
 Insert into Photos values (1, "http://162.61.226.249/PicOriginal/P63452612080938_5.jpg");
 Insert into Categories values(1, "savory"), (1, "dinner");
 Insert into Reviews values(1, "blubbo", "it's good, but the dish could use more beef", 4);
 Insert into Followers values("blubbo", "billy");
+Insert into LastRecipeID values(1);
