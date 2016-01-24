@@ -7,7 +7,7 @@ from datetime import datetime
 import sqlitedb
         
 urls = (
-    '/(.*)', 'hello', 'addValerie'
+    '/(.*)', 'hello', '/hello', 'upload', '/upload'
 )
 app = web.application(urls, globals())
 
@@ -17,6 +17,11 @@ class hello:
         users_search_results = sqlitedb.getUsers()
     	return render_template('curr_time.html', users = users_search_results)
         return 'Grub! Personalized cooking suggestions'
+
+class upload:
+    def POST(self):
+        post_params = web.input()
+        itemID = post_params['itemID']
 
 # helper method to render a template in the templates/ directory
 #
