@@ -118,4 +118,14 @@ def assignRecipeID():
     db.query(query_string, {'recipeID':recipeID})
     return recipeID
 
+# Added by Ryan on 1/27 at 9:12pm or later
+def getAllRecipes():
+    query_string = 'select * from Recipes'
+    result = query(query_string)
+    return result
+
+def getAllPhotos():
+    query_string = 'select * from Photos'
+    results = query(query_string)
+    return results
 

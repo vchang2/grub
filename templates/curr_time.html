@@ -1,34 +1,26 @@
 {% extends "app_base.html" %}
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
-  <h3>Good evening, Adam!</h3> 
-  <div class="alert alert-info">Welcome to Grub! The personalized cooking assistant.</div>
-  <img src = 'http://pinchstatic.com/images/recipe/7/2/9/5/0/large.3.jpg' alt = 'OrangeChicken' style="width:304px;height:228px;" >
-  <img src = 'http://www.melskitchencafe.com/wp-content/uploads/2013/04/Broccoli-Beef2-jpg.jpg' alt = 'BroccoliBeef' style="width:304px;height:228px;">
-  <img src = 'https://s.graphiq.com/sites/default/files/530/media/images/t2/Panda_Express_Chicken_Potsticker_821093.jpg' alt = 'Potstickers' style="width:304px;height:228px;">
-  <img src = 'http://cookdiary.net/wp-content/uploads/images/Lo-Mein_18970.jpg' alt = 'LoMein' style="width:304px;height:228px;">
-{# also make sure to include this very last line as well #}
+  <h3>Welcome to Grub!</h3> 
+  <div class="alert alert-info">Click on a photo to view a recipe.</div>
 
-<h3>User Results</h3>
-<ul>
-{% if users %}
-{% for result in users %}
-	{% for key in result %}
-		{% if key == 'UserID' %}
-			<div>
-				<p>Username: {{result['UserID']|e}}</p>
-				<p>Password: {{result['Password']|e}}</p>
-			</div>
-		{% else %}
-
-		{% endif %}
-		
-  	{% endfor %}
-  	<div>--------</div>
-{% endfor %}
-{% else %}
-<div>No results</div>
+{% if all_photos %}
+	{% for photo in all_photos %}
+		<a href = view?recipeID={{photo['RecipeID'] | e}}>
+			<img src = {{photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
+		</a>
+	{% endfor %}
 {% endif %}
-</ul>
+
+<h3>Recipe Links</h3>
+{% if all_recipes %}
+	{% for recipe in all_recipes %}
+		<ul>
+			<li><a href = view?recipeID={{recipe['RecipeID'] | e}}>{{recipe['Recipe_name'] | e }}</a></li>
+		</ul>
+	{% endfor %}
+{% else %}
+	<p>No recipes found</p>
+{% endif %}
 
 {% endblock %}

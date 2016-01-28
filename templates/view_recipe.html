@@ -1,0 +1,79 @@
+{% extends "app_base.html" %}
+{% block content %}
+{# include the first two lines above to extend the app_base template #}
+
+
+{% if recipe %}
+	{% for result in recipe %}
+		<h3>{{ result['Recipe_name'] | e}}</h3>
+		<p>Description: {{ result['Description'] | e}} </p>
+		<p>Overall Rating: {{ result['Overall_rating'] | e}} </p>
+		<p>Number of Servings: {{ result['Num_servings'] | e}} </p>
+		<p>User ID: {{ result['UserID'] | e}} </p>
+		<p>Cooking Time: {{result['Time_completion'] | e}} minutes </p>
+		<p>Is this dish spicy? {{result['Spicy'] | e}} </p>
+		<p>Difficulty: {{result['Difficulty'] | e}} </p>
+
+		{% if instructions %}
+			<br>
+			<h4>Instructions:</h4>
+			{% for instruction in instructions %}
+				<p>Step {{instruction['Instruction_number'] | e}}: {{instruction['Instruction'] | e}}</p>
+			{% endfor %}
+		{% endif %}
+
+		{% if ingredients %}
+			<br>
+			<h4>Ingredients:</h4>
+			{% for ingredient in ingredients %}
+				<ul>
+					<li>{{ingredient['Quantity'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>	
+				</ul>
+			{% endfor %}
+		{% endif %}
+
+		{% if tags %}
+			<br>
+			<h4>Tags:</h4>
+			{% for tag in tags %}
+				<ul>
+					<li>{{tag['Tags'] | e}}</li>
+				</ul>
+			{% endfor %}
+		{% endif %}
+
+		{% if photos %}
+			<br>
+			<h4>Photos:</h4>
+			{% for photo in photos %}
+				<img src = {{photo['Photo'] | e}} alt = 'OrangeChicken' style="width:304px;height:228px;" >
+			{% endfor %}
+		{% endif %}
+
+		{% if categories %}
+			<br>
+			<br>
+			<h4>Categories:</h4>
+			{% for category in categories %}
+				<ul>
+					<li>{{category['Category'] | e}}</li>
+				</ul>
+			{% endfor %}
+		{% endif %}
+
+		{% if reviews %}
+			<br>
+			<h4>Reviews:</h4>
+			{% for review in reviews %}
+				<ul>
+					<li>{{review['UserID'] | e}} ({{review['Rating'] | e}} stars) - {{review['Review'] | e}}</li>
+				</ul>
+			{% endfor %}
+		{% endif %}
+
+	{% endfor %}
+{% else %}
+	<h3>Recipe Not Found</h3>
+{% endif %}
+
+{% endblock %}

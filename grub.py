@@ -5,23 +5,32 @@ import web
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 import sqlitedb
-        
+
 urls = (
-    '/(.*)', 'hello', '/hello', 'upload', '/upload'
+    '/hello', 'hello', '/view', 'view',
 )
 app = web.application(urls, globals())
 
 class hello:        
-    def GET(self, name):
-        #sqlitedb.addUser('adam', 111)
-        users_search_results = sqlitedb.getUsers()
-    	return render_template('curr_time.html', users = users_search_results)
-        return 'Grub! Personalized cooking suggestions'
+    def GET(self):
+        all_recipes = sqlitedb.getAllRecipes()
+        all_photos = sqlitedb.getAllPhotos()
+    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos)
 
-class upload:
-    def POST(self):
+class view:
+    def GET(self):
         post_params = web.input()
-        itemID = post_params['itemID']
+        recipeID = 0
+        if 'recipeID' in post_params:
+            recipeID = post_params['recipeID']
+        recipe = sqlitedb.getRecipe(recipeID)
+        instructions = sqlitedb.getInstructions(recipeID)
+        ingredients = sqlitedb.getIngredients(recipeID)
+        tags = sqlitedb.getTags(recipeID)
+        photos = sqlitedb.getPhotos(recipeID)
+        categories = sqlitedb.getCategories(recipeID)
+        reviews = sqlitedb.getReviews(recipeID)
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
 
 # helper method to render a template in the templates/ directory
 #
