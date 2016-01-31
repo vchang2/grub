@@ -111,13 +111,16 @@ def getFollowing(username):
     return results
 
 
-#THIS IS NOT CORRECT
+#not sure if correct
 def assignRecipeID():
     query_string = 'select * from LastRecipeID'
     result = query(query_string)
-    recipeID = result + 1
-    query_string = 'insert into LastRecipeID values ($recipeID)'
-    db.query(query_string, {'recipeID':recipeID})
+    delete = 0
+    for r in result:
+        delete = r['RecpieID']
+    recipeID = delete + 1
+    query_string = 'update LastRecipeID set RecipeID = $recipeID where RecipeID = $delete'
+    db.query(query_string, {'recipeID':recipeID, 'delete':delete })
     return recipeID
 
 # Added by Ryan on 1/27 at 9:12pm or later
@@ -136,4 +139,11 @@ def getPassword(username):
     query_string = 'select Password from Recipes where UserID = $username'
     results = query(query_string, {'username': username})
     return results
+
+#for overall rating, put in -1 if it hasn't been rated yet
+def insertRecipe(RecipeID, UserID, Overall_rating, Recipe_name, Description, Time_completion, Num_servings, Spicy, Difficulty):
+    query_string = 'insert into Recipes values ($recipeID, $userID, $overall_rating, $recipe_name, $description, $time_completion, $num_servings, $spicy, $difficulty)'
+    db.query(query_string, {'recipeID': RecipeID, 'userID':UserID, 'overall_rating':Overall_rating, 'recipe_name':Recipe_name, 'description', 'time_completion':Time_completion, 'num_servings':Num_servings, 'spicy':Spicy, 'difficulty':Difficulty})
+
+
 
