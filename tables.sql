@@ -12,7 +12,7 @@ drop table if exists Followers;
 
 create table Users (
 UserID varchar(255) PRIMARY KEY,
-Password varchar(255));
+Password varchar(255), About_me varchar(255));
 
 create table Cookbooks(
 CookbookID int PRIMAR KEY,
@@ -73,7 +73,7 @@ UserID text REFERENCES Users(UserID));
 create table LastRecipeID(
 RecipeID int REFERENCES Recipes(RecipeID));
 
-Insert into Users values("skaterAdam189", "apple"), ("blubbo", "apple"), ("billy", "apple");
+Insert into Users values("skaterAdam189", "apple", "Expert master chef."), ("blubbo", "apple", "Here to make new dishes and learn how to cook."), ("billy", "apple", "AB. Also I make great recipes! Follow me.");
 
 Insert into Cookbooks values(1, "blubbo", "Blubbo's cookbook");
 Insert into Cookbooks_recipes values(1, 1);
