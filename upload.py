@@ -1,25 +1,13 @@
 import web
+import os
+
+from jinja2 import Environment, FileSystemLoader
 
 render = web.template.render('templates/')
 
 urls = (
     '/(.*)', 'upload', '/upload', 'steps', '/steps'
 )
-
-instructions = []
-for i in range(6):
-	instructions.append("THIS IS A STEP")
-
-class upload:
-	def GET(self, name):
-		print "IN UPLOAD"
-		return render_template('upload.html', instructions)
-
-class steps:
-	def GET(self):
-		print "I AM PRINTING"
-		instructions.append("I ADDED A NEW STEP")
-		return render_template('upload.html', instructions)
 
 def render_template(template_name, **context):
     extensions = context.pop('extensions', [])
@@ -34,6 +22,30 @@ def render_template(template_name, **context):
     web.header('Content-Type','text/html; charset=utf-8', unique=True)
 
     return jinja_env.get_template(template_name).render(context)
+
+instructions = []
+for i in range(6):
+	instructions.append("THIS IS A STEP")
+
+login = form.Form(
+    form.Textbox('username'),
+    form.Password('password'),
+    form.Button('Login'),
+)
+
+class upload:
+	def GET(self, name):
+		print "IN UPLOAD"
+		print len(instructions)
+		#return render_template('upload.html', instructions = instructions)
+		form = login()
+		return render.upload(form, instructions)
+
+class steps:
+	def GET(self):
+		print "I AM PRINTING"
+		instructions.append("I ADDED A NEW STEP")
+		return render_template('upload.html', instructions)
 
 if __name__ == "__main__":
 	app = web.application(urls, globals())

@@ -1,4 +1,8 @@
-$def with (instructions)
+$def with (form, instructions)
+
+<form name="main" method="post">
+$:form.render()
+<input type="submit" />
 
 <h1>Upload a new recipe!</h1>
 	<table>
