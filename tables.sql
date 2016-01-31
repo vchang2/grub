@@ -9,6 +9,8 @@ drop table if exists Photos;
 drop table if exists Categories;
 drop table if exists Reviews;
 drop table if exists Followers;
+drop table if exists LastRecipeID;
+drop table if exists Instructions;
 
 
 create table Users (
