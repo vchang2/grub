@@ -9,7 +9,7 @@ drop table if exists Photos;
 drop table if exists Categories;
 drop table if exists Reviews;
 drop table if exists Followers;
-drop table if exists LastRecipeID;
+drop table if exists Constants;
 drop table if exists Instructions;
 
 
@@ -77,8 +77,9 @@ create table Followers(
 FollowerID text REFERENCES Users(UserID),
 UserID text REFERENCES Users(UserID));
 
-create table LastRecipeID(
-RecipeID int REFERENCES Recipes(RecipeID));
+create table Constants(
+RecipeID int REFERENCES Recipes(RecipeID),
+CookbookID int REFERENCES Cookbooks(CookbookID));
 
 Insert into Users values("skaterAdam189", "apple"), ("blubbo", "apple"), ("billy", "apple");
 Insert into About_me values("skaterAdam189", "Expert master chef."), ("blubbo", "Here to make new dishes and learn how to cook."), ("billy", "AB. Also I make great recipes! Follow me.");
@@ -92,4 +93,4 @@ Insert into Photos values (1, "http://162.61.226.249/PicOriginal/P63452612080938
 Insert into Categories values(1, "savory"), (1, "dinner");
 Insert into Reviews values(1, "blubbo", "it's good, but the dish could use more beef", 4);
 Insert into Followers values("blubbo", "billy");
-Insert into LastRecipeID values(1);
+Insert into Constants values(1, 1);
