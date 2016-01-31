@@ -133,7 +133,7 @@ def getAllPhotos():
 
 #added by Valerie on 1/31
 def getPassword(username):
-    query_string = 'select password from Recipes where UserID = $username'
+    query_string = 'select Password from Recipes where UserID = $username'
     results = query(query_string, {'username': username})
     return results
 
