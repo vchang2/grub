@@ -20,7 +20,7 @@ UserID varchar(255) REFERENCES Users(UserID),
 Description varchar(255));
 
 create table Cookbooks(
-CookbookID int PRIMAR KEY,
+CookbookID int PRIMARY KEY,
 UserID text REFERENCES Users(UserID),
 Cookbook_name text);
 
@@ -79,7 +79,7 @@ create table LastRecipeID(
 RecipeID int REFERENCES Recipes(RecipeID));
 
 Insert into Users values("skaterAdam189", "apple"), ("blubbo", "apple"), ("billy", "apple");
-Insert into About_me("skaterAdam189", "Expert master chef."), ("blubbo", "Here to make new dishes and learn how to cook."), ("billy", "AB. Also I make great recipes! Follow me.");
+Insert into About_me values("skaterAdam189", "Expert master chef."), ("blubbo", "Here to make new dishes and learn how to cook."), ("billy", "AB. Also I make great recipes! Follow me.");
 Insert into Cookbooks values(1, "blubbo", "Blubbo's cookbook");
 Insert into Cookbooks_recipes values(1, 1);
 Insert into Recipes values(1, "billy", 4, "Broccoli Beef", "The Best Broccoli Beef in town.", 55, 4, "no", 2);
