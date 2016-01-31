@@ -110,6 +110,8 @@ def getFollowing(username):
     results = query(query_string, {'userID': username})
     return results
 
+
+#THIS IS NOT CORRECT
 def assignRecipeID():
     query_string = 'select * from LastRecipeID'
     result = query(query_string)
@@ -127,5 +129,11 @@ def getAllRecipes():
 def getAllPhotos():
     query_string = 'select * from Photos'
     results = query(query_string)
+    return results
+
+#added by Valerie on 1/31
+def getPassword(username):
+    query_string = 'select password from Recipes where UserID = $username'
+    results = query(query_string, {'username': username})
     return results
 
