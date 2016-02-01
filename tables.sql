@@ -1,4 +1,5 @@
 drop table if exists Users;
+drop table if exists About_me;
 drop table if exists Cookbooks;
 drop table if exists Cookbooks_recipes;
 drop table if exists Recipes;
@@ -8,14 +9,20 @@ drop table if exists Photos;
 drop table if exists Categories;
 drop table if exists Reviews;
 drop table if exists Followers;
+drop table if exists Constants;
+drop table if exists Instructions;
 
 
 create table Users (
 UserID varchar(255) PRIMARY KEY,
 Password varchar(255));
 
+create table About_me(
+UserID varchar(255) REFERENCES Users(UserID),
+Description varchar(255));
+
 create table Cookbooks(
-CookbookID int PRIMAR KEY,
+CookbookID int PRIMARY KEY,
 UserID text REFERENCES Users(UserID),
 Cookbook_name text);
 
@@ -70,11 +77,12 @@ create table Followers(
 FollowerID text REFERENCES Users(UserID),
 UserID text REFERENCES Users(UserID));
 
-create table LastRecipeID(
-RecipeID int REFERENCES Recipes(RecipeID));
+create table Constants(
+RecipeID int REFERENCES Recipes(RecipeID),
+CookbookID int REFERENCES Cookbooks(CookbookID));
 
 Insert into Users values("skaterAdam189", "apple"), ("blubbo", "apple"), ("billy", "apple");
-
+Insert into About_me values("skaterAdam189", "Expert master chef."), ("blubbo", "Here to make new dishes and learn how to cook."), ("billy", "AB. Also I make great recipes! Follow me.");
 Insert into Cookbooks values(1, "blubbo", "Blubbo's cookbook");
 Insert into Cookbooks_recipes values(1, 1);
 Insert into Recipes values(1, "billy", 4, "Broccoli Beef", "The Best Broccoli Beef in town.", 55, 4, "no", 2);
@@ -85,4 +93,4 @@ Insert into Photos values (1, "http://162.61.226.249/PicOriginal/P63452612080938
 Insert into Categories values(1, "savory"), (1, "dinner");
 Insert into Reviews values(1, "blubbo", "it's good, but the dish could use more beef", 4);
 Insert into Followers values("blubbo", "billy");
-Insert into LastRecipeID values(1);
+Insert into Constants values(1, 1);
