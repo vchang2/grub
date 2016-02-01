@@ -1,8 +1,4 @@
-$def with (form, instructions)
-
-<form name="main" method="post">
-$:form.render()
-<input type="submit" />
+$def with (instructions)
 
 <h1>Upload a new recipe!</h1>
 	<table>
@@ -46,14 +42,6 @@ $:form.render()
 			<td>Spicy?<br/>.</td>
 			<td><input type="radio" name="spicy" value="yes"> Yes<br/>
 				<input type="radio" name="spicy" value="no" checked> No</td>
-		</tr>
-		<tr>
-			<td>Level of Difficulty<br/>.<br/>.</td>
-			<td><input type="radio" name="diff" value="1"> Kitchen Novice<br/>
-				<input type="radio" name="diff" value="2" checked> Intermediate Cook<br/>
-				<input type="radio" name="diff" value="3"> Master Chef</td>
-		</tr>
-		<tr>
 		</tr>
 	</table>
 

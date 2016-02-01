@@ -1,12 +1,13 @@
 import web
 import os
+from web import form
 
 from jinja2 import Environment, FileSystemLoader
 
 render = web.template.render('templates/')
 
 urls = (
-    '/(.*)', 'upload', '/upload', 'steps', '/steps'
+    '/upload', 'upload', '/addSteps', 'addSteps'
 )
 
 def render_template(template_name, **context):
@@ -27,25 +28,28 @@ instructions = []
 for i in range(6):
 	instructions.append("THIS IS A STEP")
 
-login = form.Form(
-    form.Textbox('username'),
-    form.Password('password'),
-    form.Button('Login'),
+'''
+uploadForm = form.Form(
+	form.Textbox('name'),
+	form.Textarea('description', rows=4, cols=50),
+	form.Textbox('time'),
+	form.Textbox('servings')
 )
+'''
+
+def getHelper():
+	#return render_template('upload.html', instructions = instructions)
+	#return render.upload(uploadForm, instructions)
+	return render.upload(instructions)
 
 class upload:
-	def GET(self, name):
-		print "IN UPLOAD"
-		print len(instructions)
-		#return render_template('upload.html', instructions = instructions)
-		form = login()
-		return render.upload(form, instructions)
-
-class steps:
 	def GET(self):
-		print "I AM PRINTING"
+		return getHelper()
+
+class addSteps:
+	def GET(self):
 		instructions.append("I ADDED A NEW STEP")
-		return render_template('upload.html', instructions)
+		return getHelper()
 
 if __name__ == "__main__":
 	app = web.application(urls, globals())
