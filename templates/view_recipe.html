@@ -9,7 +9,7 @@
 		<p>Description: {{ result['Description'] | e}} </p>
 		<p>Overall Rating: {{ result['Overall_rating'] | e}} </p>
 		<p>Number of Servings: {{ result['Num_servings'] | e}} </p>
-		<p>User ID: {{ result['UserID'] | e}} </p>
+		<p>User ID: <a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a></p>
 		<p>Cooking Time: {{result['Time_completion'] | e}} minutes </p>
 		<p>Is this dish spicy? {{result['Spicy'] | e}} </p>
 		<p>Difficulty: {{result['Difficulty'] | e}} </p>
@@ -27,7 +27,11 @@
 			<h4>Ingredients:</h4>
 			{% for ingredient in ingredients %}
 				<ul>
-					<li>{{ingredient['Quantity'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>	
+					{% if ingredient['Unit'] == "blank" %}
+						<li>{{ingredient['Quantity'] | e }} {{ingredient['Ingredient'] | e }}</li>
+					{% else %}
+						<li>{{ingredient['Quantity'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>
+					{% endif %}	
 				</ul>
 			{% endfor %}
 		{% endif %}
@@ -66,7 +70,7 @@
 			<h4>Reviews:</h4>
 			{% for review in reviews %}
 				<ul>
-					<li>{{review['UserID'] | e}} ({{review['Rating'] | e}} stars) - {{review['Review'] | e}}</li>
+					<li><a href = user?userID={{review['UserID'] | e}}>{{review['UserID'] | e }}</a> ({{review['Rating'] | e}} stars) - {{review['Review'] | e}}</li>
 				</ul>
 			{% endfor %}
 		{% endif %}
