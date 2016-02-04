@@ -28,9 +28,17 @@
 			{% for ingredient in ingredients %}
 				<ul>
 					{% if ingredient['Unit'] == "None" %}
-						<li>{{ingredient['Quantity'] | e }} {{ingredient['Ingredient'] | e }}</li>
+						{% if ingredient['Quantity_denom'] == 1 %}
+							<li>{{ingredient['Quantity_num'] | e }} {{ingredient['Ingredient'] | e }}</li>
+						{% else %}
+							<li>{{ingredient['Quantity_num'] | e }}/{{ingredient['Quantity_denom'] | e }} {{ingredient['Ingredient'] | e }}</li>
+						{% endif %}
 					{% else %}
-						<li>{{ingredient['Quantity'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>
+						{% if ingredient['Quantity_denom'] == 1 %}
+							<li>{{ingredient['Quantity_num'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>
+						{% else %}
+							<li>{{ingredient['Quantity_num'] | e }}/{{ingredient['Quantity_denom'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>
+						{% endif %}
 					{% endif %}	
 				</ul>
 			{% endfor %}

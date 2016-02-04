@@ -71,7 +71,8 @@ class search:
         userID = post_params['userID']
         recipeName = post_params['recipeName']
         completionTime = post_params['completionTime']
-        search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime)
+        ingredients = post_params['ingredients']
+        search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients)
         return render_template('search_recipes.html', search_results = search_results)
 
 # helper method to render a template in the templates/ directory

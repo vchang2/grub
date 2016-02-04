@@ -217,4 +217,33 @@ def updateAboutMe(UserID, Description):
     query_string = 'update About_me set Description = $description where UserID = $userID'
     db.query(query_string, {'description':Description, 'userID':UserID})
 
+# Search Recipe Queries (Ryan, Wednesday 2/3)
+def searchRecipes(recipeID, userID, recipeName, completionTime, ingredients):
+    query_string = 'select * from Recipes'
+    if recipeID != "":
+        query_string += ' where RecipeID = $recipeID'
+    else:
+        query_string += ' where RecipeID = RecipeID'
+    if userID != "":
+        query_string += ' and UserID = $userID'
+    if recipeName != "":
+        recipeInput = recipeName
+        recipeName = '%'
+        recipeName += recipeInput
+        recipeName += '%'
+        query_string += ' and Recipe_name LIKE $recipeName'
+    if completionTime == '1':
+        query_string += ' and Time_completion <= 30'
+    elif completionTime == '2':
+        query_string += ' and Time_completion >= 30 and Time_completion <= 60'
+    elif completionTime == '3':
+        query_string += ' and Time_completion >= 60 and Time_completion <= 90'
+    elif completionTime == '4':
+        query_string += ' and Time_completion >= 90'
+    if ingredients != "":
+        ingredientsList = ingredients.split()
+        print "Printing ingredients list"
+        print ingredientsList
+    results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName})
+    return results
 

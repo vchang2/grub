@@ -2,21 +2,13 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 
-<h3> Search </h3> 
+<h3> Search Recipes </h3> 
 
 <form method="POST" action="search" role="form" style="max-width:400px; width:100%">
 	{% if message is defined %}
 	<div class="alert alert-warning" role="alert">{{ message }}</div>
 	{% endif %}
 	<div class="alert alert-info">Anything not input will not be taken into account</div>
-	<div class="form-group">
-	  <label for="recipeID">Recipe ID</label>
-	  <input type="text" class="form-control" id="recipeID" name="recipeID" />
-	</div>
-	<div class="form-group">
-	  <label for="userID">User ID</label>
-	  <input type="text" name="userID" class="form-control" id="userID" />
-	</div>
 	<div class="form-group">
 	  <label for="recipeName">Recipe Name</label>
 	  <input type="text" name="recipeName" class="form-control" id="recipeName" />
@@ -27,25 +19,37 @@
 		<div class="radio-inline"><label><input type="radio" name="completionTime" value="2">30 to 60 minutes</label></div>
 		<div class="radio-inline"><label><input type="radio" name="completionTime" value="3">60 to 90 minutes</label></div>
 		<div class="radio-inline"><label><input type="radio" name="completionTime" value="4" checked>Over 90 minutes</label></div>
+		<div class="radio-inline"><label><input type="radio" name="completionTime" value="5" checked>Any</label></div>
+	</div>
+	<div class="form-group">
+	  <label for="userID">User ID</label>
+	  <input type="text" name="userID" class="form-control" id="userID" />
+	</div>
+	<div class="form-group">
+	  <label for="recipeID">Recipe ID</label>
+	  <input type="text" class="form-control" id="recipeID" name="recipeID" />
+	</div>
+	<div class="form-group">
+	  <label for="ingredients">Ingredients</label>
+	  <input type="text" class="form-control" id="ingredients" name="ingredients" />
 	</div>
 	<div><input type="submit" value="Start Searching!" class="btn btn-primary" /></div>
 </form>
 
-<h3>Result</h3>
+<h3>Results</h3>
 <ul>
 {% if search_results %}
 {% for result in search_results %}
-	{% for key in result %}
-		<div>
-			<span>{{ key|e }}</span>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<span>{{ result[key]|e }}</span>
-		</div>
-  	{% endfor %}
-  	<div>--------</div>
+	<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }}</a></li>
+	<ul>
+		<li>User: <a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a></li>
+		<li>Rating: {{result['Overall_rating'] | e}}</li>
+		<li>Completion Time: {{result['Time_completion'] | e}}</li>
+	</ul>
+	<br>
 {% endfor %}
 {% else %}
-<div>No results</div>
+<p>No results</p>
 {% endif %}
 </ul>
 
