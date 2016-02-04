@@ -129,6 +129,6 @@ Insert into Reviews values(1, "blubbo", "it's good, but the dish could use more 
 (3, "Adam189", "A really amazing dish. I had a lot of fun making it. Since my wife is vegetarian, it's a great snack for the both of us to enjoy. Easy to make, and delicious to eart!", 5),
 (3, "blubbo", "Really great set and stone instructions for a beginner like me. No need for heating anything, and the sandwiches were delicious!!!", 5), (4, "Adam189", "Blubbo is one of our newer members to the community. This is 
 	a really great start, but would have liked to see more thorough instructions to carry out this dish. But an incredible idea", 2), (4, "billy", "I've had quesadillas: chicken, cheese, chicken and cheese, mushroom, you name it. But never green!
-	It tastes a lot better than expected!", 5), (6, "bluboo", "Amazing! This tasted so great, and really tasted like the bread stuffing my grandma used to make. It's delicious, thanks so much!", 5);
+	It tastes a lot better than expected!", 5), (6, "blubbo", "Amazing! This tasted so great, and really tasted like the bread stuffing my grandma used to make. It's delicious, thanks so much!", 5);
 Insert into Followers values("blubbo", "billy"), ("Adam189", "billy");
 Insert into Constants values(6, 1);
