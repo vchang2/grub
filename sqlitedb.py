@@ -179,9 +179,9 @@ def addRecipeInstruction(RecipeID, Instruction_number, Instruction):
     query_string = 'insert into Instructions values($recipeID, $instruction_number, $instruction)'
     db.query(query_string, {'recipeID':RecipeID, 'instruction_number':Instruction_number, 'instruction':Instruction})
 
-def addRecipeIngredients(RecipeID, Ingredient, Quantity, Unit):
-    query_string = 'insert into Ingredients values($recipeID, $ingredient, $quantity, $unit)'
-    db.query(query_string, {'recipeID':RecipeID, 'ingredient':Ingredient, 'quantity':Quantity, 'unit':Unit})
+def addRecipeIngredients(RecipeID, Ingredient, Quantity_num, Quantity_denom, Unit):
+    query_string = 'insert into Ingredients values($recipeID, $ingredient, $quantity_num, $quantity_denom, $unit)'
+    db.query(query_string, {'recipeID':RecipeID, 'ingredient':Ingredient, 'quantity_num':Quantity_num, 'quantity_denom':Quantity_denom, 'unit':Unit})
 
 def getAboutMe(username):
     query_string = 'select * from About_me where UserID = $username'
