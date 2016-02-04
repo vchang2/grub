@@ -7,7 +7,7 @@ from datetime import datetime
 import sqlitedb
 
 urls = (
-    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook',
+    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search',
 )
 app = web.application(urls, globals())
 
@@ -61,6 +61,18 @@ class cookbook:
             cookbookRecipes = sqlitedb.getCookbooks_recipes(cookbookID)
         return render_template('view_cookbook.html', cookbookID = cookbookID)
 
+class search:
+    def GET(self):
+        return render_template('search_recipes.html')
+
+    def POST(self):
+        post_params = web.input()
+        recipeID = post_params['recipeID']
+        userID = post_params['userID']
+        recipeName = post_params['recipeName']
+        completionTime = post_params['completionTime']
+        search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime)
+        return render_template('search_recipes.html', search_results = search_results)
 
 # helper method to render a template in the templates/ directory
 #
