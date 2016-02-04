@@ -27,7 +27,7 @@
 			<h4>Ingredients:</h4>
 			{% for ingredient in ingredients %}
 				<ul>
-					{% if ingredient['Unit'] == "blank" %}
+					{% if ingredient['Unit'] == "None" %}
 						<li>{{ingredient['Quantity'] | e }} {{ingredient['Ingredient'] | e }}</li>
 					{% else %}
 						<li>{{ingredient['Quantity'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>
