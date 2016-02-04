@@ -97,14 +97,16 @@ Insert into Instructions values(1, 1, "Get some broccoli."), (1, 2, "Get some be
 	tofu so that it coats (if it doesn’t coat fully in your pan, add a bit more tamari until all tofu is coated). Let the tofu marinate for at least 15 minutes."), (3, 5, "Heat a nonstick skillet to medium-high heat. Add a little oil to the pan and place tofu pieces 
 	with enough space between each so that they’re not too crowded (you can cook them in batches). Let the tofu cook (without moving it around too much) for a few minutes per side until they’re deeply golden brown and caramelized (almost blackened) around the edges. 
 	Remove from heat. Taste a little piece and add more salt & pepper if necessary."), (3, 6, "Assemble sandwiches with mayo, tofu slices, pickled veggies, cilantro and serve with sriracha.");
-Insert into Ingredients values(1, "broccoli", 10, 1, "None"), (1, "beef", 4, 1, "pounds"), (1, "yummy sauce", 2, 1,"oz"), (2, "chicken breast", 8,1, "ounces"), (2, "olive oil", 4, 1,"tablespoons"), (2, "shallot", 1,1, "None"),
-(2, "garlic clove", 1,4, "None"), (2, "Marsala wine or chicken broth", 1,2, "cup"), (2, "egg", 1,1, "None"), (2, "prosciutto", 4,1, "thin slices"), (3, "extra firm tofu", 14, 1, "oz."), (3, "fresh baguette", 1, 1, "None"), (3, "small daikon sliced into matchsticks", 1, 1, "None"),
-(3, "small carrots", 2, 1, "None");
-Insert into Tags values(1, "broccoli"), (1, "beef"), (2, "best food ever"), (2, "chicken"), (2, "Ravioli"), (2, "Dinner");
+Insert into Ingredients values(1, "broccoli", 10, 1, "None"), (1, "beef", 4, 1, "pounds"), (1, "yummy sauce", 2, 1,"ounces"), (2, "chicken breast", 8,1, "ounces"), (2, "olive oil", 4, 1,"tablespoons"), (2, "shallot", 1,1, "None"),
+(2, "garlic clove", 1,4, "None"), (2, "Marsala wine or chicken broth", 1,2, "cups"), (2, "egg", 1,1, "None"), (2, "thin slices prosciutto", 4,1, "None"), (3, "extra firm tofu", 14, 1, "ounces"), (3, "fresh baguette", 1, 1, "None"), (3, "small daikon sliced into matchsticks", 1, 1, "None"),
+(3, "small carrots", 2, 1, "None"), (3, "thinly sliced jalapeño", 1, 2, "None"), (3, "white wine vinegar", 1, 4, "cups"), (3, "salt", 3, 1, "pinches"), (3, "tamari", 2, 1, "tablespoons"), (3, "garlic", 1, 1, "cloves"), (3, "minced ginger", 1, 2, "teaspoons");
+Insert into Tags values(1, "broccoli"), (1, "beef"), (2, "best food ever"), (2, "chicken"), (2, "Ravioli"), (2, "Dinner"), (3, "Vietnamese"), (3, sandwiches);
 Insert into Photos values (1, "http://162.61.226.249/PicOriginal/P63452612080938_5.jpg"), 
 (2, "http://media.olivegarden.com/images/site/ext/pages/_promotions/specials/flavorfilled-extra-stuffed-pastas/specials_details_flavorfilled_01_1123.jpg"),
 (3, "http://www.willowandthyme.com/wp-content/uploads/2015/04/banh-mi-tofu-2fw-871x1024.jpg");
-Insert into Categories values(1, "savory"), (1, "dinner"), (2, "savory"), (2, "dinner");
-Insert into Reviews values(1, "blubbo", "it's good, but the dish could use more beef", 4), (2, "billy", "I had a wonderful time making this dish. The instructions were well thoughout and put together. It was quite fantastic", 4);
-Insert into Followers values("blubbo", "billy");
+Insert into Categories values(1, "savory"), (1, "dinner"), (2, "savory"), (2, "dinner"), (3, "vegetarian"), (2, "snack");
+Insert into Reviews values(1, "blubbo", "it's good, but the dish could use more beef", 4), (2, "billy", "I had a wonderful time making this dish. The instructions were well thoughout and put together. It was quite fantastic", 4)
+(3, "Adam189", "A really amazing dish. I had a lot of fun making it. Since my wife is vegetarian, it's a great snack for the both of us to enjoy. Easy to make, and delicious to eart!", 5),
+(3, "blubbo", "Really great set and stone instructions for a beginner like me. No need for heating anything, and the sandwiches were delicious!!!", 5);
+Insert into Followers values("blubbo", "billy"), ("Adam189", "billy");
 Insert into Constants values(3, 1);
