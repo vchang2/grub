@@ -1,0 +1,120 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="static/css/upload.css" />
+	<title>Upload Recipe</title>
+</head>
+
+<h1>Upload a new recipe!</h1>
+
+
+<form action="upload_page" method="POST"><table cellspacing="0" class="table">
+	<tr>
+		<th class="oddHead" onmouseover="helpOn(nameHelpImg)" onmouseout="helpOff(nameHelpImg)"><p>Name of Recipe</p></th>
+		<td class="oddRow">
+			<input type="text" name="name" class="name">
+			<img id="nameHelpImg" class="helpImg" src="static/images/upload_help/upload_help_name.png" />
+		</td>
+	</tr>
+	<tr>
+		<th onmouseover="helpOn(descriptionHelpImg)" onmouseout="helpOff(descriptionHelpImg)"><p>Description</p></th>
+		<td class="evenRow">
+			<textarea name="description" rows="4" cols="43"></textarea>
+			<img id="descriptionHelpImg" class="helpImg" src="static/images/upload_help/upload_help_description.png" />
+		</td>
+	</tr>
+	<tr>
+		<th class="oddHead" onmouseover="helpOn(ingredientsHelpImg)" onmouseout="helpOff(ingredientsHelpImg)"><p>Ingredients</p></th>
+		<td class="oddRow">
+			<div id="ingredients"></div>
+			<img id="ingredientsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_ingredients.png" />
+		</td>
+	</tr>
+	<tr>
+		<th onmouseover="helpOn(instructionsHelpImg)" onmouseout="helpOff(instructionsHelpImg)"><p>Instructions</p></th>
+		<td class="evenRow">
+			<div id="instructions"></div>
+			<img id="instructionsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_instructions.png" />
+		</td>
+	</tr>
+	<tr>
+		<th class="oddHead" onmouseover="helpOn(timeHelpImg)" onmouseout="helpOff(timeHelpImg)"><p>Time to Complete</p></th>
+		<td class="oddRow">
+			<input type="number" name="time" min="1"> minutes
+			<img id="timeHelpImg" class="helpImg" src="static/images/upload_help/upload_help_time.png" />
+		</td>
+	</tr>
+	<tr>
+		<th onmouseover="helpOn(servingsHelpImg)" onmouseout="helpOff(servingsHelpImg)"><p>Number of Servings</p></th>
+		<td class="evenRow">
+			<input type="number" name="servings" min="1">
+			<img id="servingsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_servings.png" />
+		</td>
+	</tr>
+		<th class="oddHead" onmouseover="helpOn(difficultyHelpImg)" onmouseout="helpOff(difficultyHelpImg)"><p>Level of difficulty</p></th>
+		<td class="oddRow">
+			<input type="radio" name="diff" value="1"> Kitchen Novice<br/>
+			<input type="radio" name="diff" value="2" checked> Intermediate Cook<br/>
+			<input type="radio" name="diff" value="3"> Master Chef
+			<img id="difficultyHelpImg" class="helpImg" src="static/images/upload_help/upload_help_difficulty.png" />
+		</td>
+	</tr>
+	<tr>
+		<th onmouseover="helpOn(spicyHelpImg)" onmouseout="helpOff(spicyHelpImg)"><p>Spicy?</p></th>
+		<td class="evenRow">
+			<input type="radio" name="spicy" value="yes"> Yes<br/>
+			<input type="radio" name="spicy" value="no" checked> No
+			<img id="spicyHelpImg" class="helpImg" src="static/images/upload_help/upload_help_spicy.png" />
+		</td>
+	</tr>
+	<tr>
+		<th class="oddHead" onmouseover="helpOn(categoriesHelpImg)" onmouseout="helpOff(categoriesHelpImg)"><p>Categories</p></th>
+		<td class="oddRow">
+			<table>
+				<tr>
+				<td><input type="checkbox" name="categories" value="breakfast"> Breakfast</td>
+				<td><input type="checkbox" name="categories" value="lunch"> Lunch</td>
+				<td><input type="checkbox" name="categories" value="dinner"> Dinner</td>
+				</tr>
+				<tr>
+				<td><input type="checkbox" name="categories" value="sweet"> Sweet</td>
+				<td><input type="checkbox" name="categories" value="savory"> Savory</td>
+				</tr>
+				<tr>
+				<td><input type="checkbox" name="categories" value="vegetarian"> Vegetarian</td>
+				<td><input type="checkbox" name="categories" value="gluten free"> Gluten Free</td>
+				</tr>
+			</table>
+			<img id="categoriesHelpImg" class="helpImg" src="static/images/upload_help/upload_help_categories.png" />
+		</td>
+	</tr>
+	<tr>
+		<th onmouseover="helpOn(tagsHelpImg)" onmouseout="helpOff(tagsHelpImg)"><p>Tags</p></th>
+		<td class="evenRow">
+			<textarea name="tags" rows="4" cols="43"></textarea>
+			<img id="tagsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_tags.png" />
+		</td>
+	</tr>
+	<tr>
+		<td>
+				<input type="submit" value="Upload Recipe!">
+		</td>
+	</tr>
+</table></form>
+
+<script type="text/javascript" src="static/js/upload_script.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+	var US = new UploadScript("ingredients", "instructions");
+
+	function helpOn(id){
+		id.style.display = "block";
+	}
+
+	function helpOff(id){
+		id.style.display = "none";
+	}
+
+//]]>
+</script>
+
+photos

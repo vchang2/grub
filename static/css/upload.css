@@ -1,0 +1,64 @@
+body{
+	font-family:tahoma;
+	background-color:#77aa77;
+}
+
+th{
+	vertical-align: top;
+	text-align:left;
+	font-weight:bold;
+	color:white;
+	padding:7;
+}
+
+td{
+	vertical-align: top;
+	position: relative;
+}
+
+textarea{
+	resize:none;
+}
+
+.quantityTextbox{
+	width:70;
+}
+
+.ingredientTextbox{
+	width:160;
+}
+
+.table{
+	margin:auto;
+	background:#C5C7CC;
+	box-shadow: 5px 5px 5px #666666;
+}
+
+.evenRow{
+	background:#eeeff2;
+	padding:7;
+	box-shadow: 7px 0px 5px -5px #666666 inset;
+}
+
+.oddRow{
+	background:#dfe1e7;
+	padding:7;
+	box-shadow: 7px 0px 5px -5px #666666 inset;
+}
+
+.oddHead{
+	background:#b4b6bb;
+}
+
+.name{
+	width:367px;
+}
+
+.helpImg{
+	display:none;
+	position:absolute;
+	width:400;
+	top:-30px;
+	left:10px;
+	z-index:2;
+}
