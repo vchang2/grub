@@ -218,7 +218,7 @@ def updateAboutMe(UserID, Description):
     db.query(query_string, {'description':Description, 'userID':UserID})
 
 # Search Recipe Queries (Ryan, Wednesday 2/3)
-def searchRecipes(recipeID, userID, recipeName, completionTime, ingredients):
+def searchRecipes(recipeID, userID, recipeName, completionTime, ingredient):
     query_string = 'select * from Recipes'
     if recipeID != "":
         query_string += ' where RecipeID = $recipeID'
@@ -240,10 +240,12 @@ def searchRecipes(recipeID, userID, recipeName, completionTime, ingredients):
         query_string += ' and Time_completion >= 60 and Time_completion <= 90'
     elif completionTime == '4':
         query_string += ' and Time_completion >= 90'
-    if ingredients != "":
-        ingredientsList = ingredients.split()
-        print "Printing ingredients list"
-        print ingredientsList
-    results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName})
+    if ingredient != "":
+        ingredientInput = ingredient
+        ingredient = '%'
+        ingredient += ingredientInput
+        ingredient += '%'
+        query_string += ' and RecipeID in (SELECT RecipeID from Ingredients where Ingredient LIKE $ingredient)'
+    results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName, 'ingredient':ingredient})
     return results
 

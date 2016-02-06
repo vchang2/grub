@@ -5,6 +5,7 @@ import web
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 import sqlitedb
+from sets import Set
 
 urls = (
     '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search',
@@ -71,9 +72,30 @@ class search:
         userID = post_params['userID']
         recipeName = post_params['recipeName']
         completionTime = post_params['completionTime']
-        ingredients = post_params['ingredients']
-        search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients)
-        return render_template('search_recipes.html', search_results = search_results)
+        ingredients = post_params['ingredients'].split()
+        recipeIDSet = Set([])
+        firstIngredient = True
+        for ingredient in ingredients:
+            search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredient)
+            if firstIngredient:
+                for result in search_results:
+                    newRecipeID = result['RecipeID']
+                    recipeIDSet.add(newRecipeID)
+                firstIngredient = False
+            else:
+                newRecipeIDSet = Set([])
+                for result in search_results:
+                    newRecipeID = result['RecipeID']
+                    newRecipeIDSet.add(newRecipeID)
+                recipeIDSet = recipeIDSet.intersection(newRecipeIDSet)
+
+        final_search_results = []
+        if len(ingredients) > 0:
+            for ingredientRecipeID in recipeIDSet:
+                final_search_results.extend(sqlitedb.searchRecipes(ingredientRecipeID, userID, recipeName, completionTime, ""))
+        else:
+            final_search_results.extend(sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ""))
+        return render_template('search_recipes.html', search_results = final_search_results)
 
 # helper method to render a template in the templates/ directory
 #
