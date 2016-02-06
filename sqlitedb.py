@@ -124,7 +124,7 @@ def assignRecipeID():
     result = query(query_string)
     replace = 0
     for r in result:
-        replace = r['RecpieID']
+        replace = r['RecipeID']
     recipeID = replace + 1
     query_string = 'update Constants set RecipeID = $recipeID where RecipeID = $replace'
     db.query(query_string, {'recipeID':recipeID, 'replace':replace })
