@@ -41,7 +41,7 @@ Description text,
 Time_completion int,
 Num_servings int,
 Spicy text,
-Difficulty int);
+Difficulty text);
 
 create table Instructions(
 RecipeID int REFERENCES Recipes(RecipeID),
@@ -86,12 +86,12 @@ Insert into Users values("Adam189", "apple"), ("blubbo", "apple"), ("billy", "ap
 Insert into About_me values("Adam189", "Expert master chef."), ("blubbo", "Here to make new dishes and learn how to cook."), ("billy", "I make great recipes! Follow me.");
 Insert into Cookbooks values(1, "blubbo", "Blubbo's cookbook");
 Insert into Cookbooks_recipes values(1, 1), (2, 1), (3, 1), (6, 1);
-Insert into Recipes values(1, "billy", 4.00, "Broccoli Beef", "The Best Broccoli Beef in town.", 55, 4, "no", 2), (2, "Adam189", 4.00, "Chicken Marsala Ravioli Filling", "Amazing Chicken Ravioli that will warm the heart.", 16, 7, "no", 3),
-(3, "billy", 5.00, "Seared Tofu Banh Mi Sandwiches","A delicate delite enjoyed as a whole-hearted meal.", 25, 3, "yes", 3),
+Insert into Recipes values(1, "billy", 4.00, "Broccoli Beef", "The Best Broccoli Beef in town.", 55, 4, "no", "Intermediate Cook"), (2, "Adam189", 4.00, "Chicken Marsala Ravioli Filling", "Amazing Chicken Ravioli that will warm the heart.", 16, 7, "no", "Master Chef"),
+(3, "billy", 5.00, "Seared Tofu Banh Mi Sandwiches","A delicate delite enjoyed as a whole-hearted meal.", 25, 3, "yes", "Master Chef"),
 (4, "blubbo", 3.50, "Green Quesadillas", "In this frigid weather, nothing sounds better to me than soups and sandwiches. But 
-	if you’re like me and you keep tortillas on hand more regularly than bread – quesadillas are the perfect little soup or salad accompaniment.", 12, 1, "yes", 3),
-(5, "Adam189", 0, "Lemon Pesto Spaghetti Squash", "As pasta, it’s kind of mushy. As a roasted vegetable that happens to form into little strands, it’s so delicious.", 20, 1, "no", 3),
-(6, "billy", 5.00, "Bread Stuffing", "A dish that brings the kids home and the family together.", 45, 10, "no", 4);
+	if you’re like me and you keep tortillas on hand more regularly than bread – quesadillas are the perfect little soup or salad accompaniment.", 12, 1, "yes", "Kitchen Novice"),
+(5, "Adam189", 0, "Lemon Pesto Spaghetti Squash", "As pasta, it’s kind of mushy. As a roasted vegetable that happens to form into little strands, it’s so delicious.", 20, 1, "no", "Master Chef"),
+(6, "billy", 5.00, "Bread Stuffing", "A dish that brings the kids home and the family together.", 45, 10, "no", "Master Chef");
 Insert into Instructions values(1, 1, "Get some broccoli."), (1, 2, "Get some beef."), (1,3, "Get some yummy sauce."), (1, 4, "8 dollar donation."), (2, 1, "Brown chicken in 2 tablespoons of olive oil over medium-high heat"), 
 (2,2, "Add shallot and garlic."), (2, 3, "Deglaze with Marsala."), (2, 4, "Take pan away from heat source and flambe."), (2, 5, "Return pan to stove, flame will go out in about 1 minute."), (2, 6, "Sprinkle in bread crumbs and 1 tablespoon Parmesan."),
 (2, 7, "Drizzle in 1 tablespoon of olive oil to keep moist. Discard bay leaves."), (2, 8, "Pulse together all ingredients in a food processor. Add egg, cream, remaining Parmesan and olive oil."),
