@@ -11,6 +11,7 @@ class upload_page:
 		return render.upload_page()
 	def POST(self):
 		data = web.input()
+		print ("hello")
 
 if __name__ == "__main__":
 	app = web.application(urls, globals())
