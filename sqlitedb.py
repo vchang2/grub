@@ -249,3 +249,13 @@ def searchRecipes(recipeID, userID, recipeName, completionTime, ingredient):
     results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName, 'ingredient':ingredient})
     return results
 
+#Added by Valerie
+def getRecipeByCategory(Category):
+    query_string = 'select * from Categories where Category = $category'
+    results = query(query_string, {'category' : Category})
+    return results
+
+def getRecipeByTag(Tag):
+    query_string = 'select * from Tags where Tags = $tag'
+    results = query(query_string, {'tag' : Tag})
+    return results
