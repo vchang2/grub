@@ -1,52 +1,16 @@
 $def with (instructions)
 
-<h1>Upload a new recipe!</h1>
-	<table>
-		<tr>
-			<td>Name of Recipe</td>
-			<td><input type="text" name="name"></td>
-		</tr>
-		<tr>
-			<td>Description<br/>.<br/>.<br/>.</td>
-			<td><textarea name="description" rows="4" cols="50"></textarea></td>
-		</tr>
-		<tr>
-			<td>Instructions</td>
-			<td>
-				<table>
-					$for step in instructions:
-						<tr>
-							<td>1.<br/>.</td>
-							<td><textarea rows="1" cols="30">$step</textarea></td>
-						</tr>
-				</table>
-				<form method="GET" action = "steps">
-					<input type="submit" value="+ Instructions" />
-				</form>
-			</td>
-		</tr>
-		<tr>
-			<td>Time to Complete</td>
-			<td><input type="number" name="time" min="1"> minutes</td>
-		</tr>
-		<tr>
-			<td>Number of Servings</td>
-			<td><input type="number" name="servings" min="1"></td>
-		</tr>
-			<td>Level of difficulty<br/>.<br/>.</td>
-			<td><input type="radio" name="diff" value="1"> Kitchen Novice<br/>
-				<input type="radio" name="diff" value="2" checked> Intermediate Cook<br/>
-				<input type="radio" name="diff" value="3"> Master Chef</td>
-		</tr>
-		<tr>
-			<td>Spicy?<br/>.</td>
-			<td><input type="radio" name="spicy" value="yes"> Yes<br/>
-				<input type="radio" name="spicy" value="no" checked> No</td>
-		</tr>
-	</table>
+<!DOCTYPE html>
+<html>
+<script src="jquery.js"></script>
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+<script src="upload.js" language="Javascript" type="text/javascript"></script>
+<form method="POST">
+     <div id="dynamicInput">
+          Entry 1<br><input type="text" name="myInputs[]">
+     </div>
+     <input type="button" value="Add another text input" onClick="addInput('dynamicInput');">
+</form>
 
-	ingredients
-	instructions
-	tags
-	photos
-	categories
+
+</html> 

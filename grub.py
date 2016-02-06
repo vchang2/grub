@@ -7,7 +7,7 @@ from datetime import datetime
 import sqlitedb
 
 urls = (
-    '/hello', 'hello', '/view', 'view',
+    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search',
 )
 app = web.application(urls, globals())
 
@@ -31,6 +31,49 @@ class view:
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
         return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
+
+class user:
+    def GET(self):
+        post_params = web.input()
+        userID = None
+        userRecipes = None
+        userAboutMe = None
+        userFollowers = None
+        userFollowing = None
+        userCookbooks = None
+        if 'userID' in post_params:
+            userID = post_params['userID']
+            userRecipes = sqlitedb.getUserRecipes(userID)
+            userAboutMe = sqlitedb.getAboutMe(userID)
+            userFollowers = sqlitedb.getFollowers(userID)
+            userFollowing = sqlitedb.getFollowing(userID)
+            userCookbooks = sqlitedb.getCookbooks(userID)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks)
+
+class cookbook:
+    # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm
+    def GET(self):
+        post_params = web.input()
+        cookbookID = None
+        cookbookRecipes = None
+        if 'cookbookID' in post_params:
+            cookbookID = post_params['cookbookID']
+            cookbookRecipes = sqlitedb.getCookbooks_recipes(cookbookID)
+        return render_template('view_cookbook.html', cookbookID = cookbookID)
+
+class search:
+    def GET(self):
+        return render_template('search_recipes.html')
+
+    def POST(self):
+        post_params = web.input()
+        recipeID = post_params['recipeID']
+        userID = post_params['userID']
+        recipeName = post_params['recipeName']
+        completionTime = post_params['completionTime']
+        ingredients = post_params['ingredients']
+        search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients)
+        return render_template('search_recipes.html', search_results = search_results)
 
 # helper method to render a template in the templates/ directory
 #

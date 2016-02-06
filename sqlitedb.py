@@ -158,7 +158,7 @@ def getPassword(username):
     results = query(query_string, {'username': username})
     return results
 
-#for overall rating, put in -1 if it hasn't been rated yet
+#for overall rating, put in 0 if it hasn't been rated yet
 def addRecipe(RecipeID, UserID, Overall_rating, Recipe_name, Description, Time_completion, Num_servings, Spicy, Difficulty):
     query_string = 'insert into Recipes values ($recipeID, $userID, $overall_rating, $recipe_name, $description, $time_completion, $num_servings, $spicy, $difficulty)'
     db.query(query_string, {'recipeID': RecipeID, 'userID':UserID, 'overall_rating':Overall_rating, 'recipe_name':Recipe_name, 'description':Description, 'time_completion':Time_completion, 'num_servings':Num_servings, 'spicy':Spicy, 'difficulty':Difficulty})
@@ -179,9 +179,9 @@ def addRecipeInstruction(RecipeID, Instruction_number, Instruction):
     query_string = 'insert into Instructions values($recipeID, $instruction_number, $instruction)'
     db.query(query_string, {'recipeID':RecipeID, 'instruction_number':Instruction_number, 'instruction':Instruction})
 
-def addRecipeIngredients(RecipeID, Ingredient, Quantity, Unit):
-    query_string = 'insert into Ingredients values($recipeID, $ingredient, $quantity, $unit)'
-    db.query(query_string, {'recipeID':RecipeID, 'ingredient':Ingredient, 'quantity':Quantity, 'unit':Unit})
+def addRecipeIngredients(RecipeID, Ingredient, Quantity_num, Quantity_denom, Unit):
+    query_string = 'insert into Ingredients values($recipeID, $ingredient, $quantity_num, $quantity_denom, $unit)'
+    db.query(query_string, {'recipeID':RecipeID, 'ingredient':Ingredient, 'quantity_num':Quantity_num, 'quantity_denom':Quantity_denom, 'unit':Unit})
 
 def getAboutMe(username):
     query_string = 'select * from About_me where UserID = $username'
@@ -217,4 +217,33 @@ def updateAboutMe(UserID, Description):
     query_string = 'update About_me set Description = $description where UserID = $userID'
     db.query(query_string, {'description':Description, 'userID':UserID})
 
+# Search Recipe Queries (Ryan, Wednesday 2/3)
+def searchRecipes(recipeID, userID, recipeName, completionTime, ingredients):
+    query_string = 'select * from Recipes'
+    if recipeID != "":
+        query_string += ' where RecipeID = $recipeID'
+    else:
+        query_string += ' where RecipeID = RecipeID'
+    if userID != "":
+        query_string += ' and UserID = $userID'
+    if recipeName != "":
+        recipeInput = recipeName
+        recipeName = '%'
+        recipeName += recipeInput
+        recipeName += '%'
+        query_string += ' and Recipe_name LIKE $recipeName'
+    if completionTime == '1':
+        query_string += ' and Time_completion <= 30'
+    elif completionTime == '2':
+        query_string += ' and Time_completion >= 30 and Time_completion <= 60'
+    elif completionTime == '3':
+        query_string += ' and Time_completion >= 60 and Time_completion <= 90'
+    elif completionTime == '4':
+        query_string += ' and Time_completion >= 90'
+    if ingredients != "":
+        ingredientsList = ingredients.split()
+        print "Printing ingredients list"
+        print ingredientsList
+    results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName})
+    return results
 

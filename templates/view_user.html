@@ -1,0 +1,70 @@
+{% extends "app_base.html" %}
+{% block content %}
+{# include the first two lines above to extend the app_base template #}
+
+{% if userID %}
+	<h3>{{ userID | e}}'s Profile</h3>
+
+	<br>
+	<h4>About Me</h4>
+	{% if userAboutMe %}
+		<p>{{userAboutMe[0]['Description'] | e}}</p>
+	{% else %}
+		<p>About Me Not Found</p>
+	{% endif %}
+
+	<br>
+	<h4>Recipes</h4>
+	<ul>
+	{% if userRecipes %}
+		{% for result in userRecipes %}
+			<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - {{ result['Overall_rating'] | e}} stars</a></li>
+		{% endfor %}
+	{% else %}
+		<li>No Recipes</li>
+	{% endif %}
+	</ul>
+
+	<br>
+	<h4>{{ userID | e}}'s Followers</h4>
+	<ul>
+	{% if userFollowers %}
+		{% for follower in userFollowers %}
+			<li><a href = user?userID={{follower['FollowerID'] | e}}>{{follower['FollowerID'] | e }}</a></li>
+		{% endfor %}
+	{% else %}
+		<li>No Followers</li>
+	{% endif %}
+	</ul>
+
+	<br>
+	<h4>Users {{ userID | e}} Follows</h4>
+	<ul>
+	{% if userFollowing %}
+		{% for following in userFollowing %}
+			<li><a href = user?userID={{following['UserID'] | e}}>{{following['UserID'] | e }}</a></li>
+		{% endfor %}
+	{% else %}
+		<li>{{ userID | e}} does not follow any users</li>
+	{% endif %}
+	</ul>
+
+	<br>
+	<h4>{{ userID | e}}'s Cookbooks</h4>
+	<ul>
+	{% if userCookbooks %}
+		{% for cookbook in userCookbooks %}
+			<li>{{ cookbook['Cookbook_name'] | e}}</li>
+		{% endfor %}
+	{% else %}
+		<li>{{ userID | e}} does not have any cookbooks</li>
+	{% endif %}
+	</ul>
+
+{% else %}
+	<h3>User Not Found</h3>
+{% endif %}
+
+
+
+{% endblock %}
