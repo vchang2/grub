@@ -83,14 +83,23 @@ class user:
 
 class cookbook:
     # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm
+    #Edit: 2/7, Valerie will now try to complete it
     def GET(self):
         post_params = web.input()
         cookbookID = None
         cookbookRecipes = None
+        cookbookInfo = None
+        recipes = []
         if 'cookbookID' in post_params:
             cookbookID = post_params['cookbookID']
             cookbookRecipes = sqlitedb.getCookbooks_recipes(cookbookID)
-        return render_template('view_cookbook.html', cookbookID = cookbookID)
+            for recipe in cookbookRecipes:
+                print "HELLO"
+                recipes.append(recipe['RecipeID'])
+            all_photos = sqlitedb.getPhotos(recipes)
+            all_recipes = sqlitedb.getRecipes(recipes)
+            cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
 
 class search:
     def GET(self):
@@ -118,7 +127,7 @@ class search_users:
         userID = post_params['userID']
         search_results = sqlitedb.searchUsers(userID)
         return render_template('search_users.html', search_results = search_results)
-        
+
 #adam's stuff
 class upload_page:
     def GET(self):
