@@ -218,7 +218,7 @@ def updateAboutMe(UserID, Description):
     db.query(query_string, {'description':Description, 'userID':UserID})
 
 # Search Recipe Queries (Ryan, Wednesday 2/3)
-def searchRecipes(recipeID, userID, recipeName, completionTime, ingredient):
+def searchRecipes(recipeID, userID, recipeName, completionTime, ingredients, categories, tags):
     query_string = 'select * from Recipes'
     if recipeID != "":
         query_string += ' where RecipeID = $recipeID'
@@ -240,13 +240,39 @@ def searchRecipes(recipeID, userID, recipeName, completionTime, ingredient):
         query_string += ' and Time_completion >= 60 and Time_completion <= 90'
     elif completionTime == '4':
         query_string += ' and Time_completion >= 90'
-    if ingredient != "":
-        ingredientInput = ingredient
-        ingredient = '%'
-        ingredient += ingredientInput
-        ingredient += '%'
-        query_string += ' and RecipeID in (SELECT RecipeID from Ingredients where Ingredient LIKE $ingredient)'
-    results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName, 'ingredient':ingredient})
+    if ingredients != "":
+        for ingredient in ingredients:
+            ingredientForQuery = '%'
+            ingredientForQuery += ingredient
+            ingredientForQuery += '%'
+            query_string += ' and RecipeID in (SELECT RecipeID from Ingredients where Ingredient LIKE "'
+            query_string += ingredientForQuery
+            query_string += '")'
+    if categories != "":
+        firstCategory = True
+        for category in categories:
+            if firstCategory:
+                query_string += ' and (RecipeID in (SELECT RecipeID from Categories where Category = "';
+            else:
+                query_string += ' or RecipeID in (SELECT RecipeID from Categories where Category = "';
+            query_string += category
+            query_string += '")'
+            firstCategory = False
+        if firstCategory == False:
+            query_string += ')'
+    if tags != "":
+        firstTag = True
+        for tag in tags:
+            if firstTag:
+                query_string += ' and (RecipeID in (SELECT RecipeID from Tags where Tags = "';
+            else:
+                query_string += ' or RecipeID in (SELECT RecipeID from Tags where Tags = "';
+            query_string += tag
+            query_string += '")'
+            firstTag = False
+        if firstTag == False:
+            query_string += ')'
+    results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName})
     return results
 
 #Added by Valerie

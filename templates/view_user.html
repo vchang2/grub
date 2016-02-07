@@ -18,7 +18,12 @@
 	<ul>
 	{% if userRecipes %}
 		{% for result in userRecipes %}
-			<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - {{ result['Overall_rating'] | e}} stars</a></li>
+			{% if result['Overall_rating'] == 0.0 %}
+				<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - Rating N/A</a></li>
+			{% else %}
+				<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - {{ result['Overall_rating'] | e}} stars</a></li>
+			{% endif %}
+			
 		{% endfor %}
 	{% else %}
 		<li>No Recipes</li>

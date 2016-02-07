@@ -7,7 +7,12 @@
 	{% for result in recipe %}
 		<h3>{{ result['Recipe_name'] | e}}</h3>
 		<p>Description: {{ result['Description'] | e}} </p>
-		<p>Overall Rating: {{ result['Overall_rating'] | e}} </p>
+		{% if result['Overall_rating'] == 0.0 %}
+			<p>Overall Rating: N/A </p>
+		{% else %}
+			<p>Overall Rating: {{ result['Overall_rating'] | e}} </p>
+		{% endif %}
+		
 		<p>Number of Servings: {{ result['Num_servings'] | e}} </p>
 		<p>User ID: <a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a></p>
 		<p>Cooking Time: {{result['Time_completion'] | e}} minutes </p>
@@ -49,7 +54,18 @@
 			<h4>Tags:</h4>
 			{% for tag in tags %}
 				<ul>
-					<li>{{tag['Tags'] | e}}</li>
+					<li><form method="POST" action="search" role="form" style="max-width:400px; width:100%">
+						<div class="form-group">
+	  						<input type="hidden" name="tags" value={{tag['Tags'] | e}}>
+	  						<input type="hidden" name="recipeID" value="">
+	  						<input type="hidden" name="userID" value="">
+	  						<input type="hidden" name="recipeName" value="">
+	  						<input type="hidden" name="completionTime" value="">
+	  						<input type="hidden" name="ingredients" value="">
+	  						<input type="hidden" name="categories" value="">
+						</div>
+						<div><input type="submit" value={{tag['Tags'] | e}} class="btn btn-primary" /></div>
+					</form></li>
 				</ul>
 			{% endfor %}
 		{% endif %}
@@ -68,7 +84,18 @@
 			<h4>Categories:</h4>
 			{% for category in categories %}
 				<ul>
-					<li>{{category['Category'] | e}}</li>
+					<li><form method="POST" action="search" role="form" style="max-width:400px; width:100%">
+						<div class="form-group">
+	  						<input type="hidden" name="categories" value={{category['Category'] | e}}>
+	  						<input type="hidden" name="recipeID" value="">
+	  						<input type="hidden" name="userID" value="">
+	  						<input type="hidden" name="recipeName" value="">
+	  						<input type="hidden" name="completionTime" value="">
+	  						<input type="hidden" name="ingredients" value="">
+	  						<input type="hidden" name="tags" value="">
+						</div>
+						<div><input type="submit" value={{category['Category'] | e}} class="btn btn-primary" /></div>
+					</form></li>
 				</ul>
 			{% endfor %}
 		{% endif %}

@@ -13,11 +13,13 @@ urls = (
     '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search','/upload_page', 'upload_page'
 )
 app = web.application(urls, globals())
+session = web.session.Session(app, web.session.DiskStore('sessions'), initializer={'sessionUser': ""})
 render = web.template.render('templates/')
 class hello:        
     def GET(self):
         all_recipes = sqlitedb.getAllRecipes()
         all_photos = sqlitedb.getAllPhotos()
+        session.sessionUser = 'blubbo'
     	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos)
 
 class view:
@@ -100,28 +102,10 @@ class search:
         recipeName = post_params['recipeName']
         completionTime = post_params['completionTime']
         ingredients = post_params['ingredients'].split()
-        recipeIDSet = Set([])
-        firstIngredient = True
-        for ingredient in ingredients:
-            search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredient)
-            if firstIngredient:
-                for result in search_results:
-                    newRecipeID = result['RecipeID']
-                    recipeIDSet.add(newRecipeID)
-                firstIngredient = False
-            else:
-                newRecipeIDSet = Set([])
-                for result in search_results:
-                    newRecipeID = result['RecipeID']
-                    newRecipeIDSet.add(newRecipeID)
-                recipeIDSet = recipeIDSet.intersection(newRecipeIDSet)
-
-        final_search_results = []
-        if len(ingredients) > 0:
-            for ingredientRecipeID in recipeIDSet:
-                final_search_results.extend(sqlitedb.searchRecipes(ingredientRecipeID, userID, recipeName, completionTime, ""))
-        else:
-            final_search_results.extend(sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ""))
+        categories = post_params['categories'].split()
+        tags = post_params['tags'].split()
+        
+        final_search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients, categories, tags)
         return render_template('search_recipes.html', search_results = final_search_results)
 
 

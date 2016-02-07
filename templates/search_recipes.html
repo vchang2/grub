@@ -33,6 +33,14 @@
 	  <label for="ingredients">Ingredients</label>
 	  <input type="text" class="form-control" id="ingredients" name="ingredients" />
 	</div>
+	<div class="form-group">
+	  <label for="categories">Categories</label>
+	  <input type="text" class="form-control" id="categories" name="categories" />
+	</div>
+	<div class="form-group">
+	  <label for="tags">Tags</label>
+	  <input type="text" class="form-control" id="tags" name="tags" />
+	</div>
 	<div><input type="submit" value="Start Searching!" class="btn btn-primary" /></div>
 </form>
 
@@ -43,7 +51,11 @@
 	<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }}</a></li>
 	<ul>
 		<li>User: <a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a></li>
-		<li>Rating: {{result['Overall_rating'] | e}}</li>
+		{% if result['Overall_rating'] == 0.0 %}
+			<li>Rating: N/A</li>
+		{% else %} 
+			<li>Rating: {{result['Overall_rating'] | e}}</li>
+		{% endif %}
 		<li>Completion Time: {{result['Time_completion'] | e}}</li>
 	</ul>
 	<br>
