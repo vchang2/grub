@@ -33,6 +33,18 @@ class view:
         reviews = sqlitedb.getReviews(recipeID)
         return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
 
+    def POST(self):
+        post_params = web.input()
+        recipeID = post_params['recipeID']
+        sqlitedb.addRecipeReview(recipeID, "blubbo",post_params['review'], int(post_params['stars']))
+        recipe = sqlitedb.getRecipe(recipeID)
+        instructions = sqlitedb.getInstructions(recipeID)
+        ingredients = sqlitedb.getIngredients(recipeID)
+        tags = sqlitedb.getTags(recipeID)
+        photos = sqlitedb.getPhotos(recipeID)
+        categories = sqlitedb.getCategories(recipeID)
+        reviews = sqlitedb.getReviews(recipeID)
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
 class user:
     def GET(self):
         post_params = web.input()
@@ -96,6 +108,7 @@ class search:
         else:
             final_search_results.extend(sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ""))
         return render_template('search_recipes.html', search_results = final_search_results)
+
 
 # helper method to render a template in the templates/ directory
 #

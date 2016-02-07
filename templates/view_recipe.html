@@ -82,7 +82,19 @@
 				</ul>
 			{% endfor %}
 		{% endif %}
-
+		<form action="view" method="POST">
+			{% for result in recipe %}
+				<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>
+			{% endfor %}
+  			<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
+  			<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
+  			<input type="radio" name="stars" value="3"> 3 Star&nbsp;&nbsp;
+  			<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
+  			<input type="radio" name="stars" value="5"> 5 Star  
+  			<br>
+  			<textarea name="review"rows="4" cols="50"></textarea>
+  			<input type="submit" value="Add Review">
+		</form>
 	{% endfor %}
 {% else %}
 	<h3>Recipe Not Found</h3>
