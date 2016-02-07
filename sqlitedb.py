@@ -259,3 +259,7 @@ def getRecipeByTag(Tag):
     query_string = 'select * from Tags where Tags = $tag'
     results = query(query_string, {'tag' : Tag})
     return results
+
+def updateRating(recipeID, new_rating):
+    query_string = 'update Recipes set Overall_rating = $overall_rating where RecipeID = $recipeID'
+    db.query(query_string, {'overall_rating':new_rating, 'recipeID':recipeID})

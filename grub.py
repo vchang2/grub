@@ -33,18 +33,31 @@ class view:
         reviews = sqlitedb.getReviews(recipeID)
         return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
 
+#added by valerie for reviews
     def POST(self):
         post_params = web.input()
         recipeID = post_params['recipeID']
-        sqlitedb.addRecipeReview(recipeID, "blubbo",post_params['review'], int(post_params['stars']))
-        recipe = sqlitedb.getRecipe(recipeID)
-        instructions = sqlitedb.getInstructions(recipeID)
-        ingredients = sqlitedb.getIngredients(recipeID)
-        tags = sqlitedb.getTags(recipeID)
-        photos = sqlitedb.getPhotos(recipeID)
-        categories = sqlitedb.getCategories(recipeID)
-        reviews = sqlitedb.getReviews(recipeID)
-        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
+        if 'review' in post_params:
+            sqlitedb.addRecipeReview(recipeID, "blubbo",post_params['review'], int(post_params['stars']))
+
+            #need to update overall rating now
+            ratings = sqlitedb.getReviews(recipeID)
+            counter = 0.0
+            total = 0
+            for r in ratings:
+                total += r['Rating']
+                counter += 1.0
+            new_rating = total/counter
+            sqlitedb.updateRating(recipeID, new_rating)
+
+            recipe = sqlitedb.getRecipe(recipeID)
+            instructions = sqlitedb.getInstructions(recipeID)
+            ingredients = sqlitedb.getIngredients(recipeID)
+            tags = sqlitedb.getTags(recipeID)
+            photos = sqlitedb.getPhotos(recipeID)
+            categories = sqlitedb.getCategories(recipeID)
+            reviews = sqlitedb.getReviews(recipeID)
+            return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
 class user:
     def GET(self):
         post_params = web.input()
