@@ -10,17 +10,19 @@ from sets import Set
 from fractions import gcd
 
 urls = (
-    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search','/upload_page', 'upload_page'
+    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search', '/upload_page', 'upload_page', '/login', 'login', '/logout', 'logout',
 )
-app = web.application(urls, globals())
-session = web.session.Session(app, web.session.DiskStore('sessions'), initializer={'sessionUser': ""})
+web.config.debug = False
+app = web.application(urls, locals())
+session = web.session.Session(app, web.session.DiskStore('sessions'), initializer={'user': None})
 render = web.template.render('templates/')
 class hello:        
     def GET(self):
         all_recipes = sqlitedb.getAllRecipes()
         all_photos = sqlitedb.getAllPhotos()
-        session.sessionUser = 'blubbo'
-    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos)
+        if session.user == None:
+            return render_template('login.html')
+    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, user = session.user)
 
 class view:
     def GET(self):
@@ -42,7 +44,7 @@ class view:
         post_params = web.input()
         recipeID = post_params['recipeID']
         if 'review' in post_params:
-            sqlitedb.addRecipeReview(recipeID, "blubbo",post_params['review'], int(post_params['stars']))
+            sqlitedb.addRecipeReview(recipeID, session.user, post_params['review'], int(post_params['stars']))
 
             #need to update overall rating now
             ratings = sqlitedb.getReviews(recipeID)
@@ -108,6 +110,35 @@ class search:
         final_search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients, categories, tags)
         return render_template('search_recipes.html', search_results = final_search_results)
 
+class login:
+    def GET(self):
+        return render_template('login.html')
+
+    def POST(self):
+        post_params = web.input()
+        userIDInput = post_params['userID']
+        passwordInput = post_params['password']
+        actualPasswordResult = sqlitedb.getPassword(userIDInput)
+        if len(actualPasswordResult) == 0:
+            return web.redirect('/login')
+        else:
+            actualPassword = actualPasswordResult[0]['Password']
+            if passwordInput == actualPassword:
+                session.user = userIDInput
+                return web.redirect('/hello')
+            else:
+                return web.redirect('/login')
+
+class logout:
+    def GET(self):
+        session.kill()
+        session.user = None
+        return web.redirect('/login')
+
+    def POST(self):
+        session.kill()
+        session.user = None
+        return web.redirect('/login')
 
 #adam's stuff
 class upload_page:
@@ -118,7 +149,7 @@ class upload_page:
         data = web.input()
 
         sqlitedb.addRecipe(recipeID,
-                "billy", #TODO: ADD THE USER ID
+                session.user, #TODO: ADD THE USER ID
                 0,
                 data.name,
                 data.description,

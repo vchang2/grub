@@ -1,7 +1,8 @@
 {% extends "app_base.html" %}
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
-  <h3>Welcome to Grub!</h3> 
+  <h3>Welcome to Grub!</h3>
+  <h4>Current user: {{ user }}</h4> 
   <div class="alert alert-info">Click on a photo to view a recipe.</div>
 
 {% if all_photos %}
