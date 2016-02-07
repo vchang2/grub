@@ -5,6 +5,7 @@ import web
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 import sqlitedb
+from sets import Set
 
 from fractions import gcd
 
@@ -34,6 +35,31 @@ class view:
         reviews = sqlitedb.getReviews(recipeID)
         return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
 
+#added by valerie for reviews
+    def POST(self):
+        post_params = web.input()
+        recipeID = post_params['recipeID']
+        if 'review' in post_params:
+            sqlitedb.addRecipeReview(recipeID, "blubbo",post_params['review'], int(post_params['stars']))
+
+            #need to update overall rating now
+            ratings = sqlitedb.getReviews(recipeID)
+            counter = 0.0
+            total = 0
+            for r in ratings:
+                total += r['Rating']
+                counter += 1.0
+            new_rating = total/counter
+            sqlitedb.updateRating(recipeID, new_rating)
+
+            recipe = sqlitedb.getRecipe(recipeID)
+            instructions = sqlitedb.getInstructions(recipeID)
+            ingredients = sqlitedb.getIngredients(recipeID)
+            tags = sqlitedb.getTags(recipeID)
+            photos = sqlitedb.getPhotos(recipeID)
+            categories = sqlitedb.getCategories(recipeID)
+            reviews = sqlitedb.getReviews(recipeID)
+            return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
 class user:
     def GET(self):
         post_params = web.input()
@@ -73,9 +99,31 @@ class search:
         userID = post_params['userID']
         recipeName = post_params['recipeName']
         completionTime = post_params['completionTime']
-        ingredients = post_params['ingredients']
-        search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients)
-        return render_template('search_recipes.html', search_results = search_results)
+        ingredients = post_params['ingredients'].split()
+        recipeIDSet = Set([])
+        firstIngredient = True
+        for ingredient in ingredients:
+            search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredient)
+            if firstIngredient:
+                for result in search_results:
+                    newRecipeID = result['RecipeID']
+                    recipeIDSet.add(newRecipeID)
+                firstIngredient = False
+            else:
+                newRecipeIDSet = Set([])
+                for result in search_results:
+                    newRecipeID = result['RecipeID']
+                    newRecipeIDSet.add(newRecipeID)
+                recipeIDSet = recipeIDSet.intersection(newRecipeIDSet)
+
+        final_search_results = []
+        if len(ingredients) > 0:
+            for ingredientRecipeID in recipeIDSet:
+                final_search_results.extend(sqlitedb.searchRecipes(ingredientRecipeID, userID, recipeName, completionTime, ""))
+        else:
+            final_search_results.extend(sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ""))
+        return render_template('search_recipes.html', search_results = final_search_results)
+
 
 #adam's stuff
 class upload_page:

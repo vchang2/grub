@@ -124,7 +124,7 @@ def assignRecipeID():
     result = query(query_string)
     replace = 0
     for r in result:
-        replace = r['RecpieID']
+        replace = r['RecipeID']
     recipeID = replace + 1
     query_string = 'update Constants set RecipeID = $recipeID where RecipeID = $replace'
     db.query(query_string, {'recipeID':recipeID, 'replace':replace })
@@ -218,7 +218,7 @@ def updateAboutMe(UserID, Description):
     db.query(query_string, {'description':Description, 'userID':UserID})
 
 # Search Recipe Queries (Ryan, Wednesday 2/3)
-def searchRecipes(recipeID, userID, recipeName, completionTime, ingredients):
+def searchRecipes(recipeID, userID, recipeName, completionTime, ingredient):
     query_string = 'select * from Recipes'
     if recipeID != "":
         query_string += ' where RecipeID = $recipeID'
@@ -240,10 +240,26 @@ def searchRecipes(recipeID, userID, recipeName, completionTime, ingredients):
         query_string += ' and Time_completion >= 60 and Time_completion <= 90'
     elif completionTime == '4':
         query_string += ' and Time_completion >= 90'
-    if ingredients != "":
-        ingredientsList = ingredients.split()
-        print "Printing ingredients list"
-        print ingredientsList
-    results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName})
+    if ingredient != "":
+        ingredientInput = ingredient
+        ingredient = '%'
+        ingredient += ingredientInput
+        ingredient += '%'
+        query_string += ' and RecipeID in (SELECT RecipeID from Ingredients where Ingredient LIKE $ingredient)'
+    results = query(query_string, {'recipeID':recipeID, 'userID':userID, 'recipeName':recipeName, 'ingredient':ingredient})
     return results
 
+#Added by Valerie
+def getRecipeByCategory(Category):
+    query_string = 'select * from Categories where Category = $category'
+    results = query(query_string, {'category' : Category})
+    return results
+
+def getRecipeByTag(Tag):
+    query_string = 'select * from Tags where Tags = $tag'
+    results = query(query_string, {'tag' : Tag})
+    return results
+
+def updateRating(recipeID, new_rating):
+    query_string = 'update Recipes set Overall_rating = $overall_rating where RecipeID = $recipeID'
+    db.query(query_string, {'overall_rating':new_rating, 'recipeID':recipeID})
