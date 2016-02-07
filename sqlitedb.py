@@ -181,7 +181,7 @@ def getPhotos(recipes):
     return results
 #added by Valerie on 1/31, a lot of the inserting Recipe data into database queries are here
 def getPassword(username):
-    query_string = 'select Password from Recipes where UserID = $username'
+    query_string = 'select Password from Users where UserID = $username'
     results = query(query_string, {'username': username})
     return results
 
