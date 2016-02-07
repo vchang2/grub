@@ -59,7 +59,7 @@
 	<ul>
 	{% if userCookbooks %}
 		{% for cookbook in userCookbooks %}
-			<li>{{ cookbook['Cookbook_name'] | e}}</li>
+			<li><a href = cookbook?cookbookID={{cookbook['CookbookID'] | e}}>{{cookbook['Cookbook_name'] | e }}</a></li>
 		{% endfor %}
 	{% else %}
 		<li>{{ userID | e}} does not have any cookbooks</li>
