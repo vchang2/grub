@@ -10,7 +10,12 @@ from sets import Set
 from fractions import gcd
 
 urls = (
+<<<<<<< HEAD
     '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search', '/upload_page', 'upload_page', '/login', 'login', '/logout', 'logout',
+=======
+    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search','/upload_page', 'upload_page',
+    '/search_users', 'search_users',
+>>>>>>> bfe46ec8e0b8b34c19ae0f7c70d0dbc579e20dd1
 )
 web.config.debug = False
 app = web.application(urls, locals())
@@ -84,14 +89,23 @@ class user:
 
 class cookbook:
     # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm
+    #Edit: 2/7, Valerie will now try to complete it
     def GET(self):
         post_params = web.input()
         cookbookID = None
         cookbookRecipes = None
+        cookbookInfo = None
+        recipes = []
         if 'cookbookID' in post_params:
             cookbookID = post_params['cookbookID']
             cookbookRecipes = sqlitedb.getCookbooks_recipes(cookbookID)
-        return render_template('view_cookbook.html', cookbookID = cookbookID)
+            for recipe in cookbookRecipes:
+                print "HELLO"
+                recipes.append(recipe['RecipeID'])
+            all_photos = sqlitedb.getPhotos(recipes)
+            all_recipes = sqlitedb.getRecipes(recipes)
+            cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
 
 class search:
     def GET(self):
@@ -139,6 +153,17 @@ class logout:
         session.kill()
         session.user = None
         return web.redirect('/login')
+
+class search_users:
+    def GET(self):
+        return render_template('search_users.html')
+
+    def POST(self):
+        post_params = web.input()
+        userID = post_params['userID']
+        search_results = sqlitedb.searchUsers(userID)
+        return render_template('search_users.html', search_results = search_results)
+
 
 #adam's stuff
 class upload_page:

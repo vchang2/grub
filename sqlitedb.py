@@ -66,7 +66,7 @@ def getCookbookInfo(CookbookID):
     return results
 
 def getCookbooks_recipes(cookbookID):
-    query_string = 'select * from Cookbooks_recipes where CookbookID = cookbookID'
+    query_string = 'select * from Cookbooks_recipes where CookbookID = $cookbookID'
     results = query(query_string, {'cookbookID': cookbookID})
     return results
 
@@ -151,7 +151,34 @@ def getAllPhotos():
     query_string = 'select * from Photos'
     results = query(query_string)
     return results
+#added by Valerie:
+def getRecipes(recipes):
+    counter = 0
+    query_string = 'select * from Recipes where'
+    for recipe in recipes:
+        if counter == 0:
+            query_string += ' RecipeID = '
+            query_string += str(recipe)
+        else:
+            query_string += ' or RecipeID = '
+            query_string += str(recipe)
+        counter += 1
+    results = query(query_string)
+    return results
 
+def getPhotos(recipes):
+    counter = 0
+    query_string = 'select * from Photos where'
+    for recipe in recipes:
+        if counter == 0:
+            query_string += ' RecipeID = '
+            query_string += str(recipe)
+        else:
+            query_string += ' or RecipeID = '
+            query_string += str(recipe)
+        counter += 1
+    results = query(query_string)
+    return results
 #added by Valerie on 1/31, a lot of the inserting Recipe data into database queries are here
 def getPassword(username):
     query_string = 'select Password from Users where UserID = $username'
@@ -289,3 +316,9 @@ def getRecipeByTag(Tag):
 def updateRating(recipeID, new_rating):
     query_string = 'update Recipes set Overall_rating = $overall_rating where RecipeID = $recipeID'
     db.query(query_string, {'overall_rating':new_rating, 'recipeID':recipeID})
+
+def searchUsers(userID):
+    userID = '%' + userID + '%' 
+    query_string = 'select * from Users where UserID LIKE $userID'
+    results = query(query_string, {'userID': userID})
+    return results
