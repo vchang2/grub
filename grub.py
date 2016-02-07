@@ -6,11 +6,13 @@ from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 import sqlitedb
 
+from fractions import gcd
+
 urls = (
-    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search',
+    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search','/upload_page', 'upload_page'
 )
 app = web.application(urls, globals())
-
+render = web.template.render('templates/')
 class hello:        
     def GET(self):
         all_recipes = sqlitedb.getAllRecipes()
@@ -74,6 +76,92 @@ class search:
         ingredients = post_params['ingredients']
         search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients)
         return render_template('search_recipes.html', search_results = search_results)
+
+#adam's stuff
+class upload_page:
+    def GET(self):
+        return render.upload_page()
+    def POST(self):
+        recipeID = sqlitedb.assignRecipeID()
+        data = web.input()
+
+        sqlitedb.addRecipe(recipeID,
+                "billy", #TODO: ADD THE USER ID
+                0,
+                data.name,
+                data.description,
+                data.time,
+                data.servings,
+                data.spicy,
+                data.diff)
+
+        tags = data.tags
+        tags = tags.split()
+        for tag in tags:
+            sqlitedb.addRecipeTags(recipeID, tag)
+
+        numIngredients = int(data.numIngredients)
+        for i in range(numIngredients):
+            ingredient = data["ingredientIngredient" + str(i)]
+            unit = "none"
+            if ("ingredientUnit" + str(i)) in data:
+                unit = data["ingredientUnit" + str(i)]
+            numerator = 1
+            denominator = 1
+            if ("ingredientQuantity" + str(i)) in data:
+                quantity = data["ingredientQuantity" + str(i)]
+                if '/' in quantity:
+                    quantityFraction = quantity.split('/')
+                    numerator = int(quantityFraction[0])
+                    denominator = int(quantityFraction[0])
+                elif '.' in quantity:
+                    quantityDecimal = float(quantity)
+                    while (quantityDecimal % 1) != 0:
+                        quantityDecimal *= 10
+                        denominator *= 10
+                    numerator = int(quantityDecimal)
+                    factor = gcd(numerator, denominator)
+                    numerator /= factor
+                    denominator /= factor
+                elif quantity != "":
+                    numerator = int(quantity)
+            sqlitedb.addRecipeIngredients(recipeID, ingredient, numerator, denominator, unit)
+
+        numInstructions = int(data.numInstructions)
+        for i in range(numInstructions):
+            if ("instruction" + str(i)) in data:
+                sqlitedb.addRecipeInstruction(recipeID, i + 1, data["instruction" + str(i)])
+
+        numImages = int(data.numImages)
+        for i in range(numImages):
+            if ("image" + str(i)) in data:
+                sqlitedb.addRecipePhotos(recipeID, data["image" + str(i)])
+
+        print data
+        if  'categoriesBR' in data:
+            sqlitedb.addRecipeCategories(recipeID, "breakfast")
+        if 'categoriesLU' in data:
+            sqlitedb.addRecipeCategories(recipeID, "lunch")
+        if 'categoriesDI' in data:
+            sqlitedb.addRecipeCategories(recipeID, "dinner")
+        if 'categoriesSA' in data:
+            sqlitedb.addRecipeCategories(recipeID, "savory")
+        if 'categoriesSW' in data:
+            sqlitedb.addRecipeCategories(recipeID, "sweet")
+        if 'categoriesVE' in data:
+            sqlitedb.addRecipeCategories(recipeID, "vegetarian")
+        if 'categoriesGF' in data:
+            sqlitedb.addRecipeCategories(recipeID, "gluten free")
+
+        recipe = sqlitedb.getRecipe(recipeID)
+        instructions = sqlitedb.getInstructions(recipeID)
+        ingredients = sqlitedb.getIngredients(recipeID)
+        tags = sqlitedb.getTags(recipeID)
+        photos = sqlitedb.getPhotos(recipeID)
+        categories = sqlitedb.getCategories(recipeID)
+        reviews = sqlitedb.getReviews(recipeID)
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
+
 
 # helper method to render a template in the templates/ directory
 #

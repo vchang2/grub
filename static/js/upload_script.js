@@ -6,36 +6,43 @@ function Ingredient(){
 	this.ingredient = "";
 }
 
-function UploadScript(ingredientsID, instructionsID){
+function UploadScript(ingredientsID, instructionsID, imagesID){
 	this.ingredientsBody = document.getElementById(ingredientsID);
 	this.instructionsBody = document.getElementById(instructionsID);
+	this.imagesBody = document.getElementById(imagesID)
 
 	this.ingredients = new Array();	
 	this.instructions = new Array();
+	this.imagesX = new Array();
 
 	for(var i = 0; i < 3; i++){
 		this.ingredients.push(new Ingredient());
 		this.instructions.push("");	
 	}
 
+	this.imagesX.push("")
+
 	this.renderIngredients();
 	this.renderInstructions();
+	this.renderImages();
 }
 
 UploadScript.prototype.renderIngredients = function(){
 	var text = "";
 
-	text += "<input type=\"hidden\" id=\"numIngredients\" value=\"" + this.ingredients.length + "\">";
+	text += "<input type=\"hidden\" name=\"numIngredients\" value=\"" + this.ingredients.length + "\">";
 	text += "<table>";
 	text += "<tr><td></td><td>Quantity</td><td>Units</td><td>Ingredient</td></td>";
 	
 	for(var i = 0; i < this.ingredients.length; i++){
 		text += "<tr><td>" + (i + 1) + ". </td>";
-		text += "<td><input type=\"text\" id=\"ingredientQuantity" + i + "\" class=\"quantityTextbox\" value=\"" + this.ingredients[i].quantity + "\"></td>"
+		text += "<td><input type=\"text\" id=\"ingredientQuantity" + i + "\" "
+		text += "name=\"ingredientQuantity" + i + "\" class=\"quantityTextbox\" value=\"" + this.ingredients[i].quantity + "\"></td>"
 
 		//SELECT BOX
 
-		text += "<td><select id=\"ingredientUnit" + i + "\">";
+		text += "<td><select id=\"ingredientUnit" + i + "\" "
+		text += "name=\"ingredientUnit" + i + "\">";
 		
 		for(var group = 0; group < Units.length; group++){
 			text += "<optgroup label=\"" + Units[group][0] + "\">";
@@ -57,7 +64,8 @@ UploadScript.prototype.renderIngredients = function(){
 
 		//
 
-		text += "<td><input type=\"text\" id=\"ingredientIngredient" + i + "\" class=\"ingredientTextbox\" value=\"" + this.ingredients[i].ingredient + "\"></td></tr>";
+		text += "<td><input type=\"text\" id=\"ingredientIngredient" + i + "\" "
+		text += "name=\"ingredientIngredient" + i + "\" class=\"ingredientTextbox\" value=\"" + this.ingredients[i].ingredient + "\"></td></tr>";
 	}
 	
 	text += "</table>";
@@ -69,12 +77,13 @@ UploadScript.prototype.renderIngredients = function(){
 UploadScript.prototype.renderInstructions = function(){
 	var text = "";
 
-	text += "<input type=\"hidden\" id=\"numInstructions\" value=\"" + this.instructions.length + "\">";
+	text += "<input type=\"hidden\" name=\"numInstructions\" value=\"" + this.instructions.length + "\">";
 	text += "<table>";
 	
 	for(var i = 0; i < this.instructions.length; i++){
 		text += "<tr><td>" + (i + 1) + ". </td>";
-		text += "<td><textarea id=\"instruction" + i + "\" rows=\"2\" cols=\"40\">" + this.instructions[i] + "</textarea></td></tr>";
+		text += "<td><textarea id=\"instruction" + i + "\" "
+		text += "name=\"instruction" + i + "\" rows=\"2\" cols=\"40\">" + this.instructions[i] + "</textarea></td></tr>";
 	}
 	
 	text += "</table>";
@@ -82,6 +91,20 @@ UploadScript.prototype.renderInstructions = function(){
 
 	this.instructionsBody.innerHTML = text;
 };
+
+UploadScript.prototype.renderImages = function(){
+	var text = "";
+	text += "<input type=\"hidden\" name=\"numImages\" value=\"" + this.imagesX.length + "\">";
+
+	for(var i = 0; i < this.imagesX.length; i++){
+		text += "<input type=\"text\" id=\"image" + i + "\" "
+		text += "name=\"image" + i + "\">";
+	}
+
+	text +="<button type=\"button\" onclick=\"US.addImage()\">+ Image</button>";
+
+	this.imagesBody.innerHTML = text;
+}
 
 UploadScript.prototype.saveIngredients = function(){
 	for(var i = 0; i < this.ingredients.length; i++){
@@ -97,6 +120,12 @@ UploadScript.prototype.saveInstructions = function(){
 	}
 };
 
+UploadScript.prototype.saveImages = function(){
+	for(var i = 0; i < this.imagesX.length; i++){
+		this.imagesX[i] = "" + document.getElementById("image" + i).value;
+	}
+};
+
 UploadScript.prototype.addIngredient = function(){
 	this.saveIngredients();
 	this.ingredients.push(new Ingredient);
@@ -107,4 +136,10 @@ UploadScript.prototype.addInstruction = function(){
 	this.saveInstructions();
 	this.instructions.push("");
 	this.renderInstructions();
+};
+
+UploadScript.prototype.addImage = function(){
+	this.saveImages();
+	this.imagesX.push("");
+	this.renderImages();
 };

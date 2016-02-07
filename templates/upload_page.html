@@ -5,6 +5,8 @@
 
 <h1>Upload a new recipe!</h1>
 
+<p id="THIS IS AN ID" name="THIS IS A NAME">THIS IS TEXT</p>
+
 
 <form action="upload_page" method="POST"><table cellspacing="0" class="table">
 	<tr>
@@ -70,17 +72,17 @@
 		<td class="oddRow">
 			<table>
 				<tr>
-				<td><input type="checkbox" name="categories" value="breakfast"> Breakfast</td>
-				<td><input type="checkbox" name="categories" value="lunch"> Lunch</td>
-				<td><input type="checkbox" name="categories" value="dinner"> Dinner</td>
+				<td><input type="checkbox" name="categoriesBR" value="breakfast"> Breakfast</td>
+				<td><input type="checkbox" name="categoriesLU" value="lunch"> Lunch</td>
+				<td><input type="checkbox" name="categoriesDI" value="dinner"> Dinner</td>
 				</tr>
 				<tr>
-				<td><input type="checkbox" name="categories" value="sweet"> Sweet</td>
-				<td><input type="checkbox" name="categories" value="savory"> Savory</td>
+				<td><input type="checkbox" name="categoriesSW" value="sweet"> Sweet</td>
+				<td><input type="checkbox" name="categoriesSA" value="savory"> Savory</td>
 				</tr>
 				<tr>
-				<td><input type="checkbox" name="categories" value="vegetarian"> Vegetarian</td>
-				<td><input type="checkbox" name="categories" value="gluten free"> Gluten Free</td>
+				<td><input type="checkbox" name="categoriesVE" value="vegetarian"> Vegetarian</td>
+				<td><input type="checkbox" name="categoriesGF" value="gluten free"> Gluten Free</td>
 				</tr>
 			</table>
 			<img id="categoriesHelpImg" class="helpImg" src="static/images/upload_help/upload_help_categories.png" />
@@ -94,6 +96,13 @@
 		</td>
 	</tr>
 	<tr>
+		<th onmouseover="helpOn(instructionsHelpImg)" onmouseout="helpOff(instructionsHelpImg)"><p>Instructions</p></th>
+		<td class="oddRow">
+			<div id="images"></div>
+			<img id="instructionsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_instructions.png" />
+		</td>
+	</tr>
+	<tr>
 		<td>
 				<input type="submit" value="Upload Recipe!">
 		</td>
@@ -104,7 +113,7 @@
 <script type="text/javascript">
 //<![CDATA[
 
-	var US = new UploadScript("ingredients", "instructions");
+	var US = new UploadScript("ingredients", "instructions", "images");
 
 	function helpOn(id){
 		id.style.display = "block";
