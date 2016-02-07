@@ -10,12 +10,7 @@ from sets import Set
 from fractions import gcd
 
 urls = (
-<<<<<<< HEAD
-    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search', '/upload_page', 'upload_page', '/login', 'login', '/logout', 'logout',
-=======
-    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search','/upload_page', 'upload_page',
-    '/search_users', 'search_users',
->>>>>>> bfe46ec8e0b8b34c19ae0f7c70d0dbc579e20dd1
+    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search', '/upload_page', 'upload_page', '/search_users', 'search_users', '/login', 'login', '/logout', 'logout',
 )
 web.config.debug = False
 app = web.application(urls, locals())
