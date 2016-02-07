@@ -10,7 +10,8 @@ from sets import Set
 from fractions import gcd
 
 urls = (
-    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search','/upload_page', 'upload_page'
+    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search','/upload_page', 'upload_page',
+    '/search_users', 'search_users',
 )
 app = web.application(urls, globals())
 session = web.session.Session(app, web.session.DiskStore('sessions'), initializer={'sessionUser': ""})
@@ -108,7 +109,16 @@ class search:
         final_search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients, categories, tags)
         return render_template('search_recipes.html', search_results = final_search_results)
 
+class search_users:
+    def GET(self):
+        return render_template('search_users.html')
 
+    def POST(self):
+        post_params = web.input()
+        userID = post_params['userID']
+        search_results = sqlitedb.searchUsers(userID)
+        return render_template('search_users.html', search_results = search_results)
+        
 #adam's stuff
 class upload_page:
     def GET(self):

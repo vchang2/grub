@@ -289,3 +289,9 @@ def getRecipeByTag(Tag):
 def updateRating(recipeID, new_rating):
     query_string = 'update Recipes set Overall_rating = $overall_rating where RecipeID = $recipeID'
     db.query(query_string, {'overall_rating':new_rating, 'recipeID':recipeID})
+
+def searchUsers(userID):
+    userID = '%' + userID + '%' 
+    query_string = 'select * from Users where UserID LIKE $userID'
+    results = query(query_string, {'userID': userID})
+    return results
