@@ -137,7 +137,7 @@ def assignCookbookID():
     for r in result:
         replace = r['CookbookID']
     CookbookID = replace + 1
-    query_string = 'update LastRecipeID set CookbookID = $cookbookID where CookbookID = $replace'
+    query_string = 'update Constants set CookbookID = $cookbookID where CookbookID = $replace'
     db.query(query_string, {'cookbookID':CookbookID, 'replace':replace})
     return CookbookID
 

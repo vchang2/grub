@@ -100,6 +100,22 @@
 			{% endfor %}
 		{% endif %}
 
+
+		{% if cookbooks %}
+		<br>
+		<form action="view" method="POST">
+			{% for result in recipe %}
+				<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>
+			{% endfor %}
+			{% for cookbook in cookbooks %}
+				<div class="form-group">
+					<input type="hidden" name="added_cookbookID" value={{cookbook['CookbookID'] | e}}>
+				</div>
+				<div><h5>Add Recipe to Cookbook {{cookbook['Cookbook_name'] | e}} <input type="submit" value="Add"></h5></div>
+			{% endfor %}
+		</form>
+		{% endif %}
+		
 		{% if reviews %}
 			<br>
 			<h4>Reviews:</h4>
@@ -109,6 +125,8 @@
 				</ul>
 			{% endfor %}
 		{% endif %}
+
+
 		<form action="view" method="POST">
 			{% for result in recipe %}
 				<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>
@@ -122,6 +140,18 @@
   			<textarea name="review"rows="4" cols="50"></textarea>
   			<input type="submit" value="Add Review">
 		</form>
+
+		<!--<button id="popup" onclick="pop_up()">Add Recipe To Cookbook</button>
+		<script type="text/javascript">
+			function pop_up() {
+				alert("choose one!");
+				document.getElementById('abc').style.display = "block";
+			}
+
+		</script>-->
+
+		<br>
+		<br>
 	{% endfor %}
 {% else %}
 	<h3>Recipe Not Found</h3>

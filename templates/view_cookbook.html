@@ -23,7 +23,7 @@
 	{% if all_photos %}
 		{% for photo in all_photos%}
 		<a href = view?recipeID={{photo['RecipeID'] | e}}>
-			<img onmouseover="bigImg(this)" onmouseout="normalImg(this)" border="0" src = {{photo['Photo'] | e}} alt = 'FoodPic' title="Smiley face" style="width:304px;height:228px;" >
+			<img onmouseover="bigImg(this)" onmouseout="normalImg(this)" border="0" src = {{photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
 		</a>
 		{% endfor %}
 	{% endif %}

@@ -37,12 +37,14 @@ class view:
         photos = sqlitedb.getPhotos(recipeID)
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
-        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
+        cookbooks = sqlitedb.getCookbooks(session.user)
+        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks)
 
 #added by valerie for reviews
     def POST(self):
         post_params = web.input()
         recipeID = post_params['recipeID']
+        print post_params
         if 'review' in post_params:
             sqlitedb.addRecipeReview(recipeID, session.user, post_params['review'], int(post_params['stars']))
 
@@ -55,15 +57,17 @@ class view:
                 counter += 1.0
             new_rating = total/counter
             sqlitedb.updateRating(recipeID, new_rating)
-
-            recipe = sqlitedb.getRecipe(recipeID)
-            instructions = sqlitedb.getInstructions(recipeID)
-            ingredients = sqlitedb.getIngredients(recipeID)
-            tags = sqlitedb.getTags(recipeID)
-            photos = sqlitedb.getPhotos(recipeID)
-            categories = sqlitedb.getCategories(recipeID)
-            reviews = sqlitedb.getReviews(recipeID)
-            return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
+        if 'added_cookbookID' in post_params:
+                sqlitedb.addCookbookRecipe(recipeID, post_params['added_cookbookID'])
+        recipe = sqlitedb.getRecipe(recipeID)
+        instructions = sqlitedb.getInstructions(recipeID)
+        ingredients = sqlitedb.getIngredients(recipeID)
+        tags = sqlitedb.getTags(recipeID)
+        photos = sqlitedb.getPhotos(recipeID)
+        categories = sqlitedb.getCategories(recipeID)
+        reviews = sqlitedb.getReviews(recipeID)
+        cookbooks = sqlitedb.getCookbooks(session.user)
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks)
 class user:
     def GET(self):
         post_params = web.input()
@@ -73,6 +77,23 @@ class user:
         userFollowers = None
         userFollowing = None
         userCookbooks = None
+        if 'userID' in post_params:
+            userID = post_params['userID']
+            userRecipes = sqlitedb.getUserRecipes(userID)
+            userAboutMe = sqlitedb.getAboutMe(userID)
+            userFollowers = sqlitedb.getFollowers(userID)
+            userFollowing = sqlitedb.getFollowing(userID)
+            userCookbooks = sqlitedb.getCookbooks(userID)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks)
+    
+    def POST(self):
+        print "HELLO"
+        post_params = web.input()
+        print post_params
+        cookbookID = None
+        if 'cookbook' in post_params:
+            cookbookID = sqlitedb.assignCookbookID()
+            sqlitedb.addCookbook(cookbookID, session.user, post_params['cookbook'])
         if 'userID' in post_params:
             userID = post_params['userID']
             userRecipes = sqlitedb.getUserRecipes(userID)
@@ -91,14 +112,17 @@ class cookbook:
         cookbookRecipes = None
         cookbookInfo = None
         recipes = []
+        all_photos = None
+        all_recipes = None 
+        cookbookInfo = None
         if 'cookbookID' in post_params:
             cookbookID = post_params['cookbookID']
             cookbookRecipes = sqlitedb.getCookbooks_recipes(cookbookID)
             for recipe in cookbookRecipes:
-                print "HELLO"
                 recipes.append(recipe['RecipeID'])
-            all_photos = sqlitedb.getPhotos(recipes)
-            all_recipes = sqlitedb.getRecipes(recipes)
+            if len(recipes) > 0:
+                all_photos = sqlitedb.getPhotos(recipes)
+                all_recipes = sqlitedb.getRecipes(recipes)
             cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
         return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
 

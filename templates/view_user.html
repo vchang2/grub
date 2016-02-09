@@ -65,6 +65,27 @@
 		<li>{{ userID | e}} does not have any cookbooks</li>
 	{% endif %}
 	</ul>
+	<form action="user" method="POST">
+		<input type="hidden" name="userID" value={{userID | e}}>
+		<input type="text" name="cookbook"><br>
+		<input type="submit" value="Add Cookbook">
+	</form>
+	<!--<form name="c" action="user" method="POST">
+		<button id="cookbook" onclick="myFunction()">Add Cookbook</button>
+	</form>
+	<p id="demo"></p>
+
+	<script type="text/javascript">
+	function myFunction() {
+	    var cookbook = prompt("Please type in name of Cookbook");
+	    
+	    if (cookbook != null) {
+	        document.getElementById("demo").innerHTML =
+	        "Cookbook has been added!";
+	        document.c.submit();
+	    }
+	}
+	</script>-->
 
 {% else %}
 	<h3>User Not Found</h3>
