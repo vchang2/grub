@@ -166,7 +166,7 @@ def getRecipes(recipes):
     results = query(query_string)
     return results
 
-def getPhotos(recipes):
+def getRecipePhotos(recipes):
     counter = 0
     query_string = 'select * from Photos where'
     for recipe in recipes:
