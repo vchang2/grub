@@ -199,13 +199,13 @@ class upload_page:
     def GET(self):
         if session.user == None:
             return render_template('login.html')
-        return render.upload_page()
+        return render_template('upload_page.html')
     def POST(self):
         recipeID = sqlitedb.assignRecipeID()
         data = web.input()
 
         sqlitedb.addRecipe(recipeID,
-                session.user, #TODO: ADD THE USER ID
+                "billy", #TODO: ADD THE USER ID
                 0,
                 data.name,
                 data.description,

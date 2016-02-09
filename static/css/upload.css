@@ -1,6 +1,15 @@
+:root{
+	--Site_BG:#77aa77;
+	--Light_1:#dfe1e7;
+	--Light_2:#eeeff2;
+	--Dark_1:#b4b6bb;
+	--Dark_2:#C5C7CC;
+	--Font:tahoma;
+}
+
 body{
-	font-family:tahoma;
-	background-color:#77aa77;
+	font-family:var(--Font);
+	background-color:var(--Site_BG);
 }
 
 th{
@@ -30,24 +39,27 @@ textarea{
 
 .table{
 	margin:auto;
-	background:#C5C7CC;
 	box-shadow: 5px 5px 5px #666666;
 }
 
-.evenRow{
-	background:#eeeff2;
+.oddRow{
+	background:var(--Light_1);
 	padding:7;
 	box-shadow: 7px 0px 5px -5px #666666 inset;
 }
 
-.oddRow{
-	background:#dfe1e7;
+.evenRow{
+	background:var(--Light_2);
 	padding:7;
 	box-shadow: 7px 0px 5px -5px #666666 inset;
 }
 
 .oddHead{
-	background:#b4b6bb;
+	background:var(--Dark_1);
+}
+
+.evenHead{
+	background:var(--Dark_2);
 }
 
 .name{
@@ -61,4 +73,20 @@ textarea{
 	top:-30px;
 	left:10px;
 	z-index:2;
+}
+
+.submitTD{
+	background:var(--Dark_2);
+	text-align:center;
+}
+
+.submitButton{
+	font-size:20px;
+	margin:10px;
+}
+
+.header{
+	background:var(--Dark_2);
+	text-align:center;
+	color:white;
 }
