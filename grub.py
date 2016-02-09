@@ -127,7 +127,7 @@ class cookbook:
             for recipe in cookbookRecipes:
                 recipes.append(recipe['RecipeID'])
             if len(recipes) > 0:
-                all_photos = sqlitedb.getPhotos(recipes)
+                all_photos = sqlitedb.getRecipePhotos(recipes)
                 all_recipes = sqlitedb.getRecipes(recipes)
             cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
         return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
