@@ -18,14 +18,16 @@ session = web.session.Session(app, web.session.DiskStore('sessions'), initialize
 render = web.template.render('templates/')
 class hello:        
     def GET(self):
-        all_recipes = sqlitedb.getAllRecipes()
-        all_photos = sqlitedb.getAllPhotos()
         if session.user == None:
             return render_template('login.html')
+        all_recipes = sqlitedb.getAllRecipes()
+        all_photos = sqlitedb.getAllPhotos()
     	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, user = session.user)
 
 class view:
     def GET(self):
+        if session.user == None:
+            return render_template('login.html')
         post_params = web.input()
         recipeID = 0
         if 'recipeID' in post_params:
@@ -79,17 +81,19 @@ class user:
         userCookbooks = None
         if 'userID' in post_params:
             userID = post_params['userID']
-            userRecipes = sqlitedb.getUserRecipes(userID)
-            userAboutMe = sqlitedb.getAboutMe(userID)
-            userFollowers = sqlitedb.getFollowers(userID)
-            userFollowing = sqlitedb.getFollowing(userID)
-            userCookbooks = sqlitedb.getCookbooks(userID)
+        elif session.user:
+            userID = session.user
+        else:
+            return render_template('login.html')
+        userRecipes = sqlitedb.getUserRecipes(userID)
+        userAboutMe = sqlitedb.getAboutMe(userID)
+        userFollowers = sqlitedb.getFollowers(userID)
+        userFollowing = sqlitedb.getFollowing(userID)
+        userCookbooks = sqlitedb.getCookbooks(userID)
         return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks)
     
     def POST(self):
-        print "HELLO"
         post_params = web.input()
-        print post_params
         cookbookID = None
         if 'cookbook' in post_params:
             cookbookID = sqlitedb.assignCookbookID()
@@ -107,6 +111,8 @@ class cookbook:
     # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm
     #Edit: 2/7, Valerie will now try to complete it
     def GET(self):
+        if session.user == None:
+            return render_template('login.html')
         post_params = web.input()
         cookbookID = None
         cookbookRecipes = None
@@ -128,6 +134,8 @@ class cookbook:
 
 class search:
     def GET(self):
+        if session.user == None:
+            return render_template('login.html')
         return render_template('search_recipes.html')
 
     def POST(self):
@@ -175,6 +183,8 @@ class logout:
 
 class search_users:
     def GET(self):
+        if session.user == None:
+            return render_template('login.html')
         return render_template('search_users.html')
 
     def POST(self):
@@ -187,6 +197,8 @@ class search_users:
 #adam's stuff
 class upload_page:
     def GET(self):
+        if session.user == None:
+            return render_template('login.html')
         return render.upload_page()
     def POST(self):
         recipeID = sqlitedb.assignRecipeID()
