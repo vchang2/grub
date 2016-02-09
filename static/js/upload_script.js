@@ -1,4 +1,4 @@
-Units = [["None", "none"], ["Weight", "pounds", "ounces"], ["Volume", "teaspoons", "tablespoons", "fluid ounces", "cups", "pints", "quarts", "gallons"], ["Small Units", "pinches", "drops"]];
+Units = [["None", "None"], ["Weight", "pounds", "ounces"], ["Volume", "teaspoons", "tablespoons", "fluid ounces", "cups", "pints", "quarts", "gallons"], ["Small Units", "pinches", "drops"]];
 
 function Ingredient(){
 	this.quantity = "";
@@ -98,7 +98,7 @@ UploadScript.prototype.renderImages = function(){
 
 	for(var i = 0; i < this.imagesX.length; i++){
 		text += "<input type=\"text\" id=\"image" + i + "\" "
-		text += "name=\"image" + i + "\">";
+		text += "name=\"image" + i + "\" value=\"" + this.imagesX[i] + "\"><br/>";
 	}
 
 	text +="<button type=\"button\" onclick=\"US.addImage()\">+ Image</button>";
