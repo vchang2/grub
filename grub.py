@@ -58,9 +58,24 @@ class view:
                 total += r['Rating']
                 counter += 1.0
             new_rating = total/counter
+            new_rating = format(new_rating, '.2f')
             sqlitedb.updateRating(recipeID, new_rating)
         if 'added_cookbookID' in post_params:
                 sqlitedb.addCookbookRecipe(recipeID, post_params['added_cookbookID'])
+        if 'DeleteReview' in post_params:
+            sqlitedb.deleteReview(post_params['DeleteReview'])
+            #need to update overall rating now
+            ratings = sqlitedb.getReviews(recipeID)
+            counter = 0.0
+            total = 0
+            for r in ratings:
+                total += r['Rating']
+                counter += 1.0
+            new_rating = total/counter
+            new_rating = format(new_rating, '.2f')
+            sqlitedb.updateRating(recipeID, new_rating)
+
+        #reload page info
         recipe = sqlitedb.getRecipe(recipeID)
         instructions = sqlitedb.getInstructions(recipeID)
         ingredients = sqlitedb.getIngredients(recipeID)

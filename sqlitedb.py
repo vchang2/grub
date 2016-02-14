@@ -322,3 +322,10 @@ def searchUsers(userID):
     query_string = 'select * from Users where UserID LIKE $userID'
     results = query(query_string, {'userID': userID})
     return results
+
+def deleteReview(review):
+    query_string = 'delete from Reviews where Review = $review'
+    db.query(query_string, {'review':review})
+
+
+
