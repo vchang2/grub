@@ -67,8 +67,10 @@
 	</ul>
 	<form action="user" method="POST">
 		<input type="hidden" name="userID" value={{userID | e}}>
-		<input type="text" name="cookbook"><br>
-		<input type="submit" value="Add Cookbook">
+		{% if viewingOwnProfile %}
+			<input type="text" name="cookbook"><br>
+			<input type="submit" value="Add Cookbook">
+		{% endif %}
 	</form>
 	<!--<form name="c" action="user" method="POST">
 		<button id="cookbook" onclick="myFunction()">Add Cookbook</button>
