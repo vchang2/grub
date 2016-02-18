@@ -39,9 +39,14 @@ class view:
         photos = sqlitedb.getPhotos(recipeID)
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
+        userHasReviewed = sqlitedb.hasUserReviewed(recipeID, session.user)
         cookbooks = sqlitedb.getCookbooks(session.user)
         userMatchesRecipeAuthor = False
-        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user)
+        for result in recipe:
+            print result['UserID']
+            if session.user == result['UserID']:
+                userMatchesRecipeAuthor = True
+        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
 
 #added by valerie for reviews
     def POST(self):
@@ -84,8 +89,13 @@ class view:
         photos = sqlitedb.getPhotos(recipeID)
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
+        userHasReviewed = sqlitedb.hasUserReviewed(recipeID, session.user)
         cookbooks = sqlitedb.getCookbooks(session.user)
-        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks)
+        userMatchesRecipeAuthor = False
+        for result in recipe:
+            if session.user == result['UserID']:
+                userMatchesRecipeAuthor = True
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, recipeID = recipeID, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
 class user:
     def GET(self):
         if session.user == None:
@@ -152,7 +162,7 @@ class cookbook:
                 all_photos = sqlitedb.getRecipePhotos(recipes)
                 all_recipes = sqlitedb.getRecipes(recipes)
             cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
-        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes, currentUser = session.user)
 
     def POST(self):
         if session.user == None:
@@ -179,7 +189,7 @@ class cookbook:
                 all_photos = sqlitedb.getRecipePhotos(recipes)
                 all_recipes = sqlitedb.getRecipes(recipes)
             cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
-        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes, currentUser = session.user)
 
 class search:
     def GET(self):

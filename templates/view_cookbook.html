@@ -14,6 +14,7 @@
 
 	{% if all_recipes %}
 		{% for result in all_recipes%}
+		<div>
 			<ul>
 			<li><a href = view?recipeID={{result['RecipeID']}}>{{result['Recipe_name']}}</a></li>
 			<form action="cookbook?cookbookID={{cookbookID}}" method="POST">
@@ -22,6 +23,7 @@
 				<input type="submit" value="Delete">
 			</form>
 			</ul>
+		</div>
 		{% endfor %}
 	{% endif %}
 

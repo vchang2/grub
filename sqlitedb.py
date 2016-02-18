@@ -66,7 +66,7 @@ def getCookbookInfo(CookbookID):
     return results
 
 def getCookbooks_recipes(cookbookID):
-    query_string = 'select * from Cookbooks_recipes where CookbookID = $cookbookID'
+    query_string = 'select DISTINCT RecipeID, CookbookID from Cookbooks_recipes where CookbookID = $cookbookID'
     results = query(query_string, {'cookbookID': cookbookID})
     return results
 
@@ -331,5 +331,11 @@ def removeRecipeFromCookbook(cookbookID, recipeID):
     query_string = 'delete from Cookbooks_recipes where RecipeID = $recipeID and CookbookID = $cookbookID'
     db.query(query_string, {'recipeID':recipeID, 'cookbookID':cookbookID})
 
-
+def hasUserReviewed(recipeID, user):
+    query_string = 'select UserID from Reviews where RecipeID = $recipeID'
+    result = query(query_string, {'recipeID': recipeID})
+    for r in result:
+        if user == r['UserID']:
+            return True
+    return False
 

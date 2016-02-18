@@ -103,17 +103,13 @@
 
 		{% if cookbooks %}
 		<br>
-		<form action="view" method="POST">
-			{% for result in recipe %}
-				<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>
-			{% endfor %}
 			{% for cookbook in cookbooks %}
-				<div class="form-group">
+				<form action=view?recipeID={{recipeID}} method="POST">
+					<input type="hidden" name="recipeID" value={{recipeID | e}}>
 					<input type="hidden" name="added_cookbookID" value={{cookbook['CookbookID'] | e}}>
-				</div>
-				<div><h5>Add Recipe to Cookbook {{cookbook['Cookbook_name'] | e}} <input type="submit" value="Add"></h5></div>
+					<h5>Add Recipe to Cookbook {{cookbook['Cookbook_name'] | e}} <input type="submit" value="Add"></h5>
+				</form>
 			{% endfor %}
-		</form>
 		{% endif %}
 		
 		{% if reviews %}
@@ -123,7 +119,7 @@
 				<ul>
 					<li><a href = user?userID={{review['UserID'] | e}}>{{review['UserID'] | e }}</a> ({{review['Rating'] | e}} stars) - {{review['Review'] | e}}</li>
 					{% if currentUser == review['UserID'] %}
-						<form action="view" method="POST">
+						<form action=view?recipeID={{recipeID}} method="POST">
 							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
 							<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">
 							<input type="submit" value="Delete">
@@ -133,20 +129,21 @@
 			{% endfor %}
 		{% endif %}
 
-
-		<form action="view" method="POST">
-			{% for result in recipe %}
-				<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>
-			{% endfor %}
-  			<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
-  			<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
-  			<input type="radio" name="stars" value="3"> 3 Star&nbsp;&nbsp;
-  			<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
-  			<input type="radio" name="stars" value="5"> 5 Star  
-  			<br>
-  			<textarea name="review"rows="4" cols="50"></textarea>
-  			<input type="submit" value="Add Review">
-		</form>
+		{% if not userMatchesRecipeAuthor and not userHasReviewed %}
+			<form action=view?recipeID={{recipeID}} method="POST">
+				{% for result in recipe %}
+					<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>
+				{% endfor %}
+	  			<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
+	  			<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
+	  			<input type="radio" name="stars" value="3"> 3 Star&nbsp;&nbsp;
+	  			<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
+	  			<input type="radio" name="stars" value="5"> 5 Star  
+	  			<br>
+	  			<textarea name="review"rows="4" cols="50"></textarea>
+	  			<input type="submit" value="Add Review">
+			</form>
+		{% endif %}
 
 		<!--<button id="popup" onclick="pop_up()">Add Recipe To Cookbook</button>
 		<script type="text/javascript">
