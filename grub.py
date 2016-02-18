@@ -41,10 +41,7 @@ class view:
         reviews = sqlitedb.getReviews(recipeID)
         cookbooks = sqlitedb.getCookbooks(session.user)
         userMatchesRecipeAuthor = False
-        recipeUserID = recipe[0]['UserID']
-        if recipeUserID == session.user:
-            userMatchesRecipeAuthor = True
-        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
+        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user)
 
 #added by valerie for reviews
     def POST(self):
