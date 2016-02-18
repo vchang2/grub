@@ -7,11 +7,6 @@
 	--Font:tahoma;
 }
 
-body{
-	font-family:var(--Font);
-	background-color:var(--Site_BG);
-}
-
 th{
 	vertical-align: top;
 	text-align:left;
@@ -45,13 +40,13 @@ textarea{
 .oddRow{
 	background:var(--Light_1);
 	padding:7;
-	box-shadow: 7px 0px 5px -5px #666666 inset;
+	box-shadow: 7px 0px 5px -5px #000000 inset;
 }
 
 .evenRow{
 	background:var(--Light_2);
 	padding:7;
-	box-shadow: 7px 0px 5px -5px #666666 inset;
+	box-shadow: 7px 0px 5px -5px #000000 inset;
 }
 
 .oddHead{
