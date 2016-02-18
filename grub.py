@@ -10,7 +10,7 @@ from sets import Set
 from fractions import gcd
 
 urls = (
-    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search', '/upload_page', 'upload_page', '/search_users', 'search_users', '/login', 'login', '/logout', 'logout',
+    '/hello', 'hello', '/view', 'view', '/user', 'user', '/cookbook', 'cookbook', '/search', 'search', '/upload_page', 'upload_page', '/search_users', 'search_users', '/login', 'login', '/logout', 'logout', '/createAccount', 'createAccount',
 )
 web.config.debug = False
 app = web.application(urls, locals())
@@ -303,6 +303,31 @@ class upload_page:
         reviews = sqlitedb.getReviews(recipeID)
         return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews)
 
+class createAccount:
+    def GET(self):
+        return render_template('create_account.html')
+
+    def POST(self):
+        post_params = web.input()
+        username = post_params['userID']
+        password = post_params['password']
+        confirmPassword = post_params['confirmPassword']
+        if username == "":
+            return render_template('create_account.html', message = "Please enter a non-empty username")
+        if password == "":
+            return render_template('create_account.html', message = "Please enter a non-empty password")
+        if password != confirmPassword:
+            return render_template('create_account.html', message = "Password does not match Confirm Password!")
+        usernameExistCheck = sqlitedb.getPassword(username)
+        if len(usernameExistCheck) != 0:
+            message = "Username '"
+            message = message + username
+            message = message + "' already exists. Please choose a different username!"
+            return render_template('create_account.html', message = message)
+        else:
+            sqlitedb.addUser(username, password)
+            session.user = username
+            return web.redirect('/hello')
 
 # helper method to render a template in the templates/ directory
 #

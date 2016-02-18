@@ -38,3 +38,14 @@
 	font-style:italic;
 	color:#777777;
 }
+
+.errorMessage{
+	color:red;
+	font-style:bold;
+}
+
+.createAccount{
+	vertical-align:top;
+	position:relative;
+	text-align:center;
+}
