@@ -122,11 +122,13 @@
 			{% for review in reviews %}
 				<ul>
 					<li><a href = user?userID={{review['UserID'] | e}}>{{review['UserID'] | e }}</a> ({{review['Rating'] | e}} stars) - {{review['Review'] | e}}</li>
-					<form action="view" method="POST">
-						<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
-						<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">
-						<input type="submit" value="Delete">
-					</form>
+					{% if userMatchesRecipeAuthor %}
+						<form action="view" method="POST">
+							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+							<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">
+							<input type="submit" value="Delete">
+						</form>
+					{% endif %}
 				</ul>
 			{% endfor %}
 		{% endif %}

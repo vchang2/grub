@@ -40,7 +40,11 @@ class view:
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
         cookbooks = sqlitedb.getCookbooks(session.user)
-        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks)
+        userMatchesRecipeAuthor = False
+        recipeUserID = recipe[0]['UserID']
+        if recipeUserID == session.user:
+            userMatchesRecipeAuthor = True
+        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
 
 #added by valerie for reviews
     def POST(self):
@@ -87,6 +91,8 @@ class view:
         return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks)
 class user:
     def GET(self):
+        if session.user == None:
+            return render_template('login.html')
         post_params = web.input()
         userID = None
         userRecipes = None
@@ -94,10 +100,14 @@ class user:
         userFollowers = None
         userFollowing = None
         userCookbooks = None
+        viewingOwnProfile = False
         if 'userID' in post_params:
             userID = post_params['userID']
+            if userID == session.user:
+                viewingOwnProfile = True
         elif session.user:
             userID = session.user
+            viewingOwnProfile = True
         else:
             return render_template('login.html')
         userRecipes = sqlitedb.getUserRecipes(userID)
@@ -105,7 +115,7 @@ class user:
         userFollowers = sqlitedb.getFollowers(userID)
         userFollowing = sqlitedb.getFollowing(userID)
         userCookbooks = sqlitedb.getCookbooks(userID)
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile)
     
     def POST(self):
         post_params = web.input()
