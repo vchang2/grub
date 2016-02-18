@@ -4,7 +4,13 @@
 
 {% if userID %}
 	<h3>{{ userID | e}}'s Profile</h3>
-
+		{% if not viewingOwnProfile %}
+			<form action="user?userID={{userID}}" method="POST">
+				<input type="hidden" name="userID" value={{userID | e}}>
+				<input type="hidden" name="addFollower" value={{userID}}>
+				<input type="submit" value="Follow">
+			</form>
+		{% endif %}
 	<br>
 	<h4>About Me</h4>
 	{% if userAboutMe %}
@@ -48,6 +54,13 @@
 	{% if userFollowing %}
 		{% for following in userFollowing %}
 			<li><a href = user?userID={{following['UserID'] | e}}>{{following['UserID'] | e }}</a></li>
+			{% if viewingOwnProfile %}
+				<form action="user?userID={{userID}}" method="POST">
+					<input type="hidden" name="userID" value={{userID}}>
+					<input type="hidden" name="unfollowing" value={{following['UserID']| e}}>
+					<input type="submit" value="Unfollow">
+				</form>
+			{% endif %}
 		{% endfor %}
 	{% else %}
 		<li>{{ userID | e}} does not follow any users</li>

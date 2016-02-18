@@ -43,7 +43,6 @@ class view:
         cookbooks = sqlitedb.getCookbooks(session.user)
         userMatchesRecipeAuthor = False
         for result in recipe:
-            print result['UserID']
             if session.user == result['UserID']:
                 userMatchesRecipeAuthor = True
         return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
@@ -52,7 +51,6 @@ class view:
     def POST(self):
         post_params = web.input()
         recipeID = post_params['recipeID']
-        print post_params
         if 'review' in post_params:
             sqlitedb.addRecipeReview(recipeID, session.user, post_params['review'], int(post_params['stars']))
 
@@ -122,6 +120,8 @@ class user:
         userFollowers = sqlitedb.getFollowers(userID)
         userFollowing = sqlitedb.getFollowing(userID)
         userCookbooks = sqlitedb.getCookbooks(userID)
+        if 'unfollowing' in post_params:
+            sqlitedb.unfollow(session.user, post_params['unfollowing'])
         return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile)
     
     def POST(self):
@@ -137,6 +137,10 @@ class user:
             userFollowers = sqlitedb.getFollowers(userID)
             userFollowing = sqlitedb.getFollowing(userID)
             userCookbooks = sqlitedb.getCookbooks(userID)
+        if 'unfollowing' in post_params:
+            sqlitedb.unfollow(session.user, post_params['unfollowing'])
+        if 'addFollower' in post_params:
+            sqlitedb.addFollower(post_params['addFollower'], session.user)
         return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks)
 
 class cookbook:

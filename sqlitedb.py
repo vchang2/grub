@@ -339,3 +339,11 @@ def hasUserReviewed(recipeID, user):
             return True
     return False
 
+def unfollow(userID, followee):
+    query_string = 'delete from Followers where FollowerID = $followerID and UserID = $userID'
+    db.query(query_string, {'followerID': userID,'userID':followee})
+
+def addFollower(userID, followerID):
+    query_string = 'insert into Followers values($followerID, $userID)'
+    db.query(query_string, {'followerID':followerID, 'userID':userID})
+
