@@ -78,13 +78,14 @@
 		<li>{{ userID | e}} does not have any cookbooks</li>
 	{% endif %}
 	</ul>
-	<form action="user" method="POST">
-		<input type="hidden" name="userID" value={{userID | e}}>
-		{% if viewingOwnProfile %}
-			<input type="text" name="cookbook"><br>
-			<input type="submit" value="Add Cookbook">
-		{% endif %}
-	</form>
+	{% if viewingOwnProfile %}
+		<form action="user?userID={{userID}}" method="POST">
+			<input type="hidden" name="userID" value={{userID | e}}>
+				<input type="text" name="cookbook"><br>
+				<input type="submit" value="Add Cookbook">
+
+		</form>
+	{% endif %}
 	<!--<form name="c" action="user" method="POST">
 		<button id="cookbook" onclick="myFunction()">Add Cookbook</button>
 	</form>

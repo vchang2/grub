@@ -127,6 +127,16 @@ class user:
     def POST(self):
         post_params = web.input()
         cookbookID = None
+        viewingOwnProfile = False
+        if 'userID' in post_params:
+            userID = post_params['userID']
+            if userID == session.user:
+                viewingOwnProfile = True
+        elif session.user:
+            userID = session.user
+            viewingOwnProfile = True
+        else:
+            return render_template('login.html')
         if 'cookbook' in post_params:
             cookbookID = sqlitedb.assignCookbookID()
             sqlitedb.addCookbook(cookbookID, session.user, post_params['cookbook'])
@@ -141,7 +151,7 @@ class user:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
         if 'addFollower' in post_params:
             sqlitedb.addFollower(post_params['addFollower'], session.user)
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile)
 
 class cookbook:
     # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm
