@@ -157,6 +157,33 @@ class cookbook:
             cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
         return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
 
+    def POST(self):
+        if session.user == None:
+            return render_template('login.html')
+        post_params = web.input()
+        cookbookID = None
+        cookbookRecipes = None
+        cookbookInfo = None
+        recipes = []
+        all_photos = None
+        all_recipes = None 
+        cookbookInfo = None
+        recipeID = None
+        if 'recipeID' in post_params:
+            recipeID = post_params['recipeID']
+            cookbookID = post_params['cookbookID']
+            sqlitedb.removeRecipeFromCookbook(cookbookID, recipeID)
+        if 'cookbookID' in post_params:
+            cookbookID = post_params['cookbookID']
+            cookbookRecipes = sqlitedb.getCookbooks_recipes(cookbookID)
+            for recipe in cookbookRecipes:
+                recipes.append(recipe['RecipeID'])
+            if len(recipes) > 0:
+                all_photos = sqlitedb.getRecipePhotos(recipes)
+                all_recipes = sqlitedb.getRecipes(recipes)
+            cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
+
 class search:
     def GET(self):
         if session.user == None:
