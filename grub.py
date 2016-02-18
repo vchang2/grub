@@ -39,15 +39,18 @@ class view:
         photos = sqlitedb.getPhotos(recipeID)
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
+        userHasReviewed = sqlitedb.hasUserReviewed(recipeID, session.user)
         cookbooks = sqlitedb.getCookbooks(session.user)
         userMatchesRecipeAuthor = False
-        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user)
+        for result in recipe:
+            if session.user == result['UserID']:
+                userMatchesRecipeAuthor = True
+        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
 
 #added by valerie for reviews
     def POST(self):
         post_params = web.input()
         recipeID = post_params['recipeID']
-        print post_params
         if 'review' in post_params:
             sqlitedb.addRecipeReview(recipeID, session.user, post_params['review'], int(post_params['stars']))
 
@@ -84,8 +87,13 @@ class view:
         photos = sqlitedb.getPhotos(recipeID)
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
+        userHasReviewed = sqlitedb.hasUserReviewed(recipeID, session.user)
         cookbooks = sqlitedb.getCookbooks(session.user)
-        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks)
+        userMatchesRecipeAuthor = False
+        for result in recipe:
+            if session.user == result['UserID']:
+                userMatchesRecipeAuthor = True
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, recipeID = recipeID, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
 class user:
     def GET(self):
         if session.user == None:
@@ -112,6 +120,8 @@ class user:
         userFollowers = sqlitedb.getFollowers(userID)
         userFollowing = sqlitedb.getFollowing(userID)
         userCookbooks = sqlitedb.getCookbooks(userID)
+        if 'unfollowing' in post_params:
+            sqlitedb.unfollow(session.user, post_params['unfollowing'])
         return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile)
     
     def POST(self):
@@ -127,6 +137,10 @@ class user:
             userFollowers = sqlitedb.getFollowers(userID)
             userFollowing = sqlitedb.getFollowing(userID)
             userCookbooks = sqlitedb.getCookbooks(userID)
+        if 'unfollowing' in post_params:
+            sqlitedb.unfollow(session.user, post_params['unfollowing'])
+        if 'addFollower' in post_params:
+            sqlitedb.addFollower(post_params['addFollower'], session.user)
         return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks)
 
 class cookbook:
@@ -152,7 +166,34 @@ class cookbook:
                 all_photos = sqlitedb.getRecipePhotos(recipes)
                 all_recipes = sqlitedb.getRecipes(recipes)
             cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
-        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes, currentUser = session.user)
+
+    def POST(self):
+        if session.user == None:
+            return render_template('login.html')
+        post_params = web.input()
+        cookbookID = None
+        cookbookRecipes = None
+        cookbookInfo = None
+        recipes = []
+        all_photos = None
+        all_recipes = None 
+        cookbookInfo = None
+        recipeID = None
+        if 'recipeID' in post_params:
+            recipeID = post_params['recipeID']
+            cookbookID = post_params['cookbookID']
+            sqlitedb.removeRecipeFromCookbook(cookbookID, recipeID)
+        if 'cookbookID' in post_params:
+            cookbookID = post_params['cookbookID']
+            cookbookRecipes = sqlitedb.getCookbooks_recipes(cookbookID)
+            for recipe in cookbookRecipes:
+                recipes.append(recipe['RecipeID'])
+            if len(recipes) > 0:
+                all_photos = sqlitedb.getRecipePhotos(recipes)
+                all_recipes = sqlitedb.getRecipes(recipes)
+            cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes, currentUser = session.user)
 
 class search:
     def GET(self):

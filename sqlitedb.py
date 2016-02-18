@@ -66,7 +66,7 @@ def getCookbookInfo(CookbookID):
     return results
 
 def getCookbooks_recipes(cookbookID):
-    query_string = 'select * from Cookbooks_recipes where CookbookID = $cookbookID'
+    query_string = 'select DISTINCT RecipeID, CookbookID from Cookbooks_recipes where CookbookID = $cookbookID'
     results = query(query_string, {'cookbookID': cookbookID})
     return results
 
@@ -327,5 +327,23 @@ def deleteReview(review):
     query_string = 'delete from Reviews where Review = $review'
     db.query(query_string, {'review':review})
 
+def removeRecipeFromCookbook(cookbookID, recipeID):
+    query_string = 'delete from Cookbooks_recipes where RecipeID = $recipeID and CookbookID = $cookbookID'
+    db.query(query_string, {'recipeID':recipeID, 'cookbookID':cookbookID})
 
+def hasUserReviewed(recipeID, user):
+    query_string = 'select UserID from Reviews where RecipeID = $recipeID'
+    result = query(query_string, {'recipeID': recipeID})
+    for r in result:
+        if user == r['UserID']:
+            return True
+    return False
+
+def unfollow(userID, followee):
+    query_string = 'delete from Followers where FollowerID = $followerID and UserID = $userID'
+    db.query(query_string, {'followerID': userID,'userID':followee})
+
+def addFollower(userID, followerID):
+    query_string = 'insert into Followers values($followerID, $userID)'
+    db.query(query_string, {'followerID':followerID, 'userID':userID})
 
