@@ -1,0 +1,37 @@
+{% extends "app_base.html" %}
+{% block content %}
+{# include the first two lines above to extend the app_base template #}
+<head>
+	<link rel="stylesheet" type="text/css" href="static/css/login.css" />
+	<title>Upload Recipe</title>
+</head>
+</body>
+	<table cellspacing="0" class="TABLE">
+		<tr><th class="TH"><h3>Grub! Create Account</h3></th></td>
+		<tr><td class="TD">
+			<p class="helptext">Create new account with username and password.</p>
+			{% if message %}
+				<p class="errorMessage">{{message}}</p>
+			{% endif %}
+			<form method="POST" action="createAccount" role="form">
+				<table class="center">
+					<tr>
+						<td><label for="userID">Username</label></td>
+						<td><input type="text" name="userID" id="userID" /></td>
+					</tr>
+					<tr>
+						<td><label for="password">Password</label></td>
+						<td><input type="password" id="password" name="password" /></td>
+					</tr>
+					<tr>
+						<td><label for="password">Confirm Password</label></td>
+						<td><input type="password" id="password" name="confirmPassword" /></td>
+					</tr>
+				</table>
+				<input type="submit" value="Create Account!" class="center2"/>
+			</form>
+		</td></tr>
+	</table>
+</body>
+
+{% endblock %}
