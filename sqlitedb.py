@@ -141,6 +141,17 @@ def assignCookbookID():
     db.query(query_string, {'cookbookID':CookbookID, 'replace':replace})
     return CookbookID
 
+def assignReviewID():
+    query_string = 'select * from Constants'
+    result = query(query_string)
+    replace = 0
+    for r in result:
+        replace = r['ReviewID']
+    ReviewID = replace + 1
+    query_string = 'update Constants set ReviewID = $reviewID where ReviewID = $replace'
+    db.query(query_string, {'reviewID':ReviewID, 'replace':replace})
+    return ReviewID
+
 # Added by Ryan on 1/27 at 9:12pm or later
 def getAllRecipes():
     query_string = 'select * from Recipes'
@@ -220,9 +231,9 @@ def getUserRecipes(username):
     results = query(query_string, {'username':username})
     return results
 
-def addRecipeReview(RecipeID, UserID, Review, Rating):
-    query_string = 'insert into Reviews values($recipeID, $userID, $review, $rating)'
-    db.query(query_string, {'recipeID':RecipeID, 'userID':UserID, 'review':Review, 'rating':Rating})
+def addRecipeReview(ReviewID, RecipeID, UserID, Review, Rating, Helpful, Unhelpful):
+    query_string = 'insert into Reviews values($reviewID, $recipeID, $userID, $review, $rating, $helpful, $unhelpful)'
+    db.query(query_string, {'reviewID':ReviewID,'recipeID':RecipeID, 'userID':UserID, 'review':Review, 'rating':Rating, 'helpful':Helpful, 'unhelpful':Unhelpful})
 
 def addFollower(FollwerID, FolloweeID):
     query_string = 'insert into Followers values($followerID, $followeeID)'
@@ -323,9 +334,9 @@ def searchUsers(userID):
     results = query(query_string, {'userID': userID})
     return results
 
-def deleteReview(review):
-    query_string = 'delete from Reviews where Review = $review'
-    db.query(query_string, {'review':review})
+def deleteReview(reviewID):
+    query_string = 'delete from Reviews where ReviewID = $reviewID'
+    db.query(query_string, {'reviewID':reviewID})
 
 def removeRecipeFromCookbook(cookbookID, recipeID):
     query_string = 'delete from Cookbooks_recipes where RecipeID = $recipeID and CookbookID = $cookbookID'
@@ -346,4 +357,10 @@ def unfollow(userID, followee):
 def addFollower(userID, followerID):
     query_string = 'insert into Followers values($followerID, $userID)'
     db.query(query_string, {'followerID':followerID, 'userID':userID})
+
+def deleteCookbook(cookbookID):
+    query_string = 'delete from Cookbooks where CookbookID = $cookbookID'
+    db.query(query_string, {'cookbookID':cookbookID})
+    query_string = 'delete from Cookbooks_recipes where CookbookID = $cookbookID'
+    db.query(query_string, {'cookbookID':cookbookID})
 

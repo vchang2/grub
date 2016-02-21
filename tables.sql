@@ -69,10 +69,13 @@ RecipeID int REFERENCES Recipes(RecipeID),
 Category text);
 
 create table Reviews(
+ReviewID int PRIMARY KEY,
 RecipeID int REFERENCES Recipes(RecipeID),
 UserID text REFERENCES Users(UserID),
 Review text,
-Rating int);
+Rating int,
+Helpful int,
+Total int);
 
 create table Followers(
 FollowerID text REFERENCES Users(UserID),
@@ -80,7 +83,8 @@ UserID text REFERENCES Users(UserID));
 
 create table Constants(
 RecipeID int REFERENCES Recipes(RecipeID),
-CookbookID int REFERENCES Cookbooks(CookbookID));
+CookbookID int REFERENCES Cookbooks(CookbookID),
+ReviewID int REFERENCES Reviews(ReviewID));
 
 Insert into Users values("Adam189", "apple"), ("blubbo", "apple"), ("billy", "apple");
 Insert into About_me values("Adam189", "Expert master chef."), ("blubbo", "Here to make new dishes and learn how to cook."), ("billy", "I make great recipes! Follow me.");
@@ -125,10 +129,10 @@ Insert into Photos values (1, "http://162.61.226.249/PicOriginal/P63452612080938
 (5, "http://lh3.googleusercontent.com/_6BFsRu-4WQr7Z0nCZHHQAMpHuWPLmWZSI-KkgSU9UoIQ2fZ51Aw0O_erwSPBOSVzvzMl2lkSC1W0GvOSs25=s480-c-e365"),
 (6, "http://images.edge-generalmills.com/5a1831d5-6c87-4c93-b3b5-465f2367c608.jpg");
 Insert into Categories values(1, "savory"), (1, "dinner"), (2, "savory"), (2, "dinner"), (3, "vegetarian"), (3, "snack"), (4, "gluten-free"), (5, "snack"), (6, "savory"), (6, "dinner"), (6, "lunch");
-Insert into Reviews values(1, "blubbo", "it's good, but the dish could use more beef", 4), (2, "billy", "I had a wonderful time making this dish. The instructions were well thoughout and put together. It was quite fantastic", 4),
-(3, "Adam189", "A really amazing dish. I had a lot of fun making it. Since my wife is vegetarian, it's a great snack for the both of us to enjoy. Easy to make, and delicious to eart!", 5),
-(3, "blubbo", "Really great set and stone instructions for a beginner like me. No need for heating anything, and the sandwiches were delicious!!!", 5), (4, "Adam189", "Blubbo is one of our newer members to the community. This is 
-	a really great start, but would have liked to see more thorough instructions to carry out this dish. But an incredible idea", 2), (4, "billy", "I've had quesadillas: chicken, cheese, chicken and cheese, mushroom, you name it. But never green!
-	It tastes a lot better than expected!", 5), (6, "blubbo", "Amazing! This tasted so great, and really tasted like the bread stuffing my grandma used to make. It's delicious, thanks so much!", 5);
+Insert into Reviews values(1, 1, "blubbo", "it's good, but the dish could use more beef", 4, 0, 0), (2, 2, "billy", "I had a wonderful time making this dish. The instructions were well thoughout and put together. It was quite fantastic", 4, 4, 4),
+(3, 3, "Adam189", "A really amazing dish. I had a lot of fun making it. Since my wife is vegetarian, it's a great snack for the both of us to enjoy. Easy to make, and delicious to eart!", 5, 5, 7),
+(4, 3,"blubbo", "Really great set and stone instructions for a beginner like me. No need for heating anything, and the sandwiches were delicious!!!", 5, 8, 9), (5, 4, "Adam189", "Blubbo is one of our newer members to the community. This is 
+	a really great start, but would have liked to see more thorough instructions to carry out this dish. But an incredible idea", 2, 6, 7), (6, 4, "billy", "I've had quesadillas: chicken, cheese, chicken and cheese, mushroom, you name it. But never green!
+	It tastes a lot better than expected!", 5, 0,0), (7, 6, "blubbo", "Amazing! This tasted so great, and really tasted like the bread stuffing my grandma used to make. It's delicious, thanks so much!", 5, 2, 2);
 Insert into Followers values("blubbo", "billy"), ("Adam189", "billy");
-Insert into Constants values(6, 1);
+Insert into Constants values(6, 1, 7);

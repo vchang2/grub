@@ -117,13 +117,19 @@
 			<h4>Reviews:</h4>
 			{% for review in reviews %}
 				<ul>
-					<li><a href = user?userID={{review['UserID'] | e}}>{{review['UserID'] | e }}</a> ({{review['Rating'] | e}} stars) - {{review['Review'] | e}}</li>
+					<p>{{review['Helpful'] | e}} out of {{review['Total'] | e}} people found this review helpful.</p>
+					<li><a href = user?userID={{review['UserID'] | e}}>{{review['UserID'] | e }}</a> ({{review['Rating'] | e}} stars) - {{review['Review'] | e}} </li>
 					{% if currentUser == review['UserID'] %}
 						<form action=view?recipeID={{recipeID}} method="POST">
 							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
-							<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">
+							<input type="hidden" name="DeleteReview" value={{review['ReviewID'] | e}}>
+							<!--<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">-->
 							<input type="submit" value="Delete">
 						</form>
+					{% endif %}
+					{% if currentUser != review['UserID'] %}
+						<p>Was this review helpful?</p>
+						<input type="submit" name="YesReview" value="Yes"><input type="submit" name="NoReview" value="No">
 					{% endif %}
 				</ul>
 			{% endfor %}

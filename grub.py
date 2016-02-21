@@ -52,7 +52,8 @@ class view:
         post_params = web.input()
         recipeID = post_params['recipeID']
         if 'review' in post_params:
-            sqlitedb.addRecipeReview(recipeID, session.user, post_params['review'], int(post_params['stars']))
+            reviewID = sqlitedb.assignReviewID()
+            sqlitedb.addRecipeReview(reviewID, recipeID, session.user, post_params['review'], int(post_params['stars']), 0, 0)
 
             #need to update overall rating now
             ratings = sqlitedb.getReviews(recipeID)
@@ -137,6 +138,8 @@ class user:
             viewingOwnProfile = True
         else:
             return render_template('login.html')
+        if 'deleteCookbook' in post_params:
+            sqlitedb.deleteCookbook(post_params['deleteCookbook'])
         if 'cookbook' in post_params:
             cookbookID = sqlitedb.assignCookbookID()
             sqlitedb.addCookbook(cookbookID, session.user, post_params['cookbook'])
