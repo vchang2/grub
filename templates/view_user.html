@@ -29,6 +29,13 @@
 			{% else %}
 				<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - {{ result['Overall_rating'] | e}} stars</a></li>
 			{% endif %}
+
+			{% if currentUser == userID %}
+				<form action="user?userID={{userID}}" method="POST">
+					<input type="hidden" name="deleteRecipe" value={{result['RecipeID']| e}}>
+					<input type="submit" value="Delete">
+				</form>
+			{% endif %}
 			
 		{% endfor %}
 	{% else %}
