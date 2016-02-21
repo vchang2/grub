@@ -220,9 +220,13 @@ class search:
         ingredients = post_params['ingredients'].split()
         categories = post_params['categories'].split()
         tags = post_params['tags'].split()
-        
         final_search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients, categories, tags)
-        return render_template('search_recipes.html', search_results = final_search_results)
+        recipe_photos = []
+        for result in final_search_results:
+            photo = sqlitedb.getPhotos(result['RecipeID'])[0]['Photo']
+            print photo
+            recipe_photos.append(photo)
+        return render_template('search_recipes.html', search_results = final_search_results, recipe_photos = recipe_photos)
 
 class login:
     def GET(self):
