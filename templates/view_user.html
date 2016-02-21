@@ -72,7 +72,7 @@
 	<ul>
 	{% if userCookbooks %}
 		{% for cookbook in userCookbooks %}
-			<li><a href = cookbook?cookbookID={{cookbook['CookbookID'] | e}}>{{cookbook['Cookbook_name'] | e }}</a> <input type="submit" value="Delete"></li>
+			<li><a href = cookbook?cookbookID={{cookbook['CookbookID'] | e}}>{{cookbook['Cookbook_name'] | e }}</a></li>
 			{% if viewingOwnProfile %}
 				<form action="user?userID={{userID}}" method="POST">
 					<input type="hidden" name="userID" value={{userID}}>
