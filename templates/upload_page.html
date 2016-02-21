@@ -7,6 +7,8 @@
 	<title>Upload Recipe</title>
 </head>
 
+<body onload="change(nameHeader, nameInput)" onkeyup="change(nameHeader, nameInput)">
+
 <form action="upload_page" method="POST"><table cellspacing="0" class="table">
 	<tr>
 		<td colspan="2" class="header"><h1 class="header">Upload a new recipe!</h1></td>
@@ -14,42 +16,42 @@
 	<tr>
 		<th class="oddHead" onmouseover="helpOn(nameHelpImg)" onmouseout="helpOff(nameHelpImg)"><p id="nameHeader">Name of Recipe</p></th>
 		<td class="oddRow">
-			<input type="text" name="name" class="name" id="nameInput" onkeypress="change(nameHeader, nameInput)">
+			<input type="text" name="name" class="name" id="nameInput">
 			<img id="nameHelpImg" class="helpImg" src="static/images/upload_help/upload_help_name.png" />
 		</td>
 	</tr>
 	<tr>
-		<th class = "evenHead" onmouseover="helpOn(descriptionHelpImg)" onmouseout="helpOff(descriptionHelpImg)"><p>Description</p></th>
+		<th class = "evenHead" onmouseover="helpOn(descriptionHelpImg)" onmouseout="helpOff(descriptionHelpImg)"><p id="descriptionHeader">Description</p></th>
 		<td class="evenRow">
-			<textarea name="description" rows="4" cols="43"></textarea>
+			<textarea name="description" rows="4" cols="43" id="descriptionInput"></textarea>
 			<img id="descriptionHelpImg" class="helpImg" src="static/images/upload_help/upload_help_description.png" />
 		</td>
 	</tr>
 	<tr>
-		<th class="oddHead" onmouseover="helpOn(ingredientsHelpImg)" onmouseout="helpOff(ingredientsHelpImg)"><p>Ingredients</p></th>
+		<th class="oddHead" onmouseover="helpOn(ingredientsHelpImg)" onmouseout="helpOff(ingredientsHelpImg)"><p id="ingredientsHeader">Ingredients</p></th>
 		<td class="oddRow">
 			<div id="ingredients"></div>
 			<img id="ingredientsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_ingredients.png" />
 		</td>
 	</tr>
 	<tr>
-		<th class = "evenHead" onmouseover="helpOn(instructionsHelpImg)" onmouseout="helpOff(instructionsHelpImg)"><p>Instructions</p></th>
+		<th class = "evenHead" onmouseover="helpOn(instructionsHelpImg)" onmouseout="helpOff(instructionsHelpImg)"><p id="instructionsHelper">Instructions</p></th>
 		<td class="evenRow">
 			<div id="instructions"></div>
 			<img id="instructionsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_instructions.png" />
 		</td>
 	</tr>
 	<tr>
-		<th class="oddHead" onmouseover="helpOn(timeHelpImg)" onmouseout="helpOff(timeHelpImg)"><p>Time to Complete</p></th>
+		<th class="oddHead" onmouseover="helpOn(timeHelpImg)" onmouseout="helpOff(timeHelpImg)"><p id="timeHeader">Time to Complete</p></th>
 		<td class="oddRow">
-			<input type="number" name="time" min="1"> minutes
+			<input type="number" name="time" min="1" id="timeInput"> minutes
 			<img id="timeHelpImg" class="helpImg" src="static/images/upload_help/upload_help_time.png" />
 		</td>
 	</tr>
 	<tr>
-		<th class = "evenHead" onmouseover="helpOn(servingsHelpImg)" onmouseout="helpOff(servingsHelpImg)"><p>Number of Servings</p></th>
+		<th class = "evenHead" onmouseover="helpOn(servingsHelpImg)" onmouseout="helpOff(servingsHelpImg)"><p id="servingsHeader">Number of Servings</p></th>
 		<td class="evenRow">
-			<input type="number" name="servings" min="1">
+			<input type="number" name="servings" min="1" id="servingsInput">
 			<img id="servingsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_servings.png" />
 		</td>
 	</tr>
@@ -98,19 +100,21 @@
 		</td>
 	</tr>
 	<tr>
-		<th class="oddHead" onmouseover="helpOn(photosHelpImg)" onmouseout="helpOff(photosHelpImg)"><p>Image URL</p></th>
+		<th class="oddHead" onmouseover="helpOn(photosHelpImg)" onmouseout="helpOff(photosHelpImg)"><p id="imageHeader">Image URL</p></th>
 		<td class="oddRow">
-			<input type="text" name="image" class="name">
+			<input type="text" name="image" class="name" id="imageInput">
 			<img id="photosHelpImg" class="helpImg" src="static/images/upload_help/upload_help_photos.png" />
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2" class="submitTD">
-			<input type="submit" value="Upload Recipe!" class="submitButton">
+			<input type="submit" value="Upload Recipe!" class="submitButton" id="submit">
 		</td>
 	</tr>
 </table></form>
 <br/><br/><br/>
+
+</body>
 
 <script type="text/javascript" src="static/js/upload_script.js"></script>
 <script type="text/javascript">
@@ -124,14 +128,32 @@
 
 	function helpOff(id){
 		id.style.display = "none";
-	}
+	}	
 
 	function change(header, input){
+		var ready = true;
+		
+		var required = ["name", "description", "time", "servings", "image"];
+		for(var i = 0; i < required.length; i++){
+			
+			input = document.getElementById(required[i] + "Input");
+			header = document.getElementById(required[i] + "Header");
+			if (input.value == "" || input.value.innerHTML == ""){
+				header.style.color = "#ff7777";
+				ready=false;
+			} else{
+				header.style.color = "#ffffff";
+			}
+		}
 
-		if (input.value == ""){
-			header.style.color = "#ff0000";
+		if(document.getElementById("ingredientIngredient0").innerHTML == ""){
+
+		}
+
+		if(ready){
+			document.getElementById("submit").disabled = false;
 		} else{
-			header.style.color = "#00ff00";
+			document.getElementById("submit").disabled = true;
 		}
 	}
 
