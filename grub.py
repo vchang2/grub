@@ -121,6 +121,7 @@ class user:
         userFollowing = None
         userCookbooks = None
         viewingOwnProfile = False
+        currentUser = session.user
         if 'userID' in post_params:
             userID = post_params['userID']
             if userID == session.user:
@@ -137,7 +138,7 @@ class user:
         userCookbooks = sqlitedb.getCookbooks(userID)
         if 'unfollowing' in post_params:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile, currentUser = currentUser)
     
     def POST(self):
         post_params = web.input()
@@ -168,7 +169,11 @@ class user:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
         if 'addFollower' in post_params:
             sqlitedb.addFollower(post_params['addFollower'], session.user)
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile)
+        if 'deleteRecipe' in post_params:
+            recipeID = post_params['deleteRecipe']
+            sqlitedb.deleteRecipe(recipeID)
+        currentUser = session.user
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile, currentUser = currentUser)
 
 class cookbook:
     # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm

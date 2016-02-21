@@ -364,6 +364,24 @@ def deleteCookbook(cookbookID):
     query_string = 'delete from Cookbooks_recipes where CookbookID = $cookbookID'
     db.query(query_string, {'cookbookID':cookbookID})
 
+# Deleting Things - Added by Ryan
+def deleteRecipe(recipeID):
+    query_string = 'delete from Recipes where RecipeID = $recipeID'
+    db.query(query_string, {'recipeID':recipeID})
+    query_string = 'delete from Cookbooks_recipes where RecipeID = $recipeID'
+    db.query(query_string, {'recipeID':recipeID})
+    query_string = 'delete from Instructions where RecipeID = $recipeID'
+    db.query(query_string, {'recipeID':recipeID})
+    query_string = 'delete from Ingredients where RecipeID = $recipeID'
+    db.query(query_string, {'recipeID':recipeID})
+    query_string = 'delete from Tags where RecipeID = $recipeID'
+    db.query(query_string, {'recipeID':recipeID})
+    query_string = 'delete from Photos where RecipeID = $recipeID'
+    db.query(query_string, {'recipeID':recipeID})
+    query_string = 'delete from Categories where RecipeID = $recipeID'
+    db.query(query_string, {'recipeID':recipeID})
+    # Need to add deleting from Reviews at some point
+
 def updateVoteReviewStatus(reviewID, userID, vote):
     query_string = 'select * from Reviews_votes where ReviewID = $reviewID'
     results = query(query_string, {'reviewID':reviewID})
