@@ -382,4 +382,71 @@ def deleteRecipe(recipeID):
     db.query(query_string, {'recipeID':recipeID})
     # Need to add deleting from Reviews at some point
 
+def updateVoteReviewStatus(reviewID, userID, vote):
+    query_string = 'select * from Reviews_votes where ReviewID = $reviewID'
+    results = query(query_string, {'reviewID':reviewID})
+    changed = False
+    
+    for result in results:
+        if result['UserID'] == userID:
+            changed = True
+    if changed:
+        query_string = 'update Reviews_votes set Vote = $vote where UserID = $userID and ReviewID = $reviewID'
+        db.query(query_string, {'vote':vote, 'userID':userID, 'reviewID':reviewID})
+    else:
+        query_string = 'insert into Reviews_votes values($reviewID, $userID, $vote)'
+        db.query(query_string, {'vote':vote, 'userID':userID, 'reviewID':reviewID})
+
+def userAlreadyReviewed(reviewID, userID):
+    query_string = 'select * from Reviews_votes where ReviewID = $reviewID'
+    results = query(query_string, {'reviewID':reviewID})
+    
+    for result in results:
+        if result['UserID'] == userID:
+            return True
+
+    return False
+
+#returns whether or not the user voted positively or negatively
+def userVoted(reviewID, userID):
+    query_string = 'select * from Reviews_votes where ReviewID = $reviewID'
+    results = query(query_string, {'reviewID':reviewID})   
+    for result in results:
+        if result['UserID'] == userID:
+            return result['Vote']
+
+    return 'na'
+
+def addOneThumbsUp(reviewID, userID):
+    query_string = 'select * from Reviews where ReviewID = $reviewID'
+    results = query(query_string, {'reviewID': reviewID})
+    helpful = 0
+    total = 0
+    for result in results:
+        helpful = int(result['Helpful']) + 1
+        total = int(result['Total']) + 1
+    if userAlreadyReviewed(reviewID, userID):
+        total -= 1
+    query_string = 'update Reviews set Helpful = $helpful where ReviewID = $reviewID'
+    db.query(query_string, {'helpful':helpful, 'reviewID':reviewID})
+    query_string = 'update Reviews set Total = $total where ReviewID = $reviewID'
+    db.query(query_string, {'total':total, 'reviewID':reviewID})
+
+
+def addOneThumbsDown(reviewID, userID):
+    query_string = 'select * from Reviews where ReviewID = $reviewID'
+    results = query(query_string, {'reviewID': reviewID})
+    total = 0
+    helpful = 0
+    for result in results:
+        total = int(result['Total']) + 1
+        helpful = int(result['Helpful'])
+    if userAlreadyReviewed(reviewID, userID):
+        helpful -= 1
+        total -= 1
+    query_string = 'update Reviews set Helpful = $helpful where ReviewID = $reviewID'
+    db.query(query_string, {'helpful':helpful, 'reviewID':reviewID})
+    query_string = 'update Reviews set Total = $total where ReviewID = $reviewID'
+    db.query(query_string, {'total':total, 'reviewID':reviewID})
+
 

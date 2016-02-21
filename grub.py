@@ -39,13 +39,16 @@ class view:
         photos = sqlitedb.getPhotos(recipeID)
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
+        userVotes = {0 : 'na'}
+        for review in reviews:
+            userVotes[review['ReviewID']] = sqlitedb.userVoted(review['ReviewID'], session.user)
         userHasReviewed = sqlitedb.hasUserReviewed(recipeID, session.user)
         cookbooks = sqlitedb.getCookbooks(session.user)
         userMatchesRecipeAuthor = False
         for result in recipe:
             if session.user == result['UserID']:
                 userMatchesRecipeAuthor = True
-        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
+        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes)
 
 #added by valerie for reviews
     def POST(self):
@@ -79,7 +82,14 @@ class view:
             new_rating = total/counter
             new_rating = format(new_rating, '.2f')
             sqlitedb.updateRating(recipeID, new_rating)
-
+        if 'HelpfulReview' in post_params:
+            reviewID = post_params['reviewID']
+            sqlitedb.addOneThumbsUp(reviewID, session.user)
+            sqlitedb.updateVoteReviewStatus(reviewID, session.user, "up")
+        if 'UnhelpfulReview' in post_params:
+            reviewID = post_params['reviewID']
+            sqlitedb.addOneThumbsDown(reviewID, session.user)
+            sqlitedb.updateVoteReviewStatus(reviewID, session.user, "down")
         #reload page info
         recipe = sqlitedb.getRecipe(recipeID)
         instructions = sqlitedb.getInstructions(recipeID)
@@ -88,13 +98,17 @@ class view:
         photos = sqlitedb.getPhotos(recipeID)
         categories = sqlitedb.getCategories(recipeID)
         reviews = sqlitedb.getReviews(recipeID)
+        userVotes = {0 : 'na'}
+        for review in reviews:
+            userVotes[review['ReviewID']] = sqlitedb.userVoted(review['ReviewID'], session.user)
+        print userVotes
         userHasReviewed = sqlitedb.hasUserReviewed(recipeID, session.user)
         cookbooks = sqlitedb.getCookbooks(session.user)
         userMatchesRecipeAuthor = False
         for result in recipe:
             if session.user == result['UserID']:
                 userMatchesRecipeAuthor = True
-        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, recipeID = recipeID, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor)
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, recipeID = recipeID, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes)
 class user:
     def GET(self):
         if session.user == None:

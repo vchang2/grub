@@ -126,10 +126,27 @@
 							<!--<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">-->
 							<input type="submit" value="Delete">
 						</form>
-					{% endif %}
-					{% if currentUser != review['UserID'] %}
-						<p>Was this review helpful?</p>
-						<input type="submit" name="YesReview" value="Yes"><input type="submit" name="NoReview" value="No">
+					{% elif userVotes[review['ReviewID']] == "up"%}
+						<form action=view?recipeID={{recipeID}} method="POST">
+							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+							<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
+							<p>Was this review helpful?</p>
+							<button type="button" disabled>Yes</button><input type="submit" name="UnhelpfulReview" value="No">
+						</form>
+					{% elif userVotes[review['ReviewID']] == "down" %}
+						<form action=view?recipeID={{recipeID}} method="POST">
+							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+							<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
+							<p>Was this review helpful?</p>
+							<input type="submit" name="HelpfulReview" value="Yes"><button type="button" disabled>No</button>
+						</form>
+					{% else %}
+						<form action=view?recipeID={{recipeID}} method="POST">
+							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+							<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
+							<p>Was this review helpful?</p>
+							<input type="submit" name="HelpfulReview" value="Yes"><input type="submit" name="UnhelpfulReview" value="No">
+						</form>
 					{% endif %}
 				</ul>
 			{% endfor %}
@@ -142,7 +159,7 @@
 				{% endfor %}
 	  			<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
 	  			<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
-	  			<input type="radio" name="stars" value="3"> 3 Star&nbsp;&nbsp;
+	  			<input type="radio" checked name="stars" value="3"> 3 Star&nbsp;&nbsp;
 	  			<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
 	  			<input type="radio" name="stars" value="5"> 5 Star  
 	  			<br>
