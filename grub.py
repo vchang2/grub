@@ -52,7 +52,8 @@ class view:
         post_params = web.input()
         recipeID = post_params['recipeID']
         if 'review' in post_params:
-            sqlitedb.addRecipeReview(recipeID, session.user, post_params['review'], int(post_params['stars']))
+            reviewID = sqlitedb.assignReviewID()
+            sqlitedb.addRecipeReview(reviewID, recipeID, session.user, post_params['review'], int(post_params['stars']), 0, 0)
 
             #need to update overall rating now
             ratings = sqlitedb.getReviews(recipeID)
@@ -137,6 +138,8 @@ class user:
             viewingOwnProfile = True
         else:
             return render_template('login.html')
+        if 'deleteCookbook' in post_params:
+            sqlitedb.deleteCookbook(post_params['deleteCookbook'])
         if 'cookbook' in post_params:
             cookbookID = sqlitedb.assignCookbookID()
             sqlitedb.addCookbook(cookbookID, session.user, post_params['cookbook'])
@@ -220,9 +223,13 @@ class search:
         ingredients = post_params['ingredients'].split()
         categories = post_params['categories'].split()
         tags = post_params['tags'].split()
-        
         final_search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients, categories, tags)
-        return render_template('search_recipes.html', search_results = final_search_results)
+        recipe_photos = []
+        for result in final_search_results:
+            photo = sqlitedb.getPhotos(result['RecipeID'])[0]['Photo']
+            print photo
+            recipe_photos.append(photo)
+        return render_template('search_recipes.html', search_results = final_search_results, recipe_photos = recipe_photos)
 
 class login:
     def GET(self):
