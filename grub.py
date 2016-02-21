@@ -293,7 +293,7 @@ class upload_page:
     def GET(self):
         if session.user == None:
             return render_template('login.html')
-        return render_template('upload_page.html')
+        return render_template('upload_page.html', currentUser = session.user)
     def POST(self):
         recipeID = sqlitedb.assignRecipeID()
         data = web.input()
@@ -345,10 +345,7 @@ class upload_page:
             if ("instruction" + str(i)) in data:
                 sqlitedb.addRecipeInstruction(recipeID, i + 1, data["instruction" + str(i)])
 
-        numImages = int(data.numImages)
-        for i in range(numImages):
-            if ("image" + str(i)) in data:
-                sqlitedb.addRecipePhotos(recipeID, data["image" + str(i)])
+        sqlitedb.addRecipePhotos(recipeID, data.image)
 
         print data
         if  'categoriesBR' in data:
