@@ -1,0 +1,44 @@
+:root{
+	--Site_BG:#77aa77;
+	--Light_1:#dfe1e7;
+	--Light_2:#eeeff2;
+	--Dark_1:#b4b6bb;
+	--Dark_2:#C5C7CC;
+	--Font:tahoma;
+}
+
+.table{
+	margin:auto;
+	box-shadow: 5px 5px 5px #666666;
+}
+
+.helptext{
+	font-style:italic;
+	color:#777777;
+	font-size:12;
+}
+
+.nowrap{
+	display:inline-block;
+	white-space:nowrap;
+}
+
+.TH{
+	background-color:var(--Dark_2);
+	padding:0;
+	padding-top:10px;
+	color:white;
+	font-size: 20px;
+}
+
+.TD1{
+	background-color:var(--Light_1);
+	padding:10px;
+	box-shadow: 0px 7px 5px -5px #000000 inset;
+}
+
+.TD2{
+	background-color:var(--Light_2);
+	padding:10px;
+	box-shadow: 0px 7px 5px -5px #000000 inset;
+}

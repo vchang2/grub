@@ -60,15 +60,16 @@ body{
 	text-decoration:none;
 	color:white;
 	font-weight:bold;
+	display:inline-block;
+	white-space:nowrap;
 }
 
 #nav_bar{
-	position:fixed;
-	left:50%;
-	transform: translate(-50%, 0);
+	position:absolute;
 	z-index:100;
-	width:101%;
+	width:100%;
 	box-shadow: 5px 5px 5px #666666;
+	overflow:scroll;
 }
 
 #logo{
