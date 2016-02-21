@@ -331,10 +331,7 @@ class upload_page:
             if ("instruction" + str(i)) in data:
                 sqlitedb.addRecipeInstruction(recipeID, i + 1, data["instruction" + str(i)])
 
-        numImages = int(data.numImages)
-        for i in range(numImages):
-            if ("image" + str(i)) in data:
-                sqlitedb.addRecipePhotos(recipeID, data["image" + str(i)])
+        sqlitedb.addRecipePhotos(recipeID, data.image)
 
         print data
         if  'categoriesBR' in data:
