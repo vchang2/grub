@@ -12,9 +12,9 @@
 		<td colspan="2" class="header"><h1 class="header">Upload a new recipe!</h1></td>
 	</tr>
 	<tr>
-		<th class="oddHead" onmouseover="helpOn(nameHelpImg)" onmouseout="helpOff(nameHelpImg)"><p>Name of Recipe</p></th>
+		<th class="oddHead" onmouseover="helpOn(nameHelpImg)" onmouseout="helpOff(nameHelpImg)"><p id="nameHeader">Name of Recipe</p></th>
 		<td class="oddRow">
-			<input type="text" name="name" class="name">
+			<input type="text" name="name" class="name" id="nameInput" onkeypress="change(nameHeader, nameInput)">
 			<img id="nameHelpImg" class="helpImg" src="static/images/upload_help/upload_help_name.png" />
 		</td>
 	</tr>
@@ -98,9 +98,9 @@
 		</td>
 	</tr>
 	<tr>
-		<th class="oddHead" onmouseover="helpOn(photosHelpImg)" onmouseout="helpOff(photosHelpImg)"><p>Image URLs</p></th>
+		<th class="oddHead" onmouseover="helpOn(photosHelpImg)" onmouseout="helpOff(photosHelpImg)"><p>Image URL</p></th>
 		<td class="oddRow">
-			<div id="images"></div>
+			<input type="text" name="image" class="name">
 			<img id="photosHelpImg" class="helpImg" src="static/images/upload_help/upload_help_photos.png" />
 		</td>
 	</tr>
@@ -116,7 +116,7 @@
 <script type="text/javascript">
 //<![CDATA[
 
-	var US = new UploadScript("ingredients", "instructions", "images");
+	var US = new UploadScript("ingredients", "instructions");
 
 	function helpOn(id){
 		id.style.display = "block";
@@ -124,6 +124,15 @@
 
 	function helpOff(id){
 		id.style.display = "none";
+	}
+
+	function change(header, input){
+
+		if (input.value == ""){
+			header.style.color = "#ff0000";
+		} else{
+			header.style.color = "#00ff00";
+		}
 	}
 
 //]]>
