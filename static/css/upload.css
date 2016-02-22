@@ -85,3 +85,9 @@ textarea{
 	text-align:center;
 	color:white;
 }
+
+.helptext{
+	font-style:italic;
+	color:#777777;
+	font-size:12;
+}
