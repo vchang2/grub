@@ -158,6 +158,10 @@ class user:
         if 'cookbook' in post_params:
             cookbookID = sqlitedb.assignCookbookID()
             sqlitedb.addCookbook(cookbookID, session.user, post_params['cookbook'])
+        if 'deleteRecipe' in post_params:
+            recipeID = post_params['deleteRecipe']
+            sqlitedb.deleteRecipe(recipeID)
+            currentUser = session.user
         if 'userID' in post_params:
             userID = post_params['userID']
             userRecipes = sqlitedb.getUserRecipes(userID)
@@ -169,10 +173,6 @@ class user:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
         if 'addFollower' in post_params:
             sqlitedb.addFollower(post_params['addFollower'], session.user)
-        if 'deleteRecipe' in post_params:
-            recipeID = post_params['deleteRecipe']
-            sqlitedb.deleteRecipe(recipeID)
-        currentUser = session.user
         return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile, currentUser = currentUser)
 
 class cookbook:

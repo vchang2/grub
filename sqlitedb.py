@@ -380,7 +380,17 @@ def deleteRecipe(recipeID):
     db.query(query_string, {'recipeID':recipeID})
     query_string = 'delete from Categories where RecipeID = $recipeID'
     db.query(query_string, {'recipeID':recipeID})
-    # Need to add deleting from Reviews at some point
+    # Fetch ReviewID's so we can delete them from Reviews_votes
+    query_string = 'select ReviewID from Reviews where RecipeID = $recipeID'
+    reviewIDs = db.query(query_string, {'recipeID':recipeID})
+    # Delete from Reviews_votes for each review ID
+    for reviewID in reviewIDs:
+        reviewID = reviewID['ReviewID']
+        query_string = 'delete from Reviews_votes where ReviewID = $reviewID'
+        db.query(query_string, {'reviewID': reviewID})
+    # Delete from Reviews
+    query_string = 'delete from Reviews where RecipeID = $recipeID'
+    db.query(query_string, {'recipeID':recipeID})
 
 def updateVoteReviewStatus(reviewID, userID, vote):
     query_string = 'select * from Reviews_votes where ReviewID = $reviewID'
