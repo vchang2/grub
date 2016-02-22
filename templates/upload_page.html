@@ -7,9 +7,9 @@
 	<title>Upload Recipe</title>
 </head>
 
-<body onload="change(nameHeader, nameInput)" onkeyup="change(nameHeader, nameInput)">
+<body onload="change(nameHeader, nameInput)" onkeyup="change(nameHeader, nameInput)" onclick="change(nameHeader, nameInput)">
 
-<form action="upload_page" method="POST"><table cellspacing="0" class="table">
+<form action="upload_page" method="POST" id="form"><table cellspacing="0" class="table">
 	<tr>
 		<td colspan="2" class="header"><h1 class="header">Upload a new recipe!</h1></td>
 	</tr>
@@ -35,7 +35,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th class = "evenHead" onmouseover="helpOn(instructionsHelpImg)" onmouseout="helpOff(instructionsHelpImg)"><p id="instructionsHelper">Instructions</p></th>
+		<th class = "evenHead" onmouseover="helpOn(instructionsHelpImg)" onmouseout="helpOff(instructionsHelpImg)"><p id="instructionsHeader">Instructions</p></th>
 		<td class="evenRow">
 			<div id="instructions"></div>
 			<img id="instructionsHelpImg" class="helpImg" src="static/images/upload_help/upload_help_instructions.png" />
@@ -109,6 +109,7 @@
 	<tr>
 		<td colspan="2" class="submitTD">
 			<input type="submit" value="Upload Recipe!" class="submitButton" id="submit">
+			<div id="submitHelp" class="helptext">Please enter information into all required fields<br/> </div>
 		</td>
 	</tr>
 </table></form>
@@ -131,6 +132,7 @@
 	}	
 
 	function change(header, input){
+		//window.alert("asfd")
 		var ready = true;
 		
 		var required = ["name", "description", "time", "servings", "image"];
@@ -138,22 +140,38 @@
 			
 			input = document.getElementById(required[i] + "Input");
 			header = document.getElementById(required[i] + "Header");
-			if (input.value == "" || input.value.innerHTML == ""){
+			if (input.value == ""){
 				header.style.color = "#ff7777";
-				ready=false;
+				ready = false;
 			} else{
 				header.style.color = "#ffffff";
 			}
 		}
 
-		if(document.getElementById("ingredientIngredient0").innerHTML == ""){
+		var ingredientsHeader = document.getElementById("ingredientsHeader");
+		var ingredientsInput = document.getElementById("ingredientIngredient0");
+		if(ingredientsInput.value == ""){
+			ingredientsHeader.style.color = "#ff7777";
+			ready = false;
+		} else{
+			ingredientsHeader.style.color = "#ffffff";
+		}
 
+		var instructionsHeader = document.getElementById("instructionsHeader");
+		var instructionsInput = document.getElementById("instruction0");
+		if(instructionsInput.value == ""){
+			instructionsHeader.style.color = "#ff7777";
+			ready = false;
+		} else{
+			instructionsHeader.style.color = "#ffffff";
 		}
 
 		if(ready){
 			document.getElementById("submit").disabled = false;
+			document.getElementById("submitHelp").style.visibility = "hidden";
 		} else{
 			document.getElementById("submit").disabled = true;
+			document.getElementById("submitHelp").style.visibility = "visible";
 		}
 	}
 
