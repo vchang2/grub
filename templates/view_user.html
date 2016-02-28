@@ -33,7 +33,8 @@
 			{% if currentUser == userID %}
 				<form action="user?userID={{userID}}" method="POST">
 					<input type="hidden" name="deleteRecipe" value={{result['RecipeID']| e}}>
-					<input type="submit" value="Delete">
+					<input type="hidden" name="userID" value={{userID | e}}>
+					<input type="submit" value="Delete Recipe">
 				</form>
 			{% endif %}
 			

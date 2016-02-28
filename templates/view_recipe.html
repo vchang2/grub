@@ -19,6 +19,13 @@
 		<p>Is this dish spicy? {{result['Spicy'] | e}} </p>
 		<p>Difficulty: {{result['Difficulty'] | e}} </p>
 
+		{% if userMatchesRecipeAuthor %}
+			<form action="user?userID={{result['UserID']}}" method="POST">
+				<input type="hidden" name="deleteRecipe" value={{result['RecipeID']| e}}>
+				<input type="submit" value="Delete">
+			</form>
+		{% endif %}
+
 		{% if instructions %}
 			<br>
 			<h4>Instructions:</h4>
