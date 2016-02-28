@@ -338,6 +338,10 @@ def deleteReview(reviewID):
     query_string = 'delete from Reviews where ReviewID = $reviewID'
     db.query(query_string, {'reviewID':reviewID})
 
+def updateRecipeReview(reviewID, description):
+    query_string = 'update Reviews set Description = $description where ReviewID = $reviewID'
+    db.query(query_string, {'reviewID':reviewID, 'description':description})
+    
 def removeRecipeFromCookbook(cookbookID, recipeID):
     query_string = 'delete from Cookbooks_recipes where RecipeID = $recipeID and CookbookID = $cookbookID'
     db.query(query_string, {'recipeID':recipeID, 'cookbookID':cookbookID})
