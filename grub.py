@@ -121,6 +121,7 @@ class user:
         userFollowing = None
         userCookbooks = None
         viewingOwnProfile = False
+        editAbout = False
         currentUser = session.user
         if 'userID' in post_params:
             userID = post_params['userID']
@@ -131,6 +132,11 @@ class user:
             viewingOwnProfile = True
         else:
             return render_template('login.html')
+        if 'editAboutMe' in post_params:
+            editAbout = True
+        if 'newAboutMe' in post_params:
+            editAbout = False
+            sqlitedb.updateAboutMe(userID, post_params['newAboutMe'])
         userRecipes = sqlitedb.getUserRecipes(userID)
         userAboutMe = sqlitedb.getAboutMe(userID)
         userFollowers = sqlitedb.getFollowers(userID)
@@ -138,13 +144,15 @@ class user:
         userCookbooks = sqlitedb.getCookbooks(userID)
         if 'unfollowing' in post_params:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile, currentUser = currentUser)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile, currentUser = currentUser, editAbout = editAbout)
     
     def POST(self):
         post_params = web.input()
         cookbookID = None
         currentUser = session.user
+        editAbout = False
         viewingOwnProfile = False
+        print post_params
         if 'userID' in post_params:
             userID = post_params['userID']
             if userID == session.user:
@@ -154,6 +162,11 @@ class user:
             viewingOwnProfile = True
         else:
             return render_template('login.html')
+        if 'editAboutMe' in post_params:
+            editAbout = True
+        if 'newAboutMe' in post_params:
+            editAbout = False
+            sqlitedb.updateAboutMe(userID, post_params['newAboutMe'])
         if 'deleteCookbook' in post_params:
             sqlitedb.deleteCookbook(post_params['deleteCookbook'])
         if 'cookbook' in post_params:
@@ -174,7 +187,7 @@ class user:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
         if 'addFollower' in post_params:
             sqlitedb.addFollower(post_params['addFollower'], session.user)
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile, currentUser = currentUser)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile, currentUser = currentUser, editAbout = editAbout)
 
 class cookbook:
     # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm
@@ -401,6 +414,7 @@ class createAccount:
             return render_template('create_account.html', message = message)
         else:
             sqlitedb.addUser(username, password)
+            sqlitedb.addAboutMe(username, "Currently no about me.")
             session.user = username
             return web.redirect('/hello')
 
