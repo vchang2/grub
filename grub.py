@@ -143,6 +143,7 @@ class user:
     def POST(self):
         post_params = web.input()
         cookbookID = None
+        currentUser = session.user
         viewingOwnProfile = False
         if 'userID' in post_params:
             userID = post_params['userID']
