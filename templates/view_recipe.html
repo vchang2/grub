@@ -116,16 +116,37 @@
 			<br>
 			<h4>Reviews:</h4>
 			{% for review in reviews %}
+				<hr/>
 				<ul>
 					<p>{{review['Helpful'] | e}} out of {{review['Total'] | e}} people found this review helpful.</p>
 					<li><a href = user?userID={{review['UserID'] | e}}>{{review['UserID'] | e }}</a> ({{review['Rating'] | e}} stars) - {{review['Review'] | e}} </li>
 					{% if currentUser == review['UserID'] %}
-						<form action=view?recipeID={{recipeID}} method="POST">
-							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
-							<input type="hidden" name="DeleteReview" value={{review['ReviewID'] | e}}>
-							<!--<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">-->
-							<input type="submit" value="Delete">
-						</form>
+						{% if editAbout %}
+							<form action=view?recipeID={{recipeID}} method="POST">
+								<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+								<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
+					  			<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
+					  			<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
+					  			<input type="radio" checked name="stars" value="3"> 3 Star&nbsp;&nbsp;
+					  			<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
+					  			<input type="radio" name="stars" value="5"> 5 Star  
+					  			<br>
+					  			<textarea name="newAboutMe"rows="4" cols="50"></textarea>
+					  			<input type="submit" value="Make Change!">
+							</form>
+						{% else %}
+							<form action=view?recipeID={{recipeID}} method="POST">
+								<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+								<input type="hidden" name="EditReview" value={{review['ReviewID'] | e}}>
+								<input type="hidden" name="editAboutMe">
+								<input type="submit" value="Edit">
+
+								<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+								<input type="hidden" name="DeleteReview" value={{review['ReviewID'] | e}}>
+								<!--<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">-->
+								<input type="submit" name ="d" value="Delete">
+							</form>
+						{% endif %}
 					{% elif userVotes[review['ReviewID']] == "up"%}
 						<form action=view?recipeID={{recipeID}} method="POST">
 							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
@@ -153,6 +174,8 @@
 		{% endif %}
 
 		{% if not userMatchesRecipeAuthor and not userHasReviewed %}
+			<hr/>
+			<h4>Write your own review!</h4>
 			<form action=view?recipeID={{recipeID}} method="POST">
 				{% for result in recipe %}
 					<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>

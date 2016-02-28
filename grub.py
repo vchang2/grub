@@ -29,6 +29,12 @@ class view:
         if session.user == None:
             return render_template('login.html')
         post_params = web.input()
+        editAbout = False
+        if 'editAboutMe' in post_params:
+            editAbout = True
+        if 'newAboutMe' in post_params:
+            editAbout = False
+            sqlitedb.updateAboutMe(userID, post_params['newAboutMe'])
         recipeID = 0
         if 'recipeID' in post_params:
             recipeID = post_params['recipeID']
@@ -48,12 +54,30 @@ class view:
         for result in recipe:
             if session.user == result['UserID']:
                 userMatchesRecipeAuthor = True
-        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes)
+        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes, editAbout = editAbout)
 
 #added by valerie for reviews
     def POST(self):
         post_params = web.input()
+        editAbout = False
         recipeID = post_params['recipeID']
+        print post_params
+        if 'editAboutMe' in post_params:
+            editAbout = True
+        if 'newAboutMe' in post_params:
+            editAbout = False
+            sqlitedb.updateRecipeReview(post_params['reviewID'], post_params['newAboutMe'], int(post_params['stars']))
+
+            #calculate new ratings
+            ratings = sqlitedb.getReviews(recipeID)
+            counter = 0.0
+            total = 0
+            for r in ratings:
+                total += r['Rating']
+                counter += 1.0
+            new_rating = total/counter
+            new_rating = format(new_rating, '.2f')
+            sqlitedb.updateRating(recipeID, new_rating)       
         if 'review' in post_params:
             reviewID = sqlitedb.assignReviewID()
             sqlitedb.addRecipeReview(reviewID, recipeID, session.user, post_params['review'], int(post_params['stars']), 0, 0)
@@ -70,7 +94,7 @@ class view:
             sqlitedb.updateRating(recipeID, new_rating)
         if 'added_cookbookID' in post_params:
                 sqlitedb.addCookbookRecipe(recipeID, post_params['added_cookbookID'])
-        if 'DeleteReview' in post_params:
+        if 'd' in post_params:
             sqlitedb.deleteReview(post_params['DeleteReview'])
             #need to update overall rating now
             ratings = sqlitedb.getReviews(recipeID)
@@ -108,7 +132,7 @@ class view:
         for result in recipe:
             if session.user == result['UserID']:
                 userMatchesRecipeAuthor = True
-        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, recipeID = recipeID, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes)
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, recipeID = recipeID, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes, editAbout = editAbout)
 class user:
     def GET(self):
         if session.user == None:
@@ -152,7 +176,6 @@ class user:
         currentUser = session.user
         editAbout = False
         viewingOwnProfile = False
-        print post_params
         if 'userID' in post_params:
             userID = post_params['userID']
             if userID == session.user:
