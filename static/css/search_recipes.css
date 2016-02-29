@@ -12,6 +12,12 @@
 	box-shadow: 5px 5px 5px #666666;
 }
 
+.resultsTable{
+	margin:auto;
+	box-shadow: 5px 5px 5px #666666;
+	width:97%;
+}
+
 .helptext{
 	font-style:italic;
 	color:#777777;
