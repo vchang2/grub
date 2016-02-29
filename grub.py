@@ -298,14 +298,14 @@ class login:
         passwordInput = post_params['password']
         actualPasswordResult = sqlitedb.getPassword(userIDInput)
         if len(actualPasswordResult) == 0:
-            return web.redirect('/login')
+            return render_template('login.html', message = "Username " + userIDInput + " does not exist.")
         else:
             actualPassword = actualPasswordResult[0]['Password']
             if passwordInput == actualPassword:
                 session.user = userIDInput
                 return web.redirect('/hello')
             else:
-                return web.redirect('/login')
+                return render_template('login.html', message = "Please enter the correct password.")
 
 class logout:
     def GET(self):
