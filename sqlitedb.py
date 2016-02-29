@@ -1,4 +1,5 @@
 import web
+from random import randint
 
 db = web.database(dbn='sqlite',
         db='database.db' #TODO: add your SQLite database filename
@@ -463,4 +464,13 @@ def addOneThumbsDown(reviewID, userID):
     query_string = 'update Reviews set Total = $total where ReviewID = $reviewID'
     db.query(query_string, {'total':total, 'reviewID':reviewID})
 
+def getFeaturedRecipe():
+    photos = []
+    while len(photos) == 0:
+        numRecipesQuery = 'select RecipeID from Constants'
+        numRecipesQueryResult = db.query(numRecipesQuery, {})
+        numRecipes = numRecipesQueryResult[0]['RecipeID']
+        chosenRecipeID = randint(1, numRecipes)
+        photos = getPhotos(chosenRecipeID)
+    return photos[0]
 

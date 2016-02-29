@@ -22,7 +22,8 @@ class hello:
             return render_template('login.html')
         all_recipes = sqlitedb.getAllRecipes()
         all_photos = sqlitedb.getAllPhotos()
-    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, user = session.user)
+        featured_recipe_photo = sqlitedb.getFeaturedRecipe()
+    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, featured_recipe_photo = featured_recipe_photo, user = session.user)
 
 class view:
     def GET(self):

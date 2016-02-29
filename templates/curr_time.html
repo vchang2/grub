@@ -4,10 +4,18 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="static/css/upload.css" />
 </head>
-  <h3>Welcome to Grub!</h3>
-  <h4>Current User: {{ user }}</h4>
-  <div class="alert alert-info">Click on a photo to view a recipe.</div>
+<h2>Welcome to Grub!</h2>
+<h3>Current User: {{ user }}</h3>
+<div class="alert alert-info">Click on a photo to view a recipe.</div>
 
+<h4>Featured Recipe</h4>
+{% if featured_recipe_photo %}
+	<a href = view?recipeID={{featured_recipe_photo['RecipeID'] | e}}>
+		<img src = {{featured_recipe_photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
+	</a>
+{% endif %}
+
+<h4>All Recipes</h4>
 {% if all_photos %}
 	{% for photo in all_photos %}
 		<a href = view?recipeID={{photo['RecipeID'] | e}}>
