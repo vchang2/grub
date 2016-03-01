@@ -7,7 +7,7 @@
 	<title>Upload Recipe</title>
 </head>
 
-<body>
+<body onresize="rerenderPhotoArea()" onscroll="rerenderPhotoArea()">
 
 <table cellspacing="0" class="table">
 	<tr>
@@ -144,7 +144,13 @@
 <script type="text/javascript">
 //<![CDATA[
 
-	var SS = new SearchScript("RESULT_DIV");
+	//var SS = new SearchScript("RESULT_DIV");
+
+	SearchScript("RESULT_DIV");
+
+	function rerenderPhotoArea(){
+		window.SearchScript("RESULT_DIV");
+	}
 
 //]]>
 </script>
