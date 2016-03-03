@@ -1,5 +1,5 @@
 function SearchScript(displayID){
-	var IMG_HEIGHT = 300;
+	var IMG_HEIGHT = 30;
 	var IMG_WIDTH = 400;
 	var padding = 20;
 
@@ -59,10 +59,9 @@ function SearchScript(displayID){
 			numLines += 1;
 		}
 
-		image.style.left = "" + offset['X'] + "px";
-		image.style.top = "" + offset['Y'] + "px";
+		image.style.left = "" + (offset['X'] - document.body.scrollLeft) + "px";
+		image.style.top = "" + (offset['Y'] - document.body.scrollTop) + "px";
 		offset['X'] += deltaX;
-
 
 		//image.style.boxShadow = "10px 20px 30px blue inset";
 		//displayDiv.appendChild(image);
