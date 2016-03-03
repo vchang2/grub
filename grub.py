@@ -23,7 +23,8 @@ class hello:
         all_recipes = sqlitedb.getAllRecipes()
         all_photos = sqlitedb.getAllPhotos()
         featured_recipe_photo = sqlitedb.getFeaturedRecipe()
-    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, featured_recipe_photo = featured_recipe_photo, user = session.user)
+        social_feed = sqlitedb.getSocialFeed()
+    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, featured_recipe_photo = featured_recipe_photo, user = session.user, social_feed = social_feed)
 
 class view:
     def GET(self):
