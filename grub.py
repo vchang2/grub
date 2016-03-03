@@ -22,13 +22,21 @@ class hello:
             return render_template('login.html')
         all_recipes = sqlitedb.getAllRecipes()
         all_photos = sqlitedb.getAllPhotos()
-    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, user = session.user)
+        featured_recipe_photo = sqlitedb.getFeaturedRecipe()
+        social_feed = sqlitedb.getSocialFeed()
+    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, featured_recipe_photo = featured_recipe_photo, user = session.user, social_feed = social_feed)
 
 class view:
     def GET(self):
         if session.user == None:
             return render_template('login.html')
         post_params = web.input()
+        editAbout = False
+        if 'editAboutMe' in post_params:
+            editAbout = True
+        if 'newAboutMe' in post_params:
+            editAbout = False
+            sqlitedb.updateAboutMe(userID, post_params['newAboutMe'])
         recipeID = 0
         if 'recipeID' in post_params:
             recipeID = post_params['recipeID']
@@ -48,12 +56,30 @@ class view:
         for result in recipe:
             if session.user == result['UserID']:
                 userMatchesRecipeAuthor = True
-        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes)
+        return render_template('view_recipe.html', recipe = recipe, recipeID = recipeID, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes, editAbout = editAbout)
 
 #added by valerie for reviews
     def POST(self):
         post_params = web.input()
+        editAbout = False
         recipeID = post_params['recipeID']
+        print post_params
+        if 'editAboutMe' in post_params:
+            editAbout = True
+        if 'newAboutMe' in post_params:
+            editAbout = False
+            sqlitedb.updateRecipeReview(post_params['reviewID'], post_params['newAboutMe'], int(post_params['stars']))
+
+            #calculate new ratings
+            ratings = sqlitedb.getReviews(recipeID)
+            counter = 0.0
+            total = 0
+            for r in ratings:
+                total += r['Rating']
+                counter += 1.0
+            new_rating = total/counter
+            new_rating = format(new_rating, '.2f')
+            sqlitedb.updateRating(recipeID, new_rating)       
         if 'review' in post_params:
             reviewID = sqlitedb.assignReviewID()
             sqlitedb.addRecipeReview(reviewID, recipeID, session.user, post_params['review'], int(post_params['stars']), 0, 0)
@@ -70,7 +96,7 @@ class view:
             sqlitedb.updateRating(recipeID, new_rating)
         if 'added_cookbookID' in post_params:
                 sqlitedb.addCookbookRecipe(recipeID, post_params['added_cookbookID'])
-        if 'DeleteReview' in post_params:
+        if 'd' in post_params:
             sqlitedb.deleteReview(post_params['DeleteReview'])
             #need to update overall rating now
             ratings = sqlitedb.getReviews(recipeID)
@@ -108,7 +134,7 @@ class view:
         for result in recipe:
             if session.user == result['UserID']:
                 userMatchesRecipeAuthor = True
-        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, recipeID = recipeID, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes)
+        return render_template('view_recipe.html', recipe = recipe, instructions = instructions, ingredients = ingredients, tags = tags, photos = photos, categories = categories, reviews = reviews, cookbooks = cookbooks, recipeID = recipeID, currentUser = session.user, userHasReviewed = userHasReviewed, userMatchesRecipeAuthor = userMatchesRecipeAuthor, userVotes = userVotes, editAbout = editAbout)
 class user:
     def GET(self):
         if session.user == None:
@@ -121,6 +147,7 @@ class user:
         userFollowing = None
         userCookbooks = None
         viewingOwnProfile = False
+        editAbout = False
         currentUser = session.user
         if 'userID' in post_params:
             userID = post_params['userID']
@@ -131,6 +158,11 @@ class user:
             viewingOwnProfile = True
         else:
             return render_template('login.html')
+        if 'editAboutMe' in post_params:
+            editAbout = True
+        if 'newAboutMe' in post_params:
+            editAbout = False
+            sqlitedb.updateAboutMe(userID, post_params['newAboutMe'])
         userRecipes = sqlitedb.getUserRecipes(userID)
         userAboutMe = sqlitedb.getAboutMe(userID)
         userFollowers = sqlitedb.getFollowers(userID)
@@ -138,12 +170,13 @@ class user:
         userCookbooks = sqlitedb.getCookbooks(userID)
         if 'unfollowing' in post_params:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile, currentUser = currentUser)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile, currentUser = currentUser, editAbout = editAbout)
     
     def POST(self):
         post_params = web.input()
         cookbookID = None
         currentUser = session.user
+        editAbout = False
         viewingOwnProfile = False
         if 'userID' in post_params:
             userID = post_params['userID']
@@ -154,6 +187,11 @@ class user:
             viewingOwnProfile = True
         else:
             return render_template('login.html')
+        if 'editAboutMe' in post_params:
+            editAbout = True
+        if 'newAboutMe' in post_params:
+            editAbout = False
+            sqlitedb.updateAboutMe(userID, post_params['newAboutMe'])
         if 'deleteCookbook' in post_params:
             sqlitedb.deleteCookbook(post_params['deleteCookbook'])
         if 'cookbook' in post_params:
@@ -174,7 +212,7 @@ class user:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
         if 'addFollower' in post_params:
             sqlitedb.addFollower(post_params['addFollower'], session.user)
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile, currentUser = currentUser)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile, currentUser = currentUser, editAbout = editAbout)
 
 class cookbook:
     # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm
@@ -261,14 +299,14 @@ class login:
         passwordInput = post_params['password']
         actualPasswordResult = sqlitedb.getPassword(userIDInput)
         if len(actualPasswordResult) == 0:
-            return web.redirect('/login')
+            return render_template('login.html', message = "Username " + userIDInput + " does not exist.")
         else:
             actualPassword = actualPasswordResult[0]['Password']
             if passwordInput == actualPassword:
                 session.user = userIDInput
                 return web.redirect('/hello')
             else:
-                return web.redirect('/login')
+                return render_template('login.html', message = "Please enter the correct password.")
 
 class logout:
     def GET(self):
@@ -401,6 +439,7 @@ class createAccount:
             return render_template('create_account.html', message = message)
         else:
             sqlitedb.addUser(username, password)
+            sqlitedb.addAboutMe(username, "Currently no about me.")
             session.user = username
             return web.redirect('/hello')
 

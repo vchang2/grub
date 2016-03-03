@@ -10,6 +10,9 @@
 		<tr><th class="TH"><h3>Grub! Login</h3></th></td>
 		<tr><td class="TD">
 			<p class="helptext">Please enter your username and password.</p>
+			{% if message %}
+				<p class="errorMessage">{{message}}</p>
+			{% endif %}
 			<form method="POST" action="login" role="form">
 				<table class="center">
 					<tr>

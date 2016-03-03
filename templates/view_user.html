@@ -16,9 +16,24 @@
 	{% if userAboutMe %}
 		<p>{{userAboutMe[0]['Description'] | e}}</p>
 	{% else %}
-		<p>About Me Not Found</p>
+		<p>Write an About me!</p>
 	{% endif %}
+	{% if viewingOwnProfile %}
+		{% if not editAbout %}
+			<form action="user?userID={{userID}}" method="POST">
+				<input type="hidden" name="userID" value={{userID | e}}>
+				<input type="hidden" name="editAboutMe">
+				<input type="submit" value="Edit">
+			</form>
+		{% else %}
+			<form action="user?userID={{userID}}" method="POST">
+				<input type="hidden" name="userID" value={{userID | e}}>
+				<input type="text" name="newAboutMe"><br>
+				<input type="submit" value="Make Change!">
 
+			</form>
+		{% endif %}
+	{% endif %}
 	<br>
 	<h4>Recipes</h4>
 	<ul>
@@ -33,7 +48,8 @@
 			{% if currentUser == userID %}
 				<form action="user?userID={{userID}}" method="POST">
 					<input type="hidden" name="deleteRecipe" value={{result['RecipeID']| e}}>
-					<input type="submit" value="Delete">
+					<input type="hidden" name="userID" value={{userID | e}}>
+					<input type="submit" value="Delete Recipe">
 				</form>
 			{% endif %}
 			

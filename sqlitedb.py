@@ -1,4 +1,5 @@
 import web
+from random import randint
 
 db = web.database(dbn='sqlite',
         db='database.db' #TODO: add your SQLite database filename
@@ -338,6 +339,10 @@ def deleteReview(reviewID):
     query_string = 'delete from Reviews where ReviewID = $reviewID'
     db.query(query_string, {'reviewID':reviewID})
 
+def updateRecipeReview(reviewID, review, rating):
+    query_string = 'update Reviews set Review = $review, Rating = $rating where ReviewID = $reviewID'
+    db.query(query_string, {'reviewID':reviewID, 'review':review, 'rating':rating})
+
 def removeRecipeFromCookbook(cookbookID, recipeID):
     query_string = 'delete from Cookbooks_recipes where RecipeID = $recipeID and CookbookID = $cookbookID'
     db.query(query_string, {'recipeID':recipeID, 'cookbookID':cookbookID})
@@ -458,5 +463,57 @@ def addOneThumbsDown(reviewID, userID):
     db.query(query_string, {'helpful':helpful, 'reviewID':reviewID})
     query_string = 'update Reviews set Total = $total where ReviewID = $reviewID'
     db.query(query_string, {'total':total, 'reviewID':reviewID})
+
+def getFeaturedRecipe():
+    photos = []
+    while len(photos) == 0:
+        numRecipesQuery = 'select RecipeID from Constants'
+        numRecipesQueryResult = db.query(numRecipesQuery, {})
+        numRecipes = numRecipesQueryResult[0]['RecipeID']
+        chosenRecipeID = randint(1, numRecipes)
+        photos = getPhotos(chosenRecipeID)
+    return photos[0]
+
+# Social Feed Query (Ryan, Monday 2/29)
+def getSocialFeed():
+    social_feed = []
+    # Followers
+    followers_query_string = 'select * from Followers'
+    followers_query_results = query(followers_query_string, {})
+    if followers_query_results:
+        social_feed.append(followers_query_results[len(followers_query_results) - 1])
+    else:
+        social_feed.append(None)
+    # Reviews - need to fetch recipe name
+    reviews_query_string = 'select * from Reviews ORDER BY ReviewID DESC LIMIT 1'
+    reviews_query_results = query(reviews_query_string, {})
+    if reviews_query_results:
+        recent_review = reviews_query_results[0]
+        recipeID = recent_review['RecipeID']
+        recipe_name_query_string = 'select * from Recipes where RecipeID = $recipeID'
+        recipe_name_query = query(recipe_name_query_string, {'recipeID':recipeID})
+        recipe_name = None
+        if recipe_name_query:
+            recipe_name = recipe_name_query[0]['Recipe_name']
+        recent_review['Recipe_name'] = recipe_name
+        social_feed.append(recent_review)
+    else:
+        social_feed.append(None) 
+    # Recipes
+    recipes_query_string = 'select * from Recipes ORDER BY RecipeID DESC LIMIT 1'
+    recipes_query_results = query(recipes_query_string, {})
+    if recipes_query_results:
+        social_feed.append(recipes_query_results[0])
+    else:
+        social_feed.append(None)
+    # Users
+    users_query_string = 'select * from Users ORDER BY UserID DESC LIMIT 1'
+    users_query_results = query(users_query_string, {})
+    if users_query_results:
+        social_feed.append(users_query_results[0])
+    else:
+        social_feed.append(None)
+    print social_feed
+    return social_feed
 
 
