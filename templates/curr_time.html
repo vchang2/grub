@@ -45,6 +45,12 @@
 		<li><a href = user?userID={{social_feed[1]['UserID'] | e}}>{{social_feed[1]['UserID'] | e }}</a> reviewed <a href = view?recipeID={{social_feed[1]['RecipeID'] | e}}>{{social_feed[1]['Recipe_name'] | e }}</a> and gave it {{social_feed[1]['Rating'] | e }} stars</li>
 	{% endif %}
 	<!-- Still need to add recent recipe added, user joined -->
+	{% if social_feed[2] != None %}
+		<li><a href = user?userID={{social_feed[2]['UserID'] | e}}>{{social_feed[2]['UserID'] | e }}</a> uploaded a new recipe: <a href = view?recipeID={{social_feed[2]['RecipeID'] | e}}>{{social_feed[2]['Recipe_name'] | e}}</a></li>
+	{% endif %}
+	{% if social_feed[3] != None %}
+		<li><a href = user?userID={{social_feed[3]['UserID'] | e}}>{{social_feed[3]['UserID'] | e}}</a> joined Grub!</li>
+	{% endif %}
 {% endif %}
 </ul>
 	
