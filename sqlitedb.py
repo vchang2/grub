@@ -1,5 +1,6 @@
 import web
 from random import randint
+import math
 
 db = web.database(dbn='sqlite',
         db='database.db' #TODO: add your SQLite database filename
@@ -513,7 +514,17 @@ def getSocialFeed():
         social_feed.append(users_query_results[0])
     else:
         social_feed.append(None)
-    print social_feed
-    return social_feed
+
+# Recommended Recipe Query (Ryan, Wednesday 3/2)
+def getRecommendedRecipes(userID):
+    numUsers = len(getUsers())
+    numRecipes = len(getAllRecipes())
+    print str(numUsers) + " users exist"
+    print str(numRecipes) + " recipes exist"
+    ratingMatrix = [[0 for col in range(numUsers)] for row in range(numRecipes)]
+    reviews_query_string = 'select * from Reviews'
+    all_reviews = query(reviews_query_string, {})
+    for review in all_reviews:
+        print ratingMatrix
 
 

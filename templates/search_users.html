@@ -2,33 +2,46 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 <head>
-	<link rel="stylesheet" type="text/css" href="static/css/upload.css" />
+	<link rel="stylesheet" type="text/css" href="static/css/search_users.css" />
 	<title>Search Users</title>
 </head>
-<h3> Search Users </h3> 
 
-<form method="POST" action="search_users" role="form" style="max-width:400px; width:100%">
-	<div class="form-group">
-	  <label for="userID">User ID</label>
-	  <input type="text" name="userID" class="form-control" id="userID" />
-	</div>
-</form>
+	<table cellspacing="0" class="TABLE">
+		<tr><th class="TH"><h3>Search Users</h3></th></tr>
+		<tr><td class="TD">
+		<p class="helptext">Please enter the user you which to find.</p>
 
 
-<h3>Results</h3>
-<ul>
-{% if search_results %}
-{% for result in search_results %}
-	<ul>
-		<li>User: <a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a></li>
-	</ul>
+
+		<form method="POST" action="search_users" role="form" style="max-width:400px; width:100%">
+			<div class="form-group">
+			  <label for="userID">Username: </label>
+			  <input type="text" name="userID" class="form-control" id="userID" />
+			  <input type="submit" value="Search">
+			</div>
+		</form>
+		</td></tr>
+	</table>
+
 	<br>
-{% endfor %}
-{% else %}
-<p>No results</p>
-{% endif %}
-</ul>
-
-
+	<br>
+	<div>
+		<table cellspacing="0" class="TABLE">
+		<tbody>
+			<tr><th class="TH"><h3>Results</h3></th></tr>
+			<tr><td class="TD">
+				{% if search_results %}
+					<p class="helptext">Below are the following users that have matched your search.</p>
+					{% for result in search_results %}
+						<a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a>
+						<br>
+					{% endfor %}
+				{% else %}
+					<p class="helptext">No results to display. Please type in a username.</p>
+				{% endif %}
+			</td></tr>
+			</tbody>
+		</table>
+	</div>
 
 {% endblock %}
