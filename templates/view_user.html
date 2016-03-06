@@ -104,12 +104,12 @@
 				{% if userFollowing %}
 					<td class="evenRow" colspan="2">
 					{% for following in userFollowing %}
-					<form action="user?userID={{userID}}" method="POST">
-						<a href = user?userID={{following['UserID'] | e}}>{{following['UserID'] | e }}</a>		
-									<input type="hidden" name="userID" value={{userID}}>
-									<input type="hidden" name="unfollowing" value={{following['UserID']| e}}>
-									<input type="submit" value="Unfollow" style="float:right;">
-								</form>
+						<form action="user?userID={{userID}}" method="POST">
+							<a href = user?userID={{following['UserID'] | e}}>{{following['UserID'] | e }}</a>		
+							<input type="hidden" name="userID" value={{userID}}>
+							<input type="hidden" name="unfollowing" value={{following['UserID']| e}}>
+							<input type="submit" value="Unfollow" style="float:right;">
+						</form>
 						{% endfor %}
 					</td>
 				{% else %}
@@ -153,13 +153,11 @@
 	{% if viewingOwnProfile %}
 	<tr>
 	<th class="evenHead"><p>Add a New Cookbook</p></th>
-	<td class="evenRow">
+	<td class="evenRow" colspan="2">
 		<form action="user?userID={{userID}}" method="POST">
 			<input type="hidden" name="userID" value={{userID | e}}>
-				<input type="text" name="cookbook"><br>
-	</td>
-	<td class="evenRowNoShadow">
-				<input type="submit" value="Add Cookbook" style="float:right;">
+			<input type="text" name="cookbook">
+			<input type="submit" value="Add Cookbook" style="float:right;">
 		</form>
 	</td>
 	{% endif %}
