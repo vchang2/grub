@@ -8,7 +8,6 @@
 }
 
 .TH{
-	vertical-align: top;
 	text-align:left;
 	font-weight:bold;
 	color:white;
@@ -48,7 +47,6 @@ textarea{
 	padding:7;
 	box-shadow: 7px 0px 5px -5px #000000 inset;
 }
-span,input{vertical-align:middle}
 
 .oddRowNoShadow{
 	background:var(--Light_1);
@@ -61,10 +59,18 @@ span,input{vertical-align:middle}
 }
 
 .oddHead{
+	text-align:left;
+	font-weight:bold;
+	color:white;
+	padding:7;
 	background:var(--Dark_1);
 }
 
 .evenHead{
+	text-align:left;
+	font-weight:bold;
+	color:white;
+	padding:7;
 	background:var(--Dark_2);
 }
 

@@ -14,7 +14,11 @@
 			<form action="user?userID={{userID}}" method="POST">
 				<input type="hidden" name="userID" value={{userID | e}}>
 				<input type="hidden" name="addFollower" value={{userID}}>
-				<input type="submit" value="Follow">
+				{% if follower %}
+					<button type="button" disabled>Follow</button>
+				{% else %}
+					<input type="submit" value="Follow">
+				{% endif %}
 			</form>
 		{% endif %}
 		</td>
