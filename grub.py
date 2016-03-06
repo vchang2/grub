@@ -25,6 +25,9 @@ class hello:
         featured_recipe_photo = sqlitedb.getFeaturedRecipe()
         recommended_recipe_photos = sqlitedb.getRecommendedRecipes(session.user)
         social_feed = sqlitedb.getSocialFeed()
+        if social_feed:
+            print "printing social feed"
+            print social_feed
     	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, featured_recipe_photo = featured_recipe_photo, recommended_recipe_photos = recommended_recipe_photos, user = session.user, social_feed = social_feed)
 
 class view:

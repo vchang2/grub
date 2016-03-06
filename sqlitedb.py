@@ -514,6 +514,7 @@ def getSocialFeed():
         social_feed.append(users_query_results[0])
     else:
         social_feed.append(None)
+    return social_feed
 
 # Recommended Recipe Query (Ryan, Wednesday 3/2)
 def getRecommendedRecipes(userID):
