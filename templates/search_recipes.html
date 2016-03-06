@@ -7,7 +7,7 @@
 	<title>Upload Recipe</title>
 </head>
 
-<body>
+<body onresize="rerenderPhotoArea()" onscroll="rerenderPhotoArea()">
 
 <table cellspacing="0" class="table">
 	<tr>
@@ -84,22 +84,32 @@
 
 <br/>
 
-<table cellspacing="0" class="table" style="width:90%">
+<table cellspacing="0" class="resultsTable">
 	<tr>
 		<th class = "TH">Results</th>
 	</tr>
 	<tr>
 		<td class="TD1">
 			<div id="RESULT_DIV">
-				<!--
 				{% if search_results %}
+					{% set counter = 0 %}
+					{% for result in search_results %}
+						<input type="hidden" id="{{'photo' + counter|string}}" value={{recipe_photos[counter]}}>
+						<input type="hidden" id="{{'name' + counter|string}}" value={{result['Recipe_name']}}>
+						{% set counter = counter + 1 %}
+					{% endfor %}
+					<input type="hidden" id="numPhotos" value="{{search_results|length}}">
 				{% else %}
 					<p style="text-align:center">No results</p>
+					<input type="hidden" id="numPhotos" value="0">
 				{% endif %}
-				-->
+				
+				<!--
 				<ul>
 				{% if search_results %}
+				{% set counter = 0 %}
 				{% for result in search_results %}
+					<img src={{recipe_photos[counter] | e}}>
 					<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }}</a></li>
 					<ul>
 						<li>User: <a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a></li>
@@ -111,11 +121,13 @@
 						<li>Completion Time: {{result['Time_completion'] | e}}</li>
 					</ul>
 					<br>
+					{% set counter = counter + 1 %}
 				{% endfor %}
 				{% else %}
 				<p>No results</p>
 				{% endif %}
 				</ul>
+				-->
 			</div>
 		</td>
 	</tr>
@@ -126,9 +138,24 @@
 	<p>{{result['Recipe_name']}}</p>
 	<p>{{result['photo']}}</p>
 {% endfor %}
+-->
+
+<script type="text/javascript" src="static/js/search_script.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+	//var SS = new SearchScript("RESULT_DIV");
+
+	SearchScript("RESULT_DIV");
+
+	function rerenderPhotoArea(){
+		window.SearchScript("RESULT_DIV");
+	}
+
+//]]>
+</script>
 
 {% endblock %}
--->
 
 </body>
 
