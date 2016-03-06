@@ -2,8 +2,14 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 
+<head>
+	<link rel="stylesheet" type="text/css" href="static/css/view_user.css" />
+	<title>Search Users</title>
+</head>
 {% if userID %}
-	<h3>{{ userID | e}}'s Profile</h3>
+	<table cellspacing="0" class="TABLE">
+	<tr>
+		<td colspan="3" class="header"><h1 class="header">{{ userID | e}}'s Profile</h1>
 		{% if not viewingOwnProfile %}
 			<form action="user?userID={{userID}}" method="POST">
 				<input type="hidden" name="userID" value={{userID | e}}>
@@ -11,110 +17,151 @@
 				<input type="submit" value="Follow">
 			</form>
 		{% endif %}
-	<br>
-	<h4>About Me</h4>
-	{% if userAboutMe %}
-		<p>{{userAboutMe[0]['Description'] | e}}</p>
-	{% else %}
-		<p>Write an About me!</p>
-	{% endif %}
-	{% if viewingOwnProfile %}
-		{% if not editAbout %}
-			<form action="user?userID={{userID}}" method="POST">
-				<input type="hidden" name="userID" value={{userID | e}}>
-				<input type="hidden" name="editAboutMe">
-				<input type="submit" value="Edit">
-			</form>
-		{% else %}
-			<form action="user?userID={{userID}}" method="POST">
-				<input type="hidden" name="userID" value={{userID | e}}>
-				<input type="text" name="newAboutMe"><br>
-				<input type="submit" value="Make Change!">
+		</td>
+	</tr>
+	<tr>
+		{% if viewingOwnProfile %}
+			<th class="oddHead"><p>About Me</p></th>
+			<td class="oddRow">
+				{% if userAboutMe %}
+					<p>{{userAboutMe[0]['Description'] | e}}</p>
+				{% else %}
+					<p>Write an About me!</p>
+				{% endif %}
+			</td>
+			<td class="oddRowNoShadow">
+				{% if not editAbout %}
+					<form action="user?userID={{userID}}" method="POST">
+						<input type="hidden" name="userID" value={{userID | e}}>
+						<input type="hidden" name="editAboutMe">
+						<input type="submit" value="Edit" style="float: right;">
+					</form>
+				{% else %}
+					<form action="user?userID={{userID}}" method="POST">
+						<input type="hidden" name="userID" value={{userID | e}}>
+						<input type="text" name="newAboutMe"><br>
+						<input type="submit" value="Make Change!">
 
-			</form>
+					</form>
+				{% endif %}
+			</td>
+		{% else %}
+			<th class="oddHead"><p>About Me</p></th>
+			<td colspan="2" class="oddRow">
+				{% if userAboutMe %}
+					<p>{{userAboutMe[0]['Description'] | e}}</p>
+				{% else %}
+					<p>Write an About me!</p>
+				{% endif %}
+			</td>
 		{% endif %}
-	{% endif %}
-	<br>
-	<h4>Recipes</h4>
-	<ul>
+
+	</tr>
+
+
+	<tr>
+		<th class="evenHead"><p>Recipes</p></th>
+		<td class="evenRow" colspan="2">	
 	{% if userRecipes %}
 		{% for result in userRecipes %}
 			{% if result['Overall_rating'] == 0.0 %}
-				<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - Rating N/A</a></li>
+				<a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - Rating N/A</a>
 			{% else %}
-				<li><a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - {{ result['Overall_rating'] | e}} stars</a></li>
+				<a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - {{ result['Overall_rating'] | e}} stars</a>
 			{% endif %}
 
 			{% if currentUser == userID %}
 				<form action="user?userID={{userID}}" method="POST">
 					<input type="hidden" name="deleteRecipe" value={{result['RecipeID']| e}}>
 					<input type="hidden" name="userID" value={{userID | e}}>
-					<input type="submit" value="Delete Recipe">
+					<input type="submit" value="Delete Recipe" style="float: right;">
 				</form>
 			{% endif %}
-			
+			<br>
 		{% endfor %}
 	{% else %}
-		<li>No Recipes</li>
+		<p class="helptext">{{ userID | e}} has no recipes yet.</p>
 	{% endif %}
-	</ul>
+	</td></tr>
 
-	<br>
-	<h4>{{ userID | e}}'s Followers</h4>
-	<ul>
-	{% if userFollowers %}
-		{% for follower in userFollowers %}
-			<li><a href = user?userID={{follower['FollowerID'] | e}}>{{follower['FollowerID'] | e }}</a></li>
-		{% endfor %}
-	{% else %}
-		<li>No Followers</li>
-	{% endif %}
-	</ul>
+	<tr>
+		<th class="oddHead"><p>{{ userID | e}}'s Followers</p></th>
+		<td class="oddRow" colspan="2">	
+		{% if userFollowers %}
+			{% for follower in userFollowers %}
+				<a href = user?userID={{follower['FollowerID'] | e}}>{{follower['FollowerID'] | e }}</a>
+				<br>
+			{% endfor %}
+		{% else %}
+			<p class="helptext">{{ userID | e}} has no followers yet.</p>
+		{% endif %}
+		</td>
+	</tr>
 
-	<br>
-	<h4>Users {{ userID | e}} Follows</h4>
-	<ul>
-	{% if userFollowing %}
-		{% for following in userFollowing %}
-			<li><a href = user?userID={{following['UserID'] | e}}>{{following['UserID'] | e }}</a></li>
-			{% if viewingOwnProfile %}
+	<tr>
+		<th class="evenHead"><p>{{ userID | e}} Follows</p></th>
+		{% if viewingOwnProfile %}	
+				{% if userFollowing %}
+					<td class="evenRow" colspan="2">
+					{% for following in userFollowing %}
+					<form action="user?userID={{userID}}" method="POST">
+						<a href = user?userID={{following['UserID'] | e}}>{{following['UserID'] | e }}</a>		
+									<input type="hidden" name="userID" value={{userID}}>
+									<input type="hidden" name="unfollowing" value={{following['UserID']| e}}>
+									<input type="submit" value="Unfollow" style="float:right;">
+								</form>
+						{% endfor %}
+					</td>
+				{% else %}
+					<td class="evenRow" colspan="2">
+						<p class="helptext">{{ userID | e}} is currently not following anyone.</p>
+					</td>
+				{% endif %}
+		{% else %}
+			<td class="evenRow" colspan="2">	
+				{% if userFollowing %}
+					{% for following in userFollowing %}
+						<a href = user?userID={{following['UserID'] | e}}>{{following['UserID'] | e }}</a>
+						<br>
+					{% endfor %}
+				{% else %}
+					<p class="helptext">{{ userID | e}} is currently not following anyone.</p>
+				{% endif %}
+			</td>
+		{% endif %}
+
+</tr>
+<tr>
+	<th class="oddHead"><p>{{ userID | e}}'s Cookbooks</p></th>
+	<td class="oddRow" colspan="2">
+		{% if userCookbooks %}
+			{% for cookbook in userCookbooks %}
 				<form action="user?userID={{userID}}" method="POST">
-					<input type="hidden" name="userID" value={{userID}}>
-					<input type="hidden" name="unfollowing" value={{following['UserID']| e}}>
-					<input type="submit" value="Unfollow">
-				</form>
-			{% endif %}
-		{% endfor %}
-	{% else %}
-		<li>{{ userID | e}} does not follow any users</li>
-	{% endif %}
-	</ul>
-
-	<br>
-	<h4>{{ userID | e}}'s Cookbooks</h4>
-	<ul>
-	{% if userCookbooks %}
-		{% for cookbook in userCookbooks %}
-			<li><a href = cookbook?cookbookID={{cookbook['CookbookID'] | e}}>{{cookbook['Cookbook_name'] | e }}</a></li>
-			{% if viewingOwnProfile %}
-				<form action="user?userID={{userID}}" method="POST">
-					<input type="hidden" name="userID" value={{userID}}>
-					<input type="hidden" name="deleteCookbook" value={{cookbook['CookbookID']| e}}>
-					<input type="submit" value="Delete">
-				</form>
-			{% endif %}
-		{% endfor %}
-	{% else %}
-		<li>{{ userID | e}} does not have any cookbooks</li>
-	{% endif %}
-	</ul>
+					<a href = cookbook?cookbookID={{cookbook['CookbookID'] | e}}>{{cookbook['Cookbook_name'] | e }}</a>
+				{% if viewingOwnProfile %}
+						<input type="hidden" name="userID" value={{userID}}>
+						<input type="hidden" name="deleteCookbook" value={{cookbook['CookbookID']| e}}>
+						<input type="submit" value="Delete" style="float:right;">
+					</form>
+				{% endif %}
+			{% endfor %}
+		{% else %}
+			<p class="helptext">{{ userID | e}} does not have any cookbooks.</p>
+		{% endif %}
+	</td>
+</tr>
 	{% if viewingOwnProfile %}
+	<tr>
+	<th class="evenHead"><p>Add a New Cookbook</p></th>
+	<td class="evenRow">
 		<form action="user?userID={{userID}}" method="POST">
 			<input type="hidden" name="userID" value={{userID | e}}>
 				<input type="text" name="cookbook"><br>
-				<input type="submit" value="Add Cookbook">
-
+	</td>
+	<td class="evenRowNoShadow">
+				<input type="submit" value="Add Cookbook" style="float:right;">
 		</form>
+	</td>
 	{% endif %}
 	<!--<form name="c" action="user" method="POST">
 		<button id="cookbook" onclick="myFunction()">Add Cookbook</button>
@@ -137,6 +184,6 @@
 	<h3>User Not Found</h3>
 {% endif %}
 
-
+</table>
 
 {% endblock %}

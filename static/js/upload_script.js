@@ -6,17 +6,21 @@ function Ingredient(){
 	this.ingredient = "";
 }
 
-function UploadScript(ingredientsID, instructionsID){
+function UploadScript(ingredientsID, instructionsID, imagesID){
 	this.ingredientsBody = document.getElementById(ingredientsID);
 	this.instructionsBody = document.getElementById(instructionsID);
+	this.imagesBody = document.getElementById(imagesID)
 
 	this.ingredients = new Array();	
 	this.instructions = new Array();
+	this.imagesX = new Array();
 
 	for(var i = 0; i < 3; i++){
 		this.ingredients.push(new Ingredient());
 		this.instructions.push("");	
 	}
+
+	this.imagesX.push("")
 
 	this.renderIngredients();
 	this.renderInstructions();
@@ -88,6 +92,20 @@ UploadScript.prototype.renderInstructions = function(){
 	this.instructionsBody.innerHTML = text;
 };
 
+UploadScript.prototype.renderImages = function(){
+	var text = "";
+	text += "<input type=\"hidden\" name=\"numImages\" value=\"" + this.imagesX.length + "\">";
+
+	for(var i = 0; i < this.imagesX.length; i++){
+		text += "<input type=\"text\" id=\"image" + i + "\" "
+		text += "name=\"image" + i + "\" value=\"" + this.imagesX[i] + "\"><br/>";
+	}
+
+	text +="<button type=\"button\" onclick=\"US.addImage()\">+ Image</button>";
+
+	this.imagesBody.innerHTML = text;
+}
+
 UploadScript.prototype.saveIngredients = function(){
 	for(var i = 0; i < this.ingredients.length; i++){
 		this.ingredients[i].quantity = "" + document.getElementById("ingredientQuantity" + i).value;
@@ -102,6 +120,12 @@ UploadScript.prototype.saveInstructions = function(){
 	}
 };
 
+UploadScript.prototype.saveImages = function(){
+	for(var i = 0; i < this.imagesX.length; i++){
+		this.imagesX[i] = "" + document.getElementById("image" + i).value;
+	}
+};
+
 UploadScript.prototype.addIngredient = function(){
 	this.saveIngredients();
 	this.ingredients.push(new Ingredient);
@@ -112,4 +136,10 @@ UploadScript.prototype.addInstruction = function(){
 	this.saveInstructions();
 	this.instructions.push("");
 	this.renderInstructions();
+};
+
+UploadScript.prototype.addImage = function(){
+	this.saveImages();
+	this.imagesX.push("");
+	this.renderImages();
 };
