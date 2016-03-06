@@ -7,7 +7,6 @@ function Ingredient(){
 }
 
 function UploadScript(ingredientsID, instructionsID){
-	window.alert("script created");
 	this.ingredientsBody = document.getElementById(ingredientsID);
 	this.instructionsBody = document.getElementById(instructionsID);
 
@@ -21,7 +20,6 @@ function UploadScript(ingredientsID, instructionsID){
 
 	this.renderIngredients();
 	this.renderInstructions();
-	this.renderImages();
 }
 
 UploadScript.prototype.renderIngredients = function(){
@@ -104,14 +102,12 @@ UploadScript.prototype.saveInstructions = function(){
 };
 
 UploadScript.prototype.addIngredient = function(){
-	window.alert("add ingredient");
 	this.saveIngredients();
 	this.ingredients.push(new Ingredient);
 	this.renderIngredients();
 };
 
 UploadScript.prototype.addInstruction = function(){
-	window.alert("add instruction");
 	this.saveInstructions();
 	this.instructions.push("");
 	this.renderInstructions();
