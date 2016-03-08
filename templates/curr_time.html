@@ -2,57 +2,95 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 <head>
-	<link rel="stylesheet" type="text/css" href="static/css/upload.css" />
+	<link rel="stylesheet" type="text/css" href="static/css/home.css" />
 </head>
-<h2>Welcome to Grub!</h2>
-<h3>Current User: {{ user }}</h3>
-<div class="alert alert-info">Click on a photo to view a recipe.</div>
 
-<h4>Featured Recipe</h4>
-{% if featured_recipe_photo %}
-	<a href = view?recipeID={{featured_recipe_photo['RecipeID'] | e}}>
-		<img src = {{featured_recipe_photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
-	</a>
-{% endif %}
-
-<h4>All Recipes</h4>
-{% if all_photos %}
-	{% for photo in all_photos %}
-		<a href = view?recipeID={{photo['RecipeID'] | e}}>
-			<img src = {{photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
+<br>
+<br>
+<table cellspacing="0" class="TABLE">
+	<tr><th class="TH"><h3>Featured Recipe</h3></th></tr>
+	<tr><td class="TD">
+	{% if featured_recipe_photo %}
+		<a href = view?recipeID={{featured_recipe_photo['RecipeID'] | e}}>
+			<img src = {{featured_recipe_photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
 		</a>
-	{% endfor %}
-{% endif %}
+	{% endif %}
+	</td></tr>
+</table>
 
-<h3>Recipe Links</h3>
-{% if all_recipes %}
-	{% for recipe in all_recipes %}
-		<ul>
-			<li><a href = view?recipeID={{recipe['RecipeID'] | e}}>{{recipe['Recipe_name'] | e }}</a></li>
-		</ul>
-	{% endfor %}
-{% else %}
-	<p>No recipes found</p>
-{% endif %}
+<br>
+<br>
+<table cellspacing="0" class="TABLE">
+	<tr><th class="TH"></th><th class = "TH"><h3>Recommended Recipes for {{ user }}</h3></th><th class="TH"></th></tr>
+	{% if all_photos %}
+		{% set column = 0 %}
+		{% for photo in all_photos %}
+			{% if column == 3 %}
+				{% set column = 0 %}
+			{% endif %}
+			{% if column == 0 %}
+				<tr><td class="TD">
+					<a href = view?recipeID={{photo['RecipeID'] | e}}>
+						<img src = {{photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
+					</a>
+				</td>
+			{% elif column == 1 %}
+				<td class="TD">
+					<a href = view?recipeID={{photo['RecipeID'] | e}}>
+						<img src = {{photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
+					</a>
+				</td>
+			{% else %}
+				<td class="TD">
+					<a href = view?recipeID={{photo['RecipeID'] | e}}>
+						<img src = {{photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
+					</a>
+				</td>
+				</tr>
+			{% endif %}
+			{% set column = column + 1 %}
+		{% endfor %}
+	{% endif %}
+</table>
 
-<h3>Social Feed</h3>
-<ul>
-{% if social_feed %}
-	{% if social_feed[0] != None %}
-		<li><a href = user?userID={{social_feed[0]['FollowerID'] | e}}>{{social_feed[0]['FollowerID'] | e }}</a> followed <a href = user?userID={{social_feed[0]['UserID'] | e}}>{{social_feed[0]['UserID'] | e }}</a></li>
-	{% endif %}
-	{% if social_feed[1] != None %}
-		<li><a href = user?userID={{social_feed[1]['UserID'] | e}}>{{social_feed[1]['UserID'] | e }}</a> reviewed <a href = view?recipeID={{social_feed[1]['RecipeID'] | e}}>{{social_feed[1]['Recipe_name'] | e }}</a> and gave it {{social_feed[1]['Rating'] | e }} stars</li>
-	{% endif %}
-	<!-- Still need to add recent recipe added, user joined -->
-	{% if social_feed[2] != None %}
-		<li><a href = user?userID={{social_feed[2]['UserID'] | e}}>{{social_feed[2]['UserID'] | e }}</a> uploaded a new recipe: <a href = view?recipeID={{social_feed[2]['RecipeID'] | e}}>{{social_feed[2]['Recipe_name'] | e}}</a></li>
-	{% endif %}
-	{% if social_feed[3] != None %}
-		<li><a href = user?userID={{social_feed[3]['UserID'] | e}}>{{social_feed[3]['UserID'] | e}}</a> joined Grub!</li>
-	{% endif %}
-{% endif %}
-</ul>
-	
+<br>
+<br>
+<table cellspacing="0" class="TABLE">
+	<tr><th class="TH"><h3>Social Feed</h3></th></tr>
+	<tr><td class="TD">
+		{% if social_feed %}
+			{% if social_feed[0] != None %}
+				<p><a href = user?userID={{social_feed[0]['FollowerID'] | e}}>{{social_feed[0]['FollowerID'] | e }}</a> followed <a href = user?userID={{social_feed[0]['UserID'] | e}}>{{social_feed[0]['UserID'] | e }}</a></p>
+			{% endif %}
+			{% if social_feed[1] != None %}
+				<p><a href = user?userID={{social_feed[1]['UserID'] | e}}>{{social_feed[1]['UserID'] | e }}</a> reviewed <a href = view?recipeID={{social_feed[1]['RecipeID'] | e}}>{{social_feed[1]['Recipe_name'] | e }}</a> and gave it {{social_feed[1]['Rating'] | e }} stars</p>
+			{% endif %}
+			{% if social_feed[2] != None %}
+				<p><a href = user?userID={{social_feed[2]['UserID'] | e}}>{{social_feed[2]['UserID'] | e }}</a> uploaded a new recipe: <a href = view?recipeID={{social_feed[2]['RecipeID'] | e}}>{{social_feed[2]['Recipe_name'] | e}}</a></p>
+			{% endif %}
+			{% if social_feed[3] != None %}
+				<p><a href = user?userID={{social_feed[3]['UserID'] | e}}>{{social_feed[3]['UserID'] | e}}</a> joined Grub!</p>
+			{% endif %}
+		{% endif %}
+	</td></tr>
+</table>
+
+<br>
+<br>
+
+<table cellspacing="0" class="TABLE">
+	<tr><th class="TH"><h3>Recipe Links</h3></th></tr>
+	<tr><td class="TD">
+		{% if all_recipes %}
+			{% for recipe in all_recipes %}
+				<p><a href = view?recipeID={{recipe['RecipeID'] | e}}>{{recipe['Recipe_name'] | e }}</a></p>
+			{% endfor %}
+		{% else %}
+			<p>No recipes found</p>
+		{% endif %}
+	</td></tr>
+</table>
+<br>
+<br>
 
 {% endblock %}
