@@ -7,6 +7,9 @@ function SearchScript(displayID){
 	var INFO_DOWN = 240;
 	var COL_2_WIDTH = 100;
 	var STAR_SIZE = 20;
+	var GRADIENT_DEFAULT_HEIGHT = 100;
+	var GRADIENT_EXTENDED_HEIGHT = 200;
+	var INFO_SHIFT = 30;
 
 	displayDiv = document.getElementById(displayID);
 	var numPhotos = document.getElementById("numPhotos").value;
@@ -25,6 +28,7 @@ function SearchScript(displayID){
 	for(var i = 0; i < numPhotos; i++){
 		var image = document.getElementById("recipePhoto" + i);
 		var linkArea = document.getElementById("linkArea" + i);
+		var gradient = document.getElementById("gradient" + i);
 		if(image == null){
 			
 			//image
@@ -42,6 +46,16 @@ function SearchScript(displayID){
 				width = IMG_WIDTH;
 			}
 
+			//gradient
+			gradient = document.createElement("img");
+			gradient.id = "gradient" + i;
+			gradient.src = "../static/images/gradient1.png";
+			gradient.style.height = GRADIENT_DEFAULT_HEIGHT + "px";
+			gradient.style.width = width;
+			gradient.style.position = "fixed";
+			gradient.name = "" + GRADIENT_DEFAULT_HEIGHT;
+			displayDiv.appendChild(gradient);
+
 			//link
 			var link = document.createElement("a");
 			link.href = document.getElementById("url" + i).value;
@@ -51,11 +65,37 @@ function SearchScript(displayID){
 			linkArea.style.width = width + "px";
 			linkArea.style.position = "fixed";
 			linkArea.style.zIndex = "100";
-			linkArea.onmouseover = function(){
-
+			linkArea.onmouseover = function(event){
+				var num = event.target.id.slice(-1);
+				var grad = document.getElementById("gradient" + num);
+				grad.style.height = GRADIENT_EXTENDED_HEIGHT + "px";
+				verticallyShift(grad, (GRADIENT_DEFAULT_HEIGHT - GRADIENT_EXTENDED_HEIGHT));
+				verticallyShift(document.getElementById("recipeName" + num), -1*INFO_SHIFT);
+				for(var j = 0; j < 5; j++){
+					verticallyShift(document.getElementById("star" + num + '_' + j), -1*INFO_SHIFT);
+				}
+				var user2 = document.getElementById("userName" + num);
+				user2.style.color = "white";
+				user2.style.textShadow = "2px 2px 2px #000000";
+				var time2 = document.getElementById("recipeTime" + num);
+				time2.style.color = "white";
+				time2.style.textShadow = "2px 2px 2px #000000";
 			};
-			linkArea.onmouseout = function(){
-
+			linkArea.onmouseout = function(event){
+				var num = event.target.id.slice(-1);
+				var grad = document.getElementById("gradient" + num);
+				grad.style.height = GRADIENT_DEFAULT_HEIGHT + "px";
+				verticallyShift(grad, (GRADIENT_EXTENDED_HEIGHT - GRADIENT_DEFAULT_HEIGHT));
+				verticallyShift(document.getElementById("recipeName" + num), INFO_SHIFT);
+				for(var j = 0; j < 5; j++){
+					verticallyShift(document.getElementById("star" + num + '_' + j), INFO_SHIFT);
+				}
+				var user2 = document.getElementById("userName" + num);
+				user2.style.color = "transparent";
+				user2.style.textShadow = "";
+				var time2 = document.getElementById("recipeTime" + num);
+				time2.style.color = "transparent";
+				time2.style.textShadow = "";
 			}
 			link.appendChild(linkArea);
 			displayDiv.appendChild(link);
@@ -76,21 +116,50 @@ function SearchScript(displayID){
 			displayDiv.appendChild(name);
 
 			//stars
-			//window.alert("before");
-			var rating = parseFloat(document.getElementById("rating" + i));
-			//window.alert("after");
+			var rating = parseFloat(document.getElementById("rating" + i).value);
 			for(var j = 0; j < 5; j++){
 				var star = document.createElement("img");
 				star.id = "star" + i + '_' + j;
-				star.src = "../static/images/Stars/Star10.png";
-				if(rating < j){
-					star.src = "../static/images/Stars/Star0.png";
-				}
+
+				var picVal = rating - j;
+				picVal = Math.min(Math.max(picVal, 0), 1);
+				picVal *= 10;
+				picVal = Math.round(picVal);
+				star.src = "../static/images/Stars/Star" + picVal + ".png";
+
 				star.style.width = STAR_SIZE + "px";
 				star.style.height = STAR_SIZE + "px";
 				star.style.position = "fixed";
 				displayDiv.appendChild(star);
 			}
+
+			//user
+			var user = document.createElement("p");
+			user.id = "userName" + i;
+			user.innerHTML = document.getElementById("user" + i).value;
+			user.style.color = "transparent";
+			user.style.textShadow = "";
+			user.style.position = "fixed";
+			user.style.fontSize = "20px";
+			user.style.whiteSpace = "nowrap";
+    		user.style.width = "" + (width - 3*padding - 5*STAR_SIZE) + "px";
+    		user.style.overflow = "hidden";
+    		user.style.textOverflow = "ellipsis";
+			displayDiv.appendChild(user);
+
+			//time
+			var time = document.createElement("p");
+			time.id = "recipeTime" + i;
+			time.innerHTML = document.getElementById("time" + i).value + " min";
+			time.style.color = "transparent";
+			time.style.textShadow = "";
+			time.style.position = "fixed";
+			time.style.fontSize = "20px";
+			time.style.whiteSpace = "nowrap";
+    		time.style.width = "" + (5*STAR_SIZE) + "px";
+    		time.style.overflow = "hidden";
+    		time.style.textOverflow = "ellipsis";
+			displayDiv.appendChild(time);
 		}
 		
 		var width = image.clientWidth;
@@ -119,12 +188,24 @@ function SearchScript(displayID){
 		linkArea.style.left = "" + imageLeft + "px";
 		linkArea.style.top = "" + imageTop + "px";
 
+		var gradientHeight = parseInt(gradient.style.height.substring(0, 3));
+		gradient.style.left = "" + imageLeft + "px";
+		gradient.style.top = "" + (imageTop + IMG_HEIGHT - GRADIENT_DEFAULT_HEIGHT) + "px";
+
 		//image.style.boxShadow="10px 20px 30px blue";//"0px 7px 5px -5px #666666 inset";
 
 		//Title of recipe
 		var name = document.getElementById("recipeName" + i);
 		name.style.left = "" + infoLeft + "px";
 		name.style.top = "" + infoTop + "px";
+
+		var user = document.getElementById("userName" + i);
+		user.style.left = "" + infoLeft + "px";
+		user.style.top = "" + infoTop + "px";
+
+		var time = document.getElementById("recipeTime" + i);
+		time.style.left = "" + (imageLeft + deltaX - time.clientWidth) + "px";
+		time.style.top = "" + infoTop + "px";
 
 		//Stars
 		var imageWidth = image.clientWidth;
@@ -164,4 +245,8 @@ function findPos(obj){
 		
 		return {X:curleft,Y:curtop};
 	}
+}
+
+function verticallyShift(obj, value){
+	obj.style.top = (parseInt(obj.style.top.substring(0, 3)) + value) + "px";
 }

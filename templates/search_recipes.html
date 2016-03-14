@@ -97,13 +97,13 @@
 						<input type="hidden" id="{{'photo' + counter|string}}" value="{{recipe_photos[counter]}}">
 						<input type="hidden" id="{{'name' + counter|string}}" value="{{result['Recipe_name']}}">
 						<input type="hidden" id="{{'url' + counter|string}}" value="view?recipeID={{result['RecipeID'] | e}}">
-						<!--
+						<input type="hidden" id="{{'user' + counter|string}}" value="{{result['UserID'] | e}}">
+						<input type="hidden" id="{{'time' + counter|string}}" value="{{result['Time_completion'] | e}}">
 						{% if result['Overall_rating'] == 0.0 %}
 							<input type="hidden" id="{{'rating' + counter|string}}" value="0">
 						{% else %} 
 							<input type="hidden" id="{{'rating' + counter|string}}" value="{{result['Overall_rating'] | e}}">
 						{% endif %}
-						-->
 						{% set counter = counter + 1 %}
 					{% endfor %}
 					<input type="hidden" id="numPhotos" value="{{search_results|length}}">
