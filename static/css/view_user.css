@@ -39,13 +39,13 @@ textarea{
 .oddRow{
 	background:var(--Light_1);
 	padding:7;
-	box-shadow: 7px 0px 5px -5px #000000 inset;
+	box-shadow: 7px 0px 5px -5px #666666 inset;
 }
 
 .evenRow{
 	background:var(--Light_2);
 	padding:7;
-	box-shadow: 7px 0px 5px -5px #000000 inset;
+	box-shadow: 7px 0px 5px -5px #666666 inset;
 }
 
 .oddRowNoShadow{

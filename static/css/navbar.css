@@ -65,7 +65,7 @@ body{
 }
 
 #nav_bar{
-	position:absolute;
+	position:fixed;
 	z-index:100;
 	width:100%;
 	box-shadow: 5px 5px 5px #666666;

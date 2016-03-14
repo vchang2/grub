@@ -40,11 +40,11 @@
 .TD1{
 	background-color:var(--Light_1);
 	padding:10px;
-	box-shadow: 0px 7px 5px -5px #000000 inset;
+	box-shadow: 0px 7px 5px -5px #666666 inset;
 }
 
 .TD2{
 	background-color:var(--Light_2);
 	padding:10px;
-	box-shadow: 0px 7px 5px -5px #000000 inset;
+	box-shadow: 0px 7px 5px -5px #666666 inset;
 }

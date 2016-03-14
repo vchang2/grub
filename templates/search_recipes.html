@@ -94,8 +94,16 @@
 				{% if search_results %}
 					{% set counter = 0 %}
 					{% for result in search_results %}
-						<input type="hidden" id="{{'photo' + counter|string}}" value={{recipe_photos[counter]}}>
-						<input type="hidden" id="{{'name' + counter|string}}" value={{result['Recipe_name']}}>
+						<input type="hidden" id="{{'photo' + counter|string}}" value="{{recipe_photos[counter]}}">
+						<input type="hidden" id="{{'name' + counter|string}}" value="{{result['Recipe_name']}}">
+						<input type="hidden" id="{{'url' + counter|string}}" value="view?recipeID={{result['RecipeID'] | e}}">
+						<!--
+						{% if result['Overall_rating'] == 0.0 %}
+							<input type="hidden" id="{{'rating' + counter|string}}" value="0">
+						{% else %} 
+							<input type="hidden" id="{{'rating' + counter|string}}" value="{{result['Overall_rating'] | e}}">
+						{% endif %}
+						-->
 						{% set counter = counter + 1 %}
 					{% endfor %}
 					<input type="hidden" id="numPhotos" value="{{search_results|length}}">
@@ -103,7 +111,9 @@
 					<p style="text-align:center">No results</p>
 					<input type="hidden" id="numPhotos" value="0">
 				{% endif %}
-				
+			
+				<div id="space"></div>
+
 				<!--
 				<ul>
 				{% if search_results %}
@@ -132,6 +142,8 @@
 		</td>
 	</tr>
 </table>
+
+<br/><br/>
 
 <!--
 {% for result in search_results %}
