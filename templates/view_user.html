@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="static/css/view_user.css" />
 	<title>Search Users</title>
 </head>
+<body onresize="rerenderPhotoArea()" onscroll="rerenderPhotoArea()">
 {% if userID %}
 	<table cellspacing="0" class="TABLE">
 	<tr>
@@ -66,10 +67,25 @@
 
 	<tr>
 		<th class="evenHead"><p>Recipes</p></th>
-		<td class="evenRow" colspan="2">	
+		<td class="evenRow" style="width:1000px" colspan="2">
+
+	<div id="RESULT_DIV">
 	{% if userRecipes %}
+		{% set counter = 0 %}
 		{% for result in userRecipes %}
+			<input type="hidden" id="{{'photo' + counter|string}}" value="{{recipe_photos[counter]}}">
+			<input type="hidden" id="{{'name' + counter|string}}" value="{{result['Recipe_name']}}">
+			<input type="hidden" id="{{'url' + counter|string}}" value="view?recipeID={{result['RecipeID'] | e}}">
+			<input type="hidden" id="{{'user' + counter|string}}" value="{{result['UserID'] | e}}">
+			<input type="hidden" id="{{'time' + counter|string}}" value="{{result['Time_completion'] | e}}">
 			{% if result['Overall_rating'] == 0.0 %}
+				<input type="hidden" id="{{'rating' + counter|string}}" value="0">
+			{% else %} 
+				<input type="hidden" id="{{'rating' + counter|string}}" value="{{result['Overall_rating'] | e}}">
+			{% endif %}
+			{% set counter = counter + 1 %}
+
+			<!--{% if result['Overall_rating'] == 0.0 %}
 				<a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - Rating N/A</a>
 			{% else %}
 				<a href = view?recipeID={{result['RecipeID'] | e}}>{{result['Recipe_name'] | e }} - {{ result['Description'] | e}} - {{ result['Overall_rating'] | e}} stars</a>
@@ -82,11 +98,16 @@
 					<input type="submit" value="Delete Recipe" style="float: right;">
 				</form>
 			{% endif %}
-			<br>
+			<br>-->
 		{% endfor %}
+		<input type="hidden" id="numPhotos" value="{{userRecipes|length}}">
 	{% else %}
-		<p class="helptext">{{ userID | e}} has no recipes yet.</p>
+		<p class="helptext">{{ userID | e}} does not have any recipes at this time.</p>
+		<input type="hidden" id="numPhotos" value="0">
 	{% endif %}
+	</div>	
+	<div id="space"></div>
+
 	</td></tr>
 
 	<tr>
@@ -189,4 +210,18 @@
 
 </table>
 
+<script type="text/javascript" src="static/js/search_script.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+	//var SS = new SearchScript("RESULT_DIV");
+	SearchScript("RESULT_DIV", 300, 250);
+
+	function rerenderPhotoArea(){
+		window.SearchScript("RESULT_DIV", 300, 250);
+	}
+
+//]]>
+</script>
 {% endblock %}
+</body>

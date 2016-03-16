@@ -153,6 +153,8 @@ class user:
         viewingOwnProfile = False
         editAbout = False
         follower = False
+        recipes = []
+        recipe_photos = []
         currentUser = session.user
         if 'userID' in post_params:
             userID = post_params['userID']
@@ -174,13 +176,20 @@ class user:
             if r['UserID'] == userID:
                 follower = True
         userRecipes = sqlitedb.getUserRecipes(userID)
+        for recipe in userRecipes:
+            recipes.append(recipe['RecipeID'])
+        if len(recipes) > 0:
+            all_photos = sqlitedb.getRecipePhotos(recipes)
+            for r in all_photos:
+                recipe_photos.append(r['Photo'])
         userAboutMe = sqlitedb.getAboutMe(userID)
         userFollowers = sqlitedb.getFollowers(userID)
         userFollowing = sqlitedb.getFollowing(userID)
         userCookbooks = sqlitedb.getCookbooks(userID)
         if 'unfollowing' in post_params:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile, currentUser = currentUser, editAbout = editAbout, follower = follower)
+        print recipe_photos
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile = viewingOwnProfile, currentUser = currentUser, editAbout = editAbout, follower = follower, recipe_photos = recipe_photos)
     
     def POST(self):
         post_params = web.input()
@@ -188,6 +197,8 @@ class user:
         currentUser = session.user
         editAbout = False
         viewingOwnProfile = False
+        recipe_photos = []
+        recipes = []
         if 'userID' in post_params:
             userID = post_params['userID']
             if userID == session.user:
@@ -214,6 +225,12 @@ class user:
         if 'userID' in post_params:
             userID = post_params['userID']
             userRecipes = sqlitedb.getUserRecipes(userID)
+            for recipe in userRecipes:
+                recipes.append(recipe['RecipeID'])
+            if len(recipes) > 0:
+                all_photos = sqlitedb.getRecipePhotos(recipes)
+                for r in all_photos:
+                    recipe_photos.append(r['Photo'])
             userAboutMe = sqlitedb.getAboutMe(userID)
             userFollowers = sqlitedb.getFollowers(userID)
             userFollowing = sqlitedb.getFollowing(userID)
@@ -222,7 +239,7 @@ class user:
             sqlitedb.unfollow(session.user, post_params['unfollowing'])
         if 'addFollower' in post_params:
             sqlitedb.addFollower(post_params['addFollower'], session.user)
-        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile, currentUser = currentUser, editAbout = editAbout)
+        return render_template('view_user.html', userID = userID, userRecipes = userRecipes, userAboutMe = userAboutMe, userFollowers = userFollowers, userFollowing = userFollowing, userCookbooks = userCookbooks, viewingOwnProfile=viewingOwnProfile, currentUser = currentUser, editAbout = editAbout, recipe_photos = recipe_photos)
 
 class cookbook:
     # THIS IS NOT COMPLETE YET - 1/31 at 4:28pm

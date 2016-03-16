@@ -1,6 +1,10 @@
-function SearchScript(displayID){
-	var IMG_HEIGHT = 300;
-	var IMG_WIDTH = 400;
+function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
+	if(IMG_HEIGHT <= 0){
+		IMG_HEIGHT = 300;
+	}
+	if(IMG_WIDTH <= 0){
+		IMG_WIDTH = 400;
+	}
 	var padding = 20;
 
 	var INFO_PADDING = 20;

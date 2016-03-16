@@ -40,12 +40,14 @@ textarea{
 	background:var(--Light_1);
 	padding:7;
 	box-shadow: 7px 0px 5px -5px #666666 inset;
+	width:1000px;
 }
 
 .evenRow{
 	background:var(--Light_2);
 	padding:7;
 	box-shadow: 7px 0px 5px -5px #666666 inset;
+	width:1000px;
 }
 
 .oddRowNoShadow{
@@ -130,6 +132,25 @@ body {
 img.centeredImage {
 	display: block;
 	margin: 0 auto;
-	width:304px;
 	height:228px;
+}
+
+.submitLink {
+  background-color: transparent;
+  border: none;
+  color:#551A8B;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15;
+  font-family: tahoma;
+}
+
+submitLink:focus {
+  outline: none;
+}
+
+.submitLink:hover {
+	font-weight: bold;
+	text-decoration: none;
+    color: #FF69B4;
 }

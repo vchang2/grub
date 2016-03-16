@@ -9,16 +9,22 @@
 
 {% if recipe %}
 	{% for result in recipe %}
-		{% if photos %}
-			<br>
-			{% for photo in photos %}
-				<img class = "centeredImage" src = {{photo['Photo'] | e}} alt = 'OrangeChicken' >
-			{% endfor %}
-		{% endif %}
+
 		<br>
 		<table cellspacing="0" class="TABLE">
 		<tr>
 			<td colspan="3" class="header"><h1 class="header">{{ result['Recipe_name'] | e}}</h1></td>
+		</tr>
+
+		<tr>
+			<td colspan="3" class="header">
+				{% if photos %}
+					{% for photo in photos %}
+						<img class = "centeredImage" src = {{photo['Photo'] | e}} alt = 'OrangeChicken' >
+						<br/>
+					{% endfor %}
+				{% endif %}
+			</td>
 		</tr>
 		<tr>
 			<th class="oddHead"><p>Description</p></th>
@@ -91,7 +97,7 @@
 			  					<input type="hidden" name="ingredients" value="">
 			  					<input type="hidden" name="categories" value="">
 							</div>
-							<div><input type="submit" value={{tag['Tags'] | e}} class="btn btn-primary" /></div>
+							<div><input type="submit" value={{tag['Tags'] | e}} class="submitLink" /></div>
 						</form>
 					{% endfor %}
 				{% endif %}
@@ -112,7 +118,7 @@
 		  						<input type="hidden" name="ingredients" value="">
 		  						<input type="hidden" name="tags" value="">
 							</div>
-							<div><input type="submit" value={{category['Category'] | e}} class="btn btn-primary" /></div>
+							<div><input type="submit" value={{category['Category'] | e}} class="submitLink" /></div>
 						</form>
 					{% endfor %}
 				{% endif %}
