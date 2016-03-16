@@ -6,14 +6,30 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="static/css/upload.css" />
 </head>
+<body onresize="rerenderPhotoArea()" onscroll="rerenderPhotoArea()">
 	{% if cookbookInfo %}
 		{% for result in cookbookInfo %}
 			<h3>Recipe(s) in {{ result['Cookbook_name'] | e}}:</h3>
 		{% endfor %}
 	{% endif %}
 
+	<div id="RESULT_DIV">
+
 	{% if all_recipes %}
+		{% set counter = 0 %}
 		{% for result in all_recipes%}
+			<input type="hidden" id="{{'photo' + counter|string}}" value="{{recipe_photos[counter]}}">
+			<input type="hidden" id="{{'name' + counter|string}}" value="{{result['Recipe_name']}}">
+			<input type="hidden" id="{{'url' + counter|string}}" value="view?recipeID={{result['RecipeID'] | e}}">
+			<input type="hidden" id="{{'user' + counter|string}}" value="{{result['UserID'] | e}}">
+			<input type="hidden" id="{{'time' + counter|string}}" value="{{result['Time_completion'] | e}}">
+			{% if result['Overall_rating'] == 0.0 %}
+				<input type="hidden" id="{{'rating' + counter|string}}" value="0">
+			{% else %} 
+				<input type="hidden" id="{{'rating' + counter|string}}" value="{{result['Overall_rating'] | e}}">
+			{% endif %}
+			{% set counter = counter + 1 %}
+		<!--
 		<div>
 			<ul>
 			<li><a href = view?recipeID={{result['RecipeID']}}>{{result['Recipe_name']}}</a></li>
@@ -26,17 +42,31 @@
 			{% endif %}
 			</ul>
 		</div>
+		-->
 		{% endfor %}
+		<input type="hidden" id="numPhotos" value="{{all_recipes|length}}">
+	{% else %}
+		{% if cookbookInfo %}
+			{% for result in cookbookInfo %}
+				<p style="text-align:center">No Recipes in {{ result['Cookbook_name'] | e}}</p>
+				<input type="hidden" id="numPhotos" value="0">
+			{% endfor %}
+		{% endif %}
 	{% endif %}
+	</div>
 
+	<div id="space"></div>
+<!--
 	{% if all_photos %}
 		{% for photo in all_photos%}
+		
 		<a href = view?recipeID={{photo['RecipeID'] | e}}>
 			<img onmouseover="bigImg(this)" onmouseout="normalImg(this)" border="0" src = {{photo['Photo'] | e}} alt = 'FoodPic' style="width:304px;height:228px;" >
 		</a>
+
 		{% endfor %}
 	{% endif %}
-
+		-->
 <script>
 	function bigImg(x) {
     	x.style.height = "240px";
@@ -48,4 +78,21 @@
     	x.style.width = "304px";
 	}
 </script>
+
+<script type="text/javascript" src="static/js/search_script.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+	//var SS = new SearchScript("RESULT_DIV");
+
+	SearchScript("RESULT_DIV");
+
+	function rerenderPhotoArea(){
+		window.SearchScript("RESULT_DIV");
+	}
+
+//]]>
+</script>
+
 {% endblock %}
+</body>

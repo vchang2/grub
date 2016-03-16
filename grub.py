@@ -238,6 +238,7 @@ class cookbook:
         all_photos = None
         all_recipes = None 
         cookbookInfo = None
+        recipe_photos = []
         if 'cookbookID' in post_params:
             cookbookID = post_params['cookbookID']
             cookbookRecipes = sqlitedb.getCookbooks_recipes(cookbookID)
@@ -246,8 +247,10 @@ class cookbook:
             if len(recipes) > 0:
                 all_photos = sqlitedb.getRecipePhotos(recipes)
                 all_recipes = sqlitedb.getRecipes(recipes)
+                for r in all_photos:
+                    recipe_photos.append(r['Photo'])
             cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
-        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes, currentUser = session.user)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes, currentUser = session.user, recipe_photos = recipe_photos)
 
     def POST(self):
         if session.user == None:
@@ -257,6 +260,7 @@ class cookbook:
         cookbookRecipes = None
         cookbookInfo = None
         recipes = []
+        recipe_photos = []
         all_photos = None
         all_recipes = None 
         cookbookInfo = None
@@ -273,8 +277,10 @@ class cookbook:
             if len(recipes) > 0:
                 all_photos = sqlitedb.getRecipePhotos(recipes)
                 all_recipes = sqlitedb.getRecipes(recipes)
+                for r in all_photos:
+                    recipe_photos.append(r['Photo'])
             cookbookInfo = sqlitedb.getCookbookInfo(cookbookID)
-        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes, currentUser = session.user)
+        return render_template('view_cookbook.html', cookbookID = cookbookID, cookbookInfo = cookbookInfo, cookbookRecipes = cookbookRecipes, all_photos = all_photos, all_recipes = all_recipes, currentUser = session.user, recipe_photos = recipe_photos)
 
 class search:
     def GET(self):
