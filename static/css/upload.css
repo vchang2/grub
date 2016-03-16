@@ -91,3 +91,8 @@ textarea{
 	color:#777777;
 	font-size:12;
 }
+
+body {
+	background-image: url("https://farm2.staticflickr.com/1696/25197998193_1bfe9ce093_m.jpg");
+	background-repeat: repeat;
+}

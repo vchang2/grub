@@ -121,3 +121,8 @@ a:hover {
 	text-decoration: none;
     color: #FF69B4;
 }
+
+body {
+	background-image: url("https://farm2.staticflickr.com/1703/25194109864_f1c301e469_m.jpg");
+	background-repeat: repeat;
+}
