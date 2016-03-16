@@ -2,202 +2,231 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 
+<head>
+	<link rel="stylesheet" type="text/css" href="static/css/view_recipe.css" />
+	<title>View Recipe</title>
+</head>
 
 {% if recipe %}
 	{% for result in recipe %}
-		<h3>{{ result['Recipe_name'] | e}}</h3>
-		<p>Description: {{ result['Description'] | e}} </p>
-		{% if result['Overall_rating'] == 0.0 %}
-			<p>Overall Rating: N/A </p>
-		{% else %}
-			<p>Overall Rating: {{ result['Overall_rating'] | e}} </p>
-		{% endif %}
-		
-		<p>Number of Servings: {{ result['Num_servings'] | e}} </p>
-		<p>User ID: <a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a></p>
-		<p>Cooking Time: {{result['Time_completion'] | e}} minutes </p>
-		<p>Is this dish spicy? {{result['Spicy'] | e}} </p>
-		<p>Difficulty: {{result['Difficulty'] | e}} </p>
-
-		{% if userMatchesRecipeAuthor %}
-			<form action="user?userID={{result['UserID']}}" method="POST">
-				<input type="hidden" name="deleteRecipe" value={{result['RecipeID']| e}}>
-				<input type="submit" value="Delete">
-			</form>
-		{% endif %}
-
-		{% if instructions %}
-			<br>
-			<h4>Instructions:</h4>
-			{% for instruction in instructions %}
-				<p>Step {{instruction['Instruction_number'] | e}}: {{instruction['Instruction'] | e}}</p>
-			{% endfor %}
-		{% endif %}
-
-		{% if ingredients %}
-			<br>
-			<h4>Ingredients:</h4>
-			{% for ingredient in ingredients %}
-				<ul>
-					{% if ingredient['Unit'] == "None" %}
-						{% if ingredient['Quantity_denom'] == 1 %}
-							<li>{{ingredient['Quantity_num'] | e }} {{ingredient['Ingredient'] | e }}</li>
-						{% else %}
-							<li>{{ingredient['Quantity_num'] | e }}/{{ingredient['Quantity_denom'] | e }} {{ingredient['Ingredient'] | e }}</li>
-						{% endif %}
-					{% else %}
-						{% if ingredient['Quantity_denom'] == 1 %}
-							<li>{{ingredient['Quantity_num'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>
-						{% else %}
-							<li>{{ingredient['Quantity_num'] | e }}/{{ingredient['Quantity_denom'] | e }} {{ingredient['Unit'] | e }} of {{ingredient['Ingredient'] | e }}</li>
-						{% endif %}
-					{% endif %}	
-				</ul>
-			{% endfor %}
-		{% endif %}
-
-		{% if tags %}
-			<br>
-			<h4>Tags:</h4>
-			{% for tag in tags %}
-				<ul>
-					<li><form method="POST" action="search" role="form" style="max-width:400px; width:100%">
-						<div class="form-group">
-	  						<input type="hidden" name="tags" value={{tag['Tags'] | e}}>
-	  						<input type="hidden" name="recipeID" value="">
-	  						<input type="hidden" name="userID" value="">
-	  						<input type="hidden" name="recipeName" value="">
-	  						<input type="hidden" name="completionTime" value="">
-	  						<input type="hidden" name="ingredients" value="">
-	  						<input type="hidden" name="categories" value="">
-						</div>
-						<div><input type="submit" value={{tag['Tags'] | e}} class="btn btn-primary" /></div>
-					</form></li>
-				</ul>
-			{% endfor %}
-		{% endif %}
-
 		{% if photos %}
 			<br>
-			<h4>Photos:</h4>
 			{% for photo in photos %}
-				<img src = {{photo['Photo'] | e}} alt = 'OrangeChicken' style="width:304px;height:228px;" >
+				<img class = "centeredImage" src = {{photo['Photo'] | e}} alt = 'OrangeChicken' >
 			{% endfor %}
 		{% endif %}
-
-		{% if categories %}
-			<br>
-			<br>
-			<h4>Categories:</h4>
-			{% for category in categories %}
-				<ul>
-					<li><form method="POST" action="search" role="form" style="max-width:400px; width:100%">
-						<div class="form-group">
-	  						<input type="hidden" name="categories" value={{category['Category'] | e}}>
-	  						<input type="hidden" name="recipeID" value="">
-	  						<input type="hidden" name="userID" value="">
-	  						<input type="hidden" name="recipeName" value="">
-	  						<input type="hidden" name="completionTime" value="">
-	  						<input type="hidden" name="ingredients" value="">
-	  						<input type="hidden" name="tags" value="">
-						</div>
-						<div><input type="submit" value={{category['Category'] | e}} class="btn btn-primary" /></div>
-					</form></li>
-				</ul>
-			{% endfor %}
-		{% endif %}
-
-
-		{% if cookbooks %}
 		<br>
-			{% for cookbook in cookbooks %}
-				<form action=view?recipeID={{recipeID}} method="POST">
-					<input type="hidden" name="recipeID" value={{recipeID | e}}>
-					<input type="hidden" name="added_cookbookID" value={{cookbook['CookbookID'] | e}}>
-					<h5>Add Recipe to Cookbook {{cookbook['Cookbook_name'] | e}} <input type="submit" value="Add"></h5>
-				</form>
-			{% endfor %}
-		{% endif %}
-		
-		{% if reviews %}
-			<br>
-			<h4>Reviews:</h4>
-			{% for review in reviews %}
-				<hr/>
-				<ul>
-					<p>{{review['Helpful'] | e}} out of {{review['Total'] | e}} people found this review helpful.</p>
-					<li><a href = user?userID={{review['UserID'] | e}}>{{review['UserID'] | e }}</a> ({{review['Rating'] | e}} stars) - {{review['Review'] | e}} </li>
-					{% if currentUser == review['UserID'] %}
-						{% if editAbout %}
+		<table cellspacing="0" class="TABLE">
+		<tr>
+			<td colspan="3" class="header"><h1 class="header">{{ result['Recipe_name'] | e}}</h1></td>
+		</tr>
+		<tr>
+			<th class="oddHead"><p>Description</p></th>
+			<td class="oddRow">
+				<p>{{ result['Description'] | e}}</p>
+			</td>
+		</tr>
+		<tr>
+			<th class="evenHead"><p>Overall Rating</p></th>
+			<td class="evenRow">
+				{% if result['Overall_rating'] == 0.0 %}
+					<p>N/A</p>
+				{% else %}
+					<p>{{ result['Overall_rating'] | e}}</p>
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th class="oddHead"><p>Number of Servings</p></th>
+			<td class="oddRow">
+				<p>{{ result['Num_servings'] | e}}</p>
+			</td>
+		</tr>
+		<tr>
+			<th class="evenHead"><p>User ID</p></th>
+			<td class="evenRow">
+				<p><a href = user?userID={{result['UserID'] | e}}>{{result['UserID'] | e }}</a></p>
+			</td>
+		</tr>
+		<tr>
+			<th class="oddHead"><p>Cooking Time</p></th>
+			<td class="oddRow">
+				<p>{{ result['Time_completion'] | e}} minutes</p>
+			</td>
+		</tr>
+		<tr>
+			<th class="evenHead"><p>Spiciness</p></th>
+			<td class="evenRow">
+				<p>{{ result['Spicy'] | e}}</p>
+			</td>
+		</tr>
+		<tr>
+			<th class="oddHead"><p>Difficulty</p></th>
+			<td class="oddRow">
+				<p>{{ result['Difficulty'] | e}}</p>
+			</td>
+		</tr>
+		<tr>
+			<th class="evenHead"><p>Instructions</p></th>
+			<td class="evenRow">
+				{% if instructions %}
+					{% for instruction in instructions %}
+						<p>Step {{instruction['Instruction_number'] | e}}: {{instruction['Instruction'] | e}}</p>
+					{% endfor %}
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th class="oddHead"><p>Tags</p></th>
+			<td class="oddRow">
+				{% if tags %}
+					{% for tag in tags %}
+						<form method="POST" action="search" role="form" style="max-width:400px; width:100%">
+							<div class="form-group">
+			  					<input type="hidden" name="tags" value={{tag['Tags'] | e}}>
+			  					<input type="hidden" name="recipeID" value="">
+			  					<input type="hidden" name="userID" value="">
+			  					<input type="hidden" name="recipeName" value="">
+			  					<input type="hidden" name="completionTime" value="">
+			  					<input type="hidden" name="ingredients" value="">
+			  					<input type="hidden" name="categories" value="">
+							</div>
+							<div><input type="submit" value={{tag['Tags'] | e}} class="btn btn-primary" /></div>
+						</form>
+					{% endfor %}
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th class="evenHead"><p>Categories</p></th>
+			<td class="evenRow">
+				{% if categories %}
+					{% for category in categories %}
+						<form method="POST" action="search" role="form" style="max-width:400px; width:100%">
+							<div class="form-group">
+		  						<input type="hidden" name="categories" value={{category['Category'] | e}}>
+		  						<input type="hidden" name="recipeID" value="">
+		  						<input type="hidden" name="userID" value="">
+		  						<input type="hidden" name="recipeName" value="">
+		  						<input type="hidden" name="completionTime" value="">
+		  						<input type="hidden" name="ingredients" value="">
+		  						<input type="hidden" name="tags" value="">
+							</div>
+							<div><input type="submit" value={{category['Category'] | e}} class="btn btn-primary" /></div>
+						</form>
+					{% endfor %}
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th class="oddHead"><p>Cookbooks</p></th>
+			<td class="oddRow">
+				{% if cookbooks %}
+					{% for cookbook in cookbooks %}
+						<form action=view?recipeID={{recipeID}} method="POST">
+							<input type="hidden" name="recipeID" value={{recipeID | e}}>
+							<input type="hidden" name="added_cookbookID" value={{cookbook['CookbookID'] | e}}>
+							<h5>Add Recipe to Cookbook {{cookbook['Cookbook_name'] | e}} <input type="submit" value="Add"></h5>
+						</form>
+					{% endfor %}
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th class="evenHead"><p>Reviews</p></th>
+			<td class="evenRow">
+				{% if reviews %}
+					{% for review in reviews %}
+						<hr/>
+						<p>{{review['Helpful'] | e}} out of {{review['Total'] | e}} people found this review helpful.</p>
+						<ul>
+							<li><a href = user?userID={{review['UserID'] | e}}>{{review['UserID'] | e }}</a> ({{review['Rating'] | e}} stars) - {{review['Review'] | e}}</li>
+						</ul>
+						{% if currentUser == review['UserID'] %}
+							{% if editAbout %}
+								<form action=view?recipeID={{recipeID}} method="POST">
+									<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+									<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
+						  			<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
+						  			<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
+						  			<input type="radio" checked name="stars" value="3"> 3 Star&nbsp;&nbsp;
+						  			<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
+						  			<input type="radio" name="stars" value="5"> 5 Star  
+						  			<br>
+						  			<textarea name="newAboutMe"rows="4" cols="50"></textarea>
+						  			<input type="submit" value="Make Change!">
+								</form>
+							{% else %}
+								<form action=view?recipeID={{recipeID}} method="POST">
+									<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+									<input type="hidden" name="EditReview" value={{review['ReviewID'] | e}}>
+									<input type="hidden" name="editAboutMe">
+									<input type="submit" value="Edit">
+
+									<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+									<input type="hidden" name="DeleteReview" value={{review['ReviewID'] | e}}>
+									<!--<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">-->
+									
+									<input type="submit" name ="d" value="Delete">
+								</form>
+							{% endif %}
+						{% elif userVotes[review['ReviewID']] == "up"%}
 							<form action=view?recipeID={{recipeID}} method="POST">
 								<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
 								<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
-					  			<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
-					  			<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
-					  			<input type="radio" checked name="stars" value="3"> 3 Star&nbsp;&nbsp;
-					  			<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
-					  			<input type="radio" name="stars" value="5"> 5 Star  
-					  			<br>
-					  			<textarea name="newAboutMe"rows="4" cols="50"></textarea>
-					  			<input type="submit" value="Make Change!">
+								<p>Was this review helpful?</p>
+								<button type="button" disabled>Yes</button><input type="submit" name="UnhelpfulReview" value="No">
+							</form>
+						{% elif userVotes[review['ReviewID']] == "down" %}
+							<form action=view?recipeID={{recipeID}} method="POST">
+								<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
+								<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
+								<p>Was this review helpful?</p>
+								<input type="submit" name="HelpfulReview" value="Yes"><button type="button" disabled>No</button>
 							</form>
 						{% else %}
 							<form action=view?recipeID={{recipeID}} method="POST">
 								<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
-								<input type="hidden" name="EditReview" value={{review['ReviewID'] | e}}>
-								<input type="hidden" name="editAboutMe">
-								<input type="submit" value="Edit">
-
-								<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
-								<input type="hidden" name="DeleteReview" value={{review['ReviewID'] | e}}>
-								<!--<input type="hidden" name="DeleteReview" value="{{review['Review']| e}}">-->
-								<input type="submit" name ="d" value="Delete">
+								<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
+								<p>Was this review helpful?</p>
+								<input type="submit" name="HelpfulReview" value="Yes"><input type="submit" name="UnhelpfulReview" value="No">
 							</form>
 						{% endif %}
-					{% elif userVotes[review['ReviewID']] == "up"%}
-						<form action=view?recipeID={{recipeID}} method="POST">
-							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
-							<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
-							<p>Was this review helpful?</p>
-							<button type="button" disabled>Yes</button><input type="submit" name="UnhelpfulReview" value="No">
-						</form>
-					{% elif userVotes[review['ReviewID']] == "down" %}
-						<form action=view?recipeID={{recipeID}} method="POST">
-							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
-							<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
-							<p>Was this review helpful?</p>
-							<input type="submit" name="HelpfulReview" value="Yes"><button type="button" disabled>No</button>
-						</form>
-					{% else %}
-						<form action=view?recipeID={{recipeID}} method="POST">
-							<input type="hidden" name="recipeID" value={{review['RecipeID'] | e}}>
-							<input type="hidden" name="reviewID" value={{review['ReviewID'] | e}}>
-							<p>Was this review helpful?</p>
-							<input type="submit" name="HelpfulReview" value="Yes"><input type="submit" name="UnhelpfulReview" value="No">
-						</form>
-					{% endif %}
-				</ul>
-			{% endfor %}
+					{% endfor %}
+				{% endif %}
+				{% if not userMatchesRecipeAuthor and not userHasReviewed %}
+					<hr/>
+					<h4>Write your own review!</h4>
+					<form action=view?recipeID={{recipeID}} method="POST">
+						{% for result in recipe %}
+							<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>
+						{% endfor %}
+	  					<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
+	  					<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
+	  					<input type="radio" checked name="stars" value="3"> 3 Star&nbsp;&nbsp;
+	  					<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
+	  					<input type="radio" name="stars" value="5"> 5 Star  
+	  					<br>
+	  					<textarea name="review"rows="4" cols="50"></textarea>
+	  					<input type="submit" value="Add Review">
+					</form>
+				{% endif %}
+			</td>
+		</tr>
+		{% if userMatchesRecipeAuthor %}
+		<tr>
+			<th class="oddHead"><p>Delete Recipe</p></th>
+			<td class="oddRow">
+				<form action="user?userID={{result['UserID']}}" method="POST">
+					<input type="hidden" name="deleteRecipe" value={{result['RecipeID']| e}}>
+					<input type="submit" value="Delete">
+				</form>
+			</td>
+		</tr>
 		{% endif %}
-
-		{% if not userMatchesRecipeAuthor and not userHasReviewed %}
-			<hr/>
-			<h4>Write your own review!</h4>
-			<form action=view?recipeID={{recipeID}} method="POST">
-				{% for result in recipe %}
-					<input type="hidden" name="recipeID" value={{result['RecipeID'] | e}}>
-				{% endfor %}
-	  			<input type="radio" name="stars" value="1"> 1 Star&nbsp;&nbsp;
-	  			<input type="radio" name="stars" value="2"> 2 Star&nbsp;&nbsp;
-	  			<input type="radio" checked name="stars" value="3"> 3 Star&nbsp;&nbsp;
-	  			<input type="radio" name="stars" value="4"> 4 Star&nbsp;&nbsp;
-	  			<input type="radio" name="stars" value="5"> 5 Star  
-	  			<br>
-	  			<textarea name="review"rows="4" cols="50"></textarea>
-	  			<input type="submit" value="Add Review">
-			</form>
-		{% endif %}
-
+		</table>
+		<br>
+		<br>
 		<!--<button id="popup" onclick="pop_up()">Add Recipe To Cookbook</button>
 		<script type="text/javascript">
 			function pop_up() {
@@ -206,9 +235,6 @@
 			}
 
 		</script>-->
-
-		<br>
-		<br>
 	{% endfor %}
 {% else %}
 	<h3>Recipe Not Found</h3>
