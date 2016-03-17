@@ -63,4 +63,7 @@ a:hover {
     color: #FF69B4;
 }
 
-
+body {
+	background-image: url("https://farm2.staticflickr.com/1547/25851684055_fc762e2162_c.jpg");
+	background-repeat: repeat;
+}
