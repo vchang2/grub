@@ -1,4 +1,4 @@
-function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
+function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH, prefix = ""){
 	if(IMG_HEIGHT <= 0){
 		IMG_HEIGHT = 300;
 	}
@@ -8,7 +8,7 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 	var padding = 20;
 
 	var INFO_PADDING = 20;
-	var INFO_DOWN = 240;
+	var INFO_DOWN = IMG_HEIGHT - 60;
 	var COL_2_WIDTH = 100;
 	var STAR_SIZE = 20;
 	var GRADIENT_DEFAULT_HEIGHT = 100;
@@ -16,7 +16,7 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 	var INFO_SHIFT = 30;
 
 	displayDiv = document.getElementById(displayID);
-	var numPhotos = document.getElementById("numPhotos").value;
+	var numPhotos = document.getElementById(prefix + "numPhotos").value;
 	if(numPhotos == 0){
 		return;
 	}
@@ -30,15 +30,15 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 	var numLines = 1;
 
 	for(var i = 0; i < numPhotos; i++){
-		var image = document.getElementById("recipePhoto" + i);
-		var linkArea = document.getElementById("linkArea" + i);
-		var gradient = document.getElementById("gradient" + i);
+		var image = document.getElementById(prefix + "recipePhoto" + i);
+		var linkArea = document.getElementById(prefix + "linkArea" + i);
+		var gradient = document.getElementById(prefix + "gradient" + i);
 		if(image == null){
 			
 			//image
 			image = document.createElement("img");
-			image.id = "recipePhoto" + i;
-			image.src = document.getElementById("photo" + i).value;
+			image.id = prefix + "recipePhoto" + i;
+			image.src = document.getElementById(prefix + "photo" + i).value;
 			image.style.height = IMG_HEIGHT + "px";
 			image.style.position = "fixed";
 			displayDiv.appendChild(image);
@@ -52,7 +52,7 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 
 			//gradient
 			gradient = document.createElement("img");
-			gradient.id = "gradient" + i;
+			gradient.id = prefix + "gradient" + i;
 			gradient.src = "../static/images/gradient1.png";
 			gradient.style.height = GRADIENT_DEFAULT_HEIGHT + "px";
 			gradient.style.width = width;
@@ -62,42 +62,42 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 
 			//link
 			var link = document.createElement("a");
-			link.href = document.getElementById("url" + i).value;
+			link.href = document.getElementById(prefix + "url" + i).value;
 			linkArea = document.createElement("div");
-			linkArea.id = "linkArea" + i;
+			linkArea.id = prefix + "linkArea" + i;
 			linkArea.style.height = IMG_HEIGHT + "px";
 			linkArea.style.width = width + "px";
 			linkArea.style.position = "fixed";
 			linkArea.style.zIndex = "100";
 			linkArea.onmouseover = function(event){
 				var num = event.target.id.slice(-1);
-				var grad = document.getElementById("gradient" + num);
+				var grad = document.getElementById(prefix + "gradient" + num);
 				grad.style.height = GRADIENT_EXTENDED_HEIGHT + "px";
 				verticallyShift(grad, (GRADIENT_DEFAULT_HEIGHT - GRADIENT_EXTENDED_HEIGHT));
-				verticallyShift(document.getElementById("recipeName" + num), -1*INFO_SHIFT);
+				verticallyShift(document.getElementById(prefix + "recipeName" + num), -1*INFO_SHIFT);
 				for(var j = 0; j < 5; j++){
-					verticallyShift(document.getElementById("star" + num + '_' + j), -1*INFO_SHIFT);
+					verticallyShift(document.getElementById(prefix + "star" + num + '_' + j), -1*INFO_SHIFT);
 				}
-				var user2 = document.getElementById("userName" + num);
+				var user2 = document.getElementById(prefix + "userName" + num);
 				user2.style.color = "white";
 				user2.style.textShadow = "2px 2px 2px #000000";
-				var time2 = document.getElementById("recipeTime" + num);
+				var time2 = document.getElementById(prefix + "recipeTime" + num);
 				time2.style.color = "white";
 				time2.style.textShadow = "2px 2px 2px #000000";
 			};
 			linkArea.onmouseout = function(event){
 				var num = event.target.id.slice(-1);
-				var grad = document.getElementById("gradient" + num);
+				var grad = document.getElementById(prefix + "gradient" + num);
 				grad.style.height = GRADIENT_DEFAULT_HEIGHT + "px";
 				verticallyShift(grad, (GRADIENT_EXTENDED_HEIGHT - GRADIENT_DEFAULT_HEIGHT));
-				verticallyShift(document.getElementById("recipeName" + num), INFO_SHIFT);
+				verticallyShift(document.getElementById(prefix + "recipeName" + num), INFO_SHIFT);
 				for(var j = 0; j < 5; j++){
-					verticallyShift(document.getElementById("star" + num + '_' + j), INFO_SHIFT);
+					verticallyShift(document.getElementById(prefix + "star" + num + '_' + j), INFO_SHIFT);
 				}
-				var user2 = document.getElementById("userName" + num);
+				var user2 = document.getElementById(prefix + "userName" + num);
 				user2.style.color = "transparent";
 				user2.style.textShadow = "";
-				var time2 = document.getElementById("recipeTime" + num);
+				var time2 = document.getElementById(prefix + "recipeTime" + num);
 				time2.style.color = "transparent";
 				time2.style.textShadow = "";
 			}
@@ -106,8 +106,8 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 
 			//name
 			var name = document.createElement("p");
-			name.id = "recipeName" + i;
-			name.innerHTML = document.getElementById("name" + i).value;
+			name.id = prefix + "recipeName" + i;
+			name.innerHTML = document.getElementById(prefix + "name" + i).value;
 			name.style.color = "white";
 			name.style.textShadow = "2px 2px 2px #000000";
 			name.style.position = "fixed";
@@ -120,10 +120,10 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 			displayDiv.appendChild(name);
 
 			//stars
-			var rating = parseFloat(document.getElementById("rating" + i).value);
+			var rating = parseFloat(document.getElementById(prefix + "rating" + i).value);
 			for(var j = 0; j < 5; j++){
 				var star = document.createElement("img");
-				star.id = "star" + i + '_' + j;
+				star.id = prefix + "star" + i + '_' + j;
 
 				var picVal = rating - j;
 				picVal = Math.min(Math.max(picVal, 0), 1);
@@ -139,8 +139,8 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 
 			//user
 			var user = document.createElement("p");
-			user.id = "userName" + i;
-			user.innerHTML = document.getElementById("user" + i).value;
+			user.id = prefix + "userName" + i;
+			user.innerHTML = document.getElementById(prefix + "user" + i).value;
 			user.style.color = "transparent";
 			user.style.textShadow = "";
 			user.style.position = "fixed";
@@ -153,8 +153,8 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 
 			//time
 			var time = document.createElement("p");
-			time.id = "recipeTime" + i;
-			time.innerHTML = document.getElementById("time" + i).value + " min";
+			time.id = prefix + "recipeTime" + i;
+			time.innerHTML = document.getElementById(prefix + "time" + i).value + " min";
 			time.style.color = "transparent";
 			time.style.textShadow = "";
 			time.style.position = "fixed";
@@ -175,7 +175,7 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 
 		deltaX += padding;
 
-		if (offset['X'] + deltaX > window.innerWidth - originalOffset['X'] - padding){
+		if (i != 0 && offset['X'] + deltaX > window.innerWidth - originalOffset['X'] - padding){
 			offset['X'] = originalOffset['X'];
 			offset['Y'] += IMG_HEIGHT + padding;
 			numLines += 1;
@@ -199,15 +199,15 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 		//image.style.boxShadow="10px 20px 30px blue";//"0px 7px 5px -5px #666666 inset";
 
 		//Title of recipe
-		var name = document.getElementById("recipeName" + i);
+		var name = document.getElementById(prefix + "recipeName" + i);
 		name.style.left = "" + infoLeft + "px";
 		name.style.top = "" + infoTop + "px";
 
-		var user = document.getElementById("userName" + i);
+		var user = document.getElementById(prefix + "userName" + i);
 		user.style.left = "" + infoLeft + "px";
 		user.style.top = "" + infoTop + "px";
 
-		var time = document.getElementById("recipeTime" + i);
+		var time = document.getElementById(prefix + "recipeTime" + i);
 		time.style.left = "" + (imageLeft + deltaX - time.clientWidth) + "px";
 		time.style.top = "" + infoTop + "px";
 
@@ -217,7 +217,7 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 			imageWidth = IMG_WIDTH
 		}
 		for(var j = 0; j < 5; j++){
-			var star = document.getElementById("star" + i + '_' + j)
+			var star = document.getElementById(prefix + "star" + i + '_' + j)
 			star.style.top = (infoTop + 20) + "px";
 			star.style.left = "" + (imageLeft + imageWidth - INFO_PADDING - ((5-j) * STAR_SIZE)) + "px";
 			//star.style.left = "" + (imageLeft + imageWidth - INFO_PADDING - (STAR_SIZE)) + "px";
@@ -229,7 +229,7 @@ function SearchScript(displayID, IMG_HEIGHT, IMG_WIDTH){
 
 	}
 
-	spaceDiv = document.getElementById('space');
+	spaceDiv = document.getElementById(prefix + 'space');
 	spaceDiv.innerHTML = "";
 	for(var i = 0; i < numLines; i++){
 		//TODO: 5/6? Why?

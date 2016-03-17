@@ -21,14 +21,20 @@ class hello:
         if session.user == None:
             return render_template('login.html')
         all_recipes = sqlitedb.getAllRecipes()
-        all_photos = sqlitedb.getAllPhotos()
-        featured_recipe_photo = sqlitedb.getFeaturedRecipe()
-        recommended_recipe_photos = sqlitedb.getRecommendedRecipes(session.user)
+        r_photos = sqlitedb.getRecommendedPhotos()
+        recommended_photos = []
+        for r in r_photos:
+            recommended_photos.append(r['Photo'])
+        fp = sqlitedb.getFeaturedRecipe()
+        featured_recipe_photo = []
+        featured_recipe_photo.append(fp['Photo'])
+        featured_recipe = sqlitedb.getRecipe(1)
+        recommended_recipes = sqlitedb.getRecommendedRecipes(session.user)
         social_feed = sqlitedb.getSocialFeed()
         if social_feed:
             print "printing social feed"
             print social_feed
-    	return render_template('curr_time.html', all_recipes = all_recipes, all_photos = all_photos, featured_recipe_photo = featured_recipe_photo, recommended_recipe_photos = recommended_recipe_photos, user = session.user, social_feed = social_feed)
+    	return render_template('curr_time.html', all_recipes = all_recipes, recommended_photos = recommended_photos, featured_recipe_photo = featured_recipe_photo, recommended_recipes = recommended_recipes, user = session.user, social_feed = social_feed, featured_recipe = featured_recipe)
 
 class view:
     def GET(self):
@@ -376,7 +382,7 @@ class upload_page:
         data = web.input()
 
         sqlitedb.addRecipe(recipeID,
-                "billy", #TODO: ADD THE USER ID
+                session.user, #TODO: ADD THE USER ID
                 0,
                 data.name,
                 data.description,

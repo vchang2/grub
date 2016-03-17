@@ -164,6 +164,11 @@ def getAllPhotos():
     query_string = 'select * from Photos'
     results = query(query_string)
     return results
+
+def getRecommendedPhotos():
+    query_string = 'select * from Photos where RecipeID > 1 and RecipeID <= 6'
+    results = query(query_string)
+    return results
 #added by Valerie:
 def getRecipes(recipes):
     counter = 0
@@ -471,7 +476,7 @@ def getFeaturedRecipe():
         numRecipesQuery = 'select RecipeID from Constants'
         numRecipesQueryResult = db.query(numRecipesQuery, {})
         numRecipes = numRecipesQueryResult[0]['RecipeID']
-        chosenRecipeID = randint(1, numRecipes)
+        chosenRecipeID = 1
         photos = getPhotos(chosenRecipeID)
     return photos[0]
 
@@ -517,7 +522,12 @@ def getSocialFeed():
     return social_feed
 
 # Recommended Recipe Query (Ryan, Wednesday 3/2)
+# Revised by Valerie
 def getRecommendedRecipes(userID):
+    query_string = 'select * from Recipes where RecipeID > 1 and RecipeID <= 6'
+    results = query(query_string)
+    return results
+    '''
     numUsers = len(getUsers())
     numRecipes = len(getAllRecipes())
     print str(numUsers) + " users exist"
@@ -527,5 +537,5 @@ def getRecommendedRecipes(userID):
     all_reviews = query(reviews_query_string, {})
     for review in all_reviews:
         print ratingMatrix
-
+'''
 
