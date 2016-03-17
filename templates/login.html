@@ -4,13 +4,38 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="static/css/login.css" />
 	<title>Login</title>
+
+	<style>
+		#head{
+			animation: nod 2s infinite;
+		}
+
+		@keyframes nod {
+		    0% {transform: rotate(-10deg);}
+		    50% {transform: rotate(7deg);}
+		    100% {transform: rotate(-10deg);}
+		}
+
+		#plate{
+			animation: zzz 2s infinite;
+		}
+
+		@keyframes zzz {
+		    0% {transform: rotate(0deg);}
+		    100% {transform: rotate(0deg);}
+		}
+	</style>
+
 </head>
 
-</body>
+<body onload="placeImgs()" onresize="placeImgs()" onscroll="placeImgs()">
 
 	<center>
-		<div style="background:white;width:840px;margin:40px;box-shadow: 5px 5px 5px #666666;">
-		<img src="../static/images/grub logo.png" style="width:800px;">
+		<div id="container">
+			<div style="background:white;width:840px;margin:40px;box-shadow: 5px 5px 5px #666666;">
+			<img  id="head" src="../static/images/logo_head.png" style="width:320px;position:absolute">
+			<img  id="plate" src="../static/images/grub_logo_no_head.png" style="width:800px;">
+			</div>
 		</div>
 	</center>
 
@@ -38,5 +63,17 @@
 		<tr><td class ="TD"><a href = "createAccount" class="createAccount">Create New Account</a></td></tr>
 	</table>
 </body>
+
+<script>
+	function placeImgs(){
+		var plate = document.getElementById("plate");
+		var plateRect = plate.getBoundingClientRect();
+
+		var head = document.getElementById("head");
+		head.style.top = (plateRect.top - 10) + "px";
+		head.style.left = (plateRect.left + 483) + "px";
+		//window.alert(plate.getBoundingClientRect().left)
+	}
+</script>
 
 {% endblock %}
