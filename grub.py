@@ -313,12 +313,28 @@ class search:
 
     def POST(self):
         post_params = web.input()
-        recipeID = post_params['recipeID']
+        recipeID = ""
         userID = post_params['userID']
         recipeName = post_params['recipeName']
         completionTime = post_params['completionTime']
         ingredients = post_params['ingredients'].split()
-        categories = post_params['categories'].split()
+        categories = []
+
+        if  'categoriesBR' in post_params:
+            categories.append("breakfast")
+        if 'categoriesLU' in post_params:
+            categories.append("lunch")
+        if 'categoriesDI' in post_params:
+            categories.append("dinner")
+        if 'categoriesSA' in post_params:
+            categories.append("savory")
+        if 'categoriesSW' in post_params:
+            categories.append("sweet")
+        if 'categoriesVE' in post_params:
+            categories.append("vegetarian")
+        if 'categoriesGF' in post_params:
+            categories.append("gluten free")
+
         tags = post_params['tags'].split()
         final_search_results = sqlitedb.searchRecipes(recipeID, userID, recipeName, completionTime, ingredients, categories, tags)
         recipe_photos = []
