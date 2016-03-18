@@ -4,44 +4,53 @@
 
 
 <head>
-	<link rel="stylesheet" type="text/css" href="static/css/upload.css" />
+	<link rel="stylesheet" type="text/css" href="static/css/view_cookbook.css" />
 </head>
 <body onresize="rerenderPhotoArea()" onscroll="rerenderPhotoArea()">
+	<br/>
 	{% if cookbookInfo %}
-		{% for result in cookbookInfo %}
-			<h3>Recipe(s) in {{ result['Cookbook_name'] | e}}:</h3>
+		{% for cookbook in cookbookInfo %}
+			<table cellspacing="0" class="resultsTable">
+				<tr>
+					<th class = "TH"><h1 class="header">{{ cookbook['Cookbook_name'] | e}}</h1></th>
+				</tr>
+				<tr>
+					<td class="TD1">
+						<div id="RESULT_DIV">
+							{% if all_recipes %}
+								{% set counter = 0 %}
+								{% for result in all_recipes %}
+									<input type="hidden" id="{{'photo' + counter|string}}" value="{{recipe_photos[counter]}}">
+									<input type="hidden" id="{{'name' + counter|string}}" value="{{result['Recipe_name']}}">
+									<input type="hidden" id="{{'url' + counter|string}}" value="view?recipeID={{result['RecipeID'] | e}}">
+									<input type="hidden" id="{{'user' + counter|string}}" value="{{result['UserID'] | e}}">
+									<input type="hidden" id="{{'time' + counter|string}}" value="{{result['Time_completion'] | e}}">
+									{% if result['Overall_rating'] == 0.0 %}
+										<input type="hidden" id="{{'rating' + counter|string}}" value="0">
+									{% else %} 
+										<input type="hidden" id="{{'rating' + counter|string}}" value="{{result['Overall_rating'] | e}}">
+									{% endif %}
+									{% set counter = counter + 1 %}
+								{% endfor %}
+								<input type="hidden" id="numPhotos" value="{{all_recipes|length}}">
+							{% else %}
+								<p style="text-align:center">This cookbook doesn't have any recipes yet!</p>
+								<input type="hidden" id="numPhotos" value="0">
+							{% endif %}
+						
+							<div id="space"></div>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<br/><br/>
 		{% endfor %}
-	{% endif %}
-
-	<div id="RESULT_DIV">
-
-	{% if all_recipes %}
-		{% set counter = 0 %}
-		{% for result in all_recipes%}
-			<input type="hidden" id="{{'photo' + counter|string}}" value="{{recipe_photos[counter]}}">
-			<input type="hidden" id="{{'name' + counter|string}}" value="{{result['Recipe_name']}}">
-			<input type="hidden" id="{{'url' + counter|string}}" value="view?recipeID={{result['RecipeID'] | e}}">
-			<input type="hidden" id="{{'user' + counter|string}}" value="{{result['UserID'] | e}}">
-			<input type="hidden" id="{{'time' + counter|string}}" value="{{result['Time_completion'] | e}}">
-			{% if result['Overall_rating'] == 0.0 %}
-				<input type="hidden" id="{{'rating' + counter|string}}" value="0">
-			{% else %} 
-				<input type="hidden" id="{{'rating' + counter|string}}" value="{{result['Overall_rating'] | e}}">
-			{% endif %}
-			{% set counter = counter + 1 %}
-		{% endfor %}
-		<input type="hidden" id="numPhotos" value="{{all_recipes|length}}">
 	{% else %}
-		{% if cookbookInfo %}
-			{% for result in cookbookInfo %}
-				<p style="text-align:center">No Recipes in {{ result['Cookbook_name'] | e}}</p>
-				<input type="hidden" id="numPhotos" value="0">
-			{% endfor %}
-		{% endif %}
+		<table cellspacing="0" class="resultsTable">
+		<tr>
+			<th class = "TH"><h1 class="header">Cookbook not found. Sad!</h1></th>
+		</tr>
 	{% endif %}
-	</div>
-
-	<div id="space"></div>
 
 <script>
 	function bigImg(x) {
