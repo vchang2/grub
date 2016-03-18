@@ -73,8 +73,40 @@
 			</td>
 		</tr>
 		<tr>
-			<th class="evenHead"><p>Instructions</p></th>
+			<th class="evenHead"><p>Ingredients</p></th>
 			<td class="evenRow">
+				{% if ingredients %}
+					{% for ingredient in ingredients %}
+						{% set modifiedUnit = ingredient['Unit'] %}
+						{% set modifiedDenom = ingredient['Quantity_denom'] %}
+						{% if ingredient['Quantity_num'] == ingredient['Quantity_denom'] %}
+							{% set modifiedDenom = 1 %}
+						{% endif %}
+						{% if ingredient['Unit'][(ingredient['Unit'] | length) -1] == 's' %}
+							{% if ingredient['Quantity_num'] <= modifiedDenom %}
+								{% set modifiedUnit = ingredient['Unit'][:-1] %}
+							{% endif %}
+						{% endif %}
+						{% if modifiedDenom == 1 %}
+							{% if modifiedUnit == "None" %}
+								<p>{{ingredient['Quantity_num'] | e}} {{ingredient['Ingredient'] | e}}</p>
+							{% else %}
+								<p>{{ingredient['Quantity_num'] | e}} {{modifiedUnit}} of {{ingredient['Ingredient'] | e}}</p>
+							{% endif %}
+						{% else %}
+							{% if modifiedUnit == "None" %}
+								<p>{{ingredient['Quantity_num'] | e}}/{{modifiedDenom | e}} {{ingredient['Ingredient'] | e}}</p>
+							{% else %}
+								<p>{{ingredient['Quantity_num'] | e}}/{{modifiedDenom | e}} {{modifiedUnit}} of {{ingredient['Ingredient'] | e}}</p>
+							{% endif %}
+						{% endif %}	
+					{% endfor %}
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th class="oddHead"><p>Instructions</p></th>
+			<td class="oddRow">
 				{% if instructions %}
 					{% for instruction in instructions %}
 						<p>Step {{instruction['Instruction_number'] | e}}: {{instruction['Instruction'] | e}}</p>
@@ -83,8 +115,8 @@
 			</td>
 		</tr>
 		<tr>
-			<th class="oddHead"><p>Tags</p></th>
-			<td class="oddRow">
+			<th class="evenHead"><p>Tags</p></th>
+			<td class="evenRow">
 				{% if tags %}
 					{% for tag in tags %}
 						<form method="POST" action="search" role="form" style="max-width:400px; width:100%">
@@ -104,8 +136,8 @@
 			</td>
 		</tr>
 		<tr>
-			<th class="evenHead"><p>Categories</p></th>
-			<td class="evenRow">
+			<th class="oddHead"><p>Categories</p></th>
+			<td class="oddRow">
 				{% if categories %}
 					{% for category in categories %}
 						<form method="POST" action="search" role="form" style="max-width:400px; width:100%">
@@ -125,8 +157,8 @@
 			</td>
 		</tr>
 		<tr>
-			<th class="oddHead"><p>Cookbooks</p></th>
-			<td class="oddRow">
+			<th class="evenHead"><p>Cookbooks</p></th>
+			<td class="evenRow">
 				{% if cookbooks %}
 					{% for cookbook in cookbooks %}
 						<form action=view?recipeID={{recipeID}} method="POST">
@@ -139,8 +171,8 @@
 			</td>
 		</tr>
 		<tr>
-			<th class="evenHead"><p>Reviews</p></th>
-			<td class="evenRow">
+			<th class="oddHead"><p>Reviews</p></th>
+			<td class="oddRow">
 				{% if reviews %}
 					{% for review in reviews %}
 						<hr/>
@@ -221,8 +253,8 @@
 		</tr>
 		{% if userMatchesRecipeAuthor %}
 		<tr>
-			<th class="oddHead"><p>Delete Recipe</p></th>
-			<td class="oddRow">
+			<th class="evenHead"><p>Delete Recipe</p></th>
+			<td class="evenRow">
 				<form action="user?userID={{result['UserID']}}" method="POST">
 					<input type="hidden" name="deleteRecipe" value={{result['RecipeID']| e}}>
 					<input type="submit" value="Delete">
