@@ -30,26 +30,50 @@
 					<td><input type="text" name="recipeName" class="form-control" id="recipeName" /></td>
 				</tr>
 				<tr>
-					<td><span class="nowrap"><label for="userID">User ID</label></span></td>
-					<td><input type="text" name="userID" class="form-control" id="userID" /></td>
-				</tr>
-				<tr>
-					<td><span class="nowrap"><label for="categories">Categories</label></span></td>
-					<td><input type="text" class="form-control" id="categories" name="categories" /></td>
-				</tr>
-			</table></td>
-			<td class="TD2"><table>
-				<tr>
 					<td><span class="nowrap"><label for="ingredients">Ingredients</label></span></td>
 					<td><input type="text" class="form-control" id="ingredients" name="ingredients" /></td>
 				</tr>
 				<tr>
-					<td><span class="nowrap"><label for="recipeID">Recipe ID</label></span></td>
-					<td><input type="text" class="form-control" id="recipeID" name="recipeID" /></td>
+					<td><span class="nowrap"><label for="userID">User ID</label></span></td>
+					<td><input type="text" name="userID" class="form-control" id="userID" /></td>
 				</tr>
 				<tr>
 					<td><span class="nowrap"><label for="tags">Tags</label></span></td>
 					<td><input type="text" class="form-control" id="tags" name="tags" /></td>
+				</tr>
+			</table></td>
+			<td class="TD2"><table>
+				<tr>
+					<td><label for="status"><span class="nowrap">
+						Categories &nbsp;&nbsp;
+					</span></label></td>
+				</tr>
+				<tr>
+					<td><label><span class="nowrap">
+						<input type="checkbox" name="categoriesBR" value="breakfast"> Breakfast
+					</span></label></td>
+					<td><label><span class="nowrap">
+						<input type="checkbox" name="categoriesLU" value="lunch"> Lunch
+					</span></label></td>
+					<td><label><span class="nowrap">
+						<input type="checkbox" name="categoriesDI" value="dinner"> Dinner
+					</span></label></td>
+				</tr>
+				<tr>
+					<td><label><span class="nowrap">
+						<input type="checkbox" name="categoriesSW" value="sweet"> Sweet
+					</span></label></td>
+					<td><label><span class="nowrap">
+						<input type="checkbox" name="categoriesSA" value="savory"> Savory
+					</span></label></td>
+				</tr>
+				<tr>
+					<td><label><span class="nowrap">
+						<input type="checkbox" name="categoriesVE" value="vegetarian"> Vegetarian
+					</span></label></td>
+					<td><label><span class="nowrap">
+						<input type="checkbox" name="categoriesGF" value="gluten free"> Gluten Free
+					</span></label></td>
 				</tr>
 			</table></td>
 			<td class="TD1"><table>
@@ -65,10 +89,8 @@
 					<td><label><span class="nowrap">
 						<input type="radio" name="completionTime" value="3">60 to 90 min
 					</span></label></td>
-					<td><label><span class="nowrap">
-						<input type="radio" name="completionTime" value="5" checked>Any
-					</span></label></td>
 				</tr>
+				<tr>
 					<td><label><span class="nowrap">
 						<input type="radio" name="completionTime" value="2">30 to 60 min
 					</span></label></td>
@@ -76,6 +98,12 @@
 						<input type="radio" name="completionTime" value="4">Over 90 min
 					</span></label></td>
 				</tr>
+				<tr>
+					<td><label><span class="nowrap">
+						<input type="radio" name="completionTime" value="5" checked>Any
+					</span></label></td>
+				</tr>
+
 			</table></td>
 			<td  class="TD2"><input type="submit" value="Search!" class="btn btn-primary" /></td>
 		</form>
